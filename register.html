@@ -33,13 +33,13 @@
     </div>
   </div>
 
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
-    const SUPABASE_URL = 'https://nfcjbjohxzaikelxgmjg.supabase.co';
-    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5mY2piam9oeHphaWtlbHhnbWpnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjEwNTgzMjAsImV4cCI6MjA3NjYzNDMyMH0.u0ta1NxSDbJ_9lf1TcMp3M0-_vNNBs6HByOj8wtKsX4';
-    
-    const { createClient } = supabase;
-    const supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-    
+    const supabase = window.supabase.createClient(
+      'https://nfcjbjohxzaikelxgmjg.supabase.co',
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5mY2piam9oeHphaWtlbHhnbWpnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjEwNTgzMjAsImV4cCI6MjA3NjYzNDMyMH0.u0ta1NxSDbJ_9lf1TcMp3M0-_vNNBs6HByOj8wtKsX4'
+    );
+
     document.getElementById('registerForm').addEventListener('submit', async (e) => {
       e.preventDefault();
       
@@ -47,40 +47,45 @@
       const email = document.getElementById('email').value;
       const password = document.getElementById('password').value;
       
+      const messageDiv = document.getElementById('message');
+      messageDiv.innerHTML = '<div class="alert alert-info">登録中...</div>';
+      
       try {
-        console.log('Attempting registration...');
-        const { data, error } = await supabaseClient
+        console.log('Sending data to Supabase...');
+        const { data, error } = await supabase
           .from('users')
           .insert([{ name, email, password }])
           .select();
           
         if (error) {
-          console.error('Registration error:', error);
+          console.error('Supabase Error:', error);
           throw error;
         }
 
-        console.log('Registration successful:', data);
-
-        // Store user data and redirect
-        if (data && data[0]) {
+        console.log('Success! Data:', data);
+        
+        if (data && data.length > 0) {
+          // Store user and redirect
           localStorage.setItem('user', JSON.stringify(data[0]));
-          document.getElementById('message').innerHTML = `
-            <div class="alert alert-success">登録が成功しました！ダッシュボードに移動します...</div>
-          `;
+          messageDiv.innerHTML = '<div class="alert alert-success">登録成功！ダッシュボードに移動します...</div>';
           
           setTimeout(() => {
-            console.log('Redirecting to dashboard...');
             window.location.href = 'dashboard.html';
-          }, 1500);
+          }, 2000);
+        } else {
+          throw new Error('データが返されませんでした');
         }
+        
       } catch (error) {
-        console.error('Registration failed:', error);
-        document.getElementById('message').innerHTML = `
-          <div class="alert alert-danger">エラー: ${error.message}</div>
+        console.error('Registration Failed:', error);
+        messageDiv.innerHTML = `
+          <div class="alert alert-danger">
+            <strong>エラー:</strong> ${error.message}
+            <br><small>詳細: ${JSON.stringify(error)}</small>
+          </div>
         `;
       }
     });
   </script>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </body>
 </html>

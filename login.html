@@ -29,56 +29,69 @@
     </div>
   </div>
 
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
-    const SUPABASE_URL = 'https://nfcjbjohxzaikelxgmjg.supabase.co';
-    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5mY2piam9oeHphaWtlbHhnbWpnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjEwNTgzMjAsImV4cCI6MjA3NjYzNDMyMH0.u0ta1NxSDbJ_9lf1TcMp3M0-_vNNBs6HByOj8wtKsX4';
-    
-    const { createClient } = supabase;
-    const supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-    
+    const supabase = window.supabase.createClient(
+      'https://nfcjbjohxzaikelxgmjg.supabase.co',
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5mY2piam9oeHphaWtlbHhnbWpnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjEwNTgzMjAsImV4cCI6MjA3NjYzNDMyMH0.u0ta1NxSDbJ_9lf1TcMp3M0-_vNNBs6HByOj8wtKsX4'
+    );
+
     document.getElementById('loginForm').addEventListener('submit', async (e) => {
       e.preventDefault();
       
       const email = document.getElementById('email').value;
       const password = document.getElementById('password').value;
       
+      const messageDiv = document.getElementById('message');
+      messageDiv.innerHTML = '<div class="alert alert-info">ログイン中...</div>';
+      
       try {
-        console.log('Attempting login...');
-        const { data, error } = await supabaseClient
+        console.log('Attempting login for:', email);
+        
+        // First, let's check if the user exists with this email
+        const { data: users, error: findError } = await supabase
           .from('users')
           .select('*')
-          .eq('email', email)
-          .eq('password', password)
-          .single();
+          .eq('email', email);
           
-        if (error) {
-          console.error('Login error:', error);
-          throw error;
+        if (findError) {
+          console.error('Find user error:', findError);
+          throw findError;
         }
-
-        console.log('Login successful:', data);
-
-        if (data) {
-          localStorage.setItem('user', JSON.stringify(data));
-          document.getElementById('message').innerHTML = `
-            <div class="alert alert-success">ログイン成功！ダッシュボードに移動します...</div>
-          `;
+        
+        console.log('Found users:', users);
+        
+        if (!users || users.length === 0) {
+          throw new Error('このメールアドレスのユーザーが見つかりません');
+        }
+        
+        // Now check password
+        const user = users[0];
+        console.log('User found:', user);
+        console.log('Input password:', password);
+        console.log('Stored password:', user.password);
+        
+        if (user.password === password) {
+          // Login successful
+          localStorage.setItem('user', JSON.stringify(user));
+          messageDiv.innerHTML = '<div class="alert alert-success">ログイン成功！ダッシュボードに移動します...</div>';
           
           setTimeout(() => {
-            console.log('Redirecting to dashboard...');
             window.location.href = 'dashboard.html';
           }, 1500);
         } else {
-          throw new Error('メールアドレスまたはパスワードが間違っています');
+          throw new Error('パスワードが間違っています');
         }
+        
       } catch (error) {
         console.error('Login failed:', error);
-        document.getElementById('message').innerHTML = `
-          <div class="alert alert-danger">${error.message}</div>
+        messageDiv.innerHTML = `
+          <div class="alert alert-danger">
+            <strong>ログイン失敗:</strong> ${error.message}
+          </div>
         `;
       }
     });
   </script>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </body>
 </html>
