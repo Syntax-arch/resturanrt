@@ -48,24 +48,33 @@
       const password = document.getElementById('password').value;
       
       try {
+        console.log('Attempting registration...');
         const { data, error } = await supabaseClient
           .from('users')
           .insert([{ name, email, password }])
           .select();
           
-    if (error) throw error;
+        if (error) {
+          console.error('Registration error:', error);
+          throw error;
+        }
 
+        console.log('Registration successful:', data);
 
-localStorage.setItem('user', JSON.stringify(data[0]));
-document.getElementById('message').innerHTML = `
-  <div class="alert alert-success">登録が成功しました！ダッシュボードに移動します...</div>
-`;
-document.getElementById('registerForm').reset();
-
-setTimeout(() => {
-  window.location.href = 'dashboard.html';
-}, 1500);
+        // Store user data and redirect
+        if (data && data[0]) {
+          localStorage.setItem('user', JSON.stringify(data[0]));
+          document.getElementById('message').innerHTML = `
+            <div class="alert alert-success">登録が成功しました！ダッシュボードに移動します...</div>
+          `;
+          
+          setTimeout(() => {
+            console.log('Redirecting to dashboard...');
+            window.location.href = 'dashboard.html';
+          }, 1500);
+        }
       } catch (error) {
+        console.error('Registration failed:', error);
         document.getElementById('message').innerHTML = `
           <div class="alert alert-danger">エラー: ${error.message}</div>
         `;

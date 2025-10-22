@@ -43,6 +43,7 @@
       const password = document.getElementById('password').value;
       
       try {
+        console.log('Attempting login...');
         const { data, error } = await supabaseClient
           .from('users')
           .select('*')
@@ -50,22 +51,28 @@
           .eq('password', password)
           .single();
           
-        if (error) throw error;
-        
+        if (error) {
+          console.error('Login error:', error);
+          throw error;
+        }
+
+        console.log('Login successful:', data);
+
         if (data) {
           localStorage.setItem('user', JSON.stringify(data));
           document.getElementById('message').innerHTML = `
-            <div class="alert alert-success">ログイン成功！</div>
+            <div class="alert alert-success">ログイン成功！ダッシュボードに移動します...</div>
           `;
           
-          
-setTimeout(() => {
-  window.location.href = 'dashboard.html';
-}, 1000);
+          setTimeout(() => {
+            console.log('Redirecting to dashboard...');
+            window.location.href = 'dashboard.html';
+          }, 1500);
         } else {
           throw new Error('メールアドレスまたはパスワードが間違っています');
         }
       } catch (error) {
+        console.error('Login failed:', error);
         document.getElementById('message').innerHTML = `
           <div class="alert alert-danger">${error.message}</div>
         `;
