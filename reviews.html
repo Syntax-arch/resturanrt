@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>お客様の声 - レストラン予約システム</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="style.css" rel="stylesheet">
+  <style>
+    .review-card {
+      background: white;
+      border-radius: 12px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+    .review-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+    .review-avatar {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      margin-right: 1rem;
+      object-fit: cover;
+    }
+    .rating-stars {
+      color: #ffc107;
+      font-size: 1.2rem;
+    }
+    .review-image {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      border-radius: 8px;
+      margin: 1rem 0;
+    }
+    .stats-card {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      border-radius: 12px;
+      padding: 2rem;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="sakura-decoration"></div>
+  
+  <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #c62828;">
+    <div class="container">
+      <a class="navbar-brand fw-bold" href="dashboard.html">
+        🍣 レストラン予約システム
+      </a>
+      <div class="navbar-nav ms-auto">
+        <a href="dashboard.html" class="btn btn-outline-light btn-sm me-2">ダッシュボード</a>
+        <button class="btn btn-outline-light btn-sm" id="logoutBtn">ログアウト</button>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container mt-4">
+    <div class="text-center mb-5">
+      <h1>お客様の声</h1>
+      <p class="lead">ご来店いただいたお客様からのレビュー</p>
+    </div>
+
+    <!-- Statistics -->
+    <div class="row mb-5">
+      <div class="col-md-3 mb-3">
+        <div class="stats-card">
+          <div class="h2 mb-2">4.8</div>
+          <div class="rating-stars mb-2">★★★★★</div>
+          <small>総合評価</small>
+        </div>
+      </div>
+      <div class="col-md-3 mb-3">
+        <div class="stats-card" style="background: linear-gradient(135deg, #4facfe, #00f2fe);">
+          <div class="h2 mb-2">256</div>
+          <div class="h5">レビュー数</div>
+        </div>
+      </div>
+      <div class="col-md-3 mb-3">
+        <div class="stats-card" style="background: linear-gradient(135deg, #43e97b, #38f9d7);">
+          <div class="h2 mb-2">98%</div>
+          <div class="h5">満足度</div>
+        </div>
+      </div>
+      <div class="col-md-3 mb-3">
+        <div class="stats-card" style="background: linear-gradient(135deg, #ff9a9e, #fecfef);">
+          <div class="h2 mb-2">4.9</div>
+          <div class="h5">サービス評価</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Reviews -->
+    <div class="row">
+      <div class="col-md-6">
+        <div class="review-card">
+          <div class="review-header">
+            <img src="https://images.unsplash.com/photo-1494790108755-2616b612b786?w=100&h=100&fit=crop&crop=face" alt="山田さん" class="review-avatar">
+            <div>
+              <h6 class="mb-1">山田 花子</h6>
+              <div class="rating-stars">★★★★★</div>
+              <small class="text-muted">2024年1月15日</small>
+            </div>
+          </div>
+          <p>記念日のディナーで利用しました。スタッフの対応がとても丁寧で、料理もすべて美味しかったです。特にメインのステーキが絶品でした。またぜひ訪れたいと思います。</p>
+          <img src="https://images.unsplash.com/photo-1546833999-b9f581a1996d?w=400&h=200&fit=crop" alt="料理写真" class="review-image">
+        </div>
+
+        <div class="review-card">
+          <div class="review-header">
+            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop&crop=face" alt="佐藤さん" class="review-avatar">
+            <div>
+              <h6 class="mb-1">佐藤 一郎</h6>
+              <div class="rating-stars">★★★★☆</div>
+              <small class="text-muted">2024年1月12日</small>
+            </div>
+          </div>
+          <p>家族での食事に利用しました。子ども用の椅子やメニューも用意していただき、家族連れにも優しいお店です。料理のクオリティも高く、また来たいと思います。</p>
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <div class="review-card">
+          <div class="review-header">
+            <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop&crop=face" alt="鈴木さん" class="review-avatar">
+            <div>
+              <h6 class="mb-1">鈴木 美咲</h6>
+              <div class="rating-stars">★★★★★</div>
+              <small class="text-muted">2024年1月10日</small>
+            </div>
+          </div>
+          <p>誕生日のサプライズで利用しました。スタッフの方がケーキと花を用意してくださり、とても感動しました。料理もサービスも最高で、忘れられない一日になりました。</p>
+          <img src="https://images.unsplash.com/photo-1565958011703-44f9829ba187?w=400&h=200&fit=crop" alt="デザート" class="review-image">
+        </div>
+
+        <div class="review-card">
+          <div class="review-header">
+            <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop&crop=face" alt="田中さん" class="review-avatar">
+            <div>
+              <h6 class="mb-1">田中 健太</h6>
+              <div class="rating-stars">★★★★★</div>
+              <small class="text-muted">2024年1月8日</small>
+            </div>
+          </div>
+          <p>ビジネス接待で利用しました。個室が静かで落ち着き、料理の出るタイミングも完璧でした。取引先の方にも大変喜んでいただきました。</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Write Review Button -->
+    <div class="text-center mt-4">
+      <button class="btn btn-japanese" data-bs-toggle="modal" data-bs-target="#writeReviewModal">
+        ✍️ レビューを書く
+      </button>
+    </div>
+  </div>
+
+  <!-- Write Review Modal -->
+  <div class="modal fade" id="writeReviewModal" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">レビューを書く</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <form id="reviewForm">
+            <div class="mb-3">
+              <label class="form-label">評価</label>
+              <div class="rating-stars" id="ratingSelect">
+                <span style="cursor: pointer;" onclick="setRating(1)">★</span>
+                <span style="cursor: pointer;" onclick="setRating(2)">★</span>
+                <span style="cursor: pointer;" onclick="setRating(3)">★</span>
+                <span style="cursor: pointer;" onclick="setRating(4)">★</span>
+                <span style="cursor: pointer;" onclick="setRating(5)">★</span>
+              </div>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">レビュー本文</label>
+              <textarea class="form-control" rows="4" placeholder="ご感想をお聞かせください"></textarea>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">写真を追加</label>
+              <input type="file" class="form-control" accept="image/*">
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">キャンセル</button>
+          <button type="button" class="btn btn-japanese" onclick="submitReview()">投稿する</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // Check authentication
+    const currentUser = JSON.parse(localStorage.getItem('user'));
+    if (!currentUser) {
+      window.location.href = 'login.html';
+    }
+
+    // Rating system
+    function setRating(rating) {
+      const stars = document.querySelectorAll('#ratingSelect span');
+      stars.forEach((star, index) => {
+        star.style.color = index < rating ? '#ffc107' : '#ddd';
+      });
+    }
+
+    function submitReview() {
+      alert('レビューを投稿しました！承認後に表示されます。');
+      bootstrap.Modal.getInstance(document.getElementById('writeReviewModal')).hide();
+    }
+
+    // Logout
+    document.getElementById('logoutBtn').addEventListener('click', () => {
+      if (confirm('ログアウトしますか？')) {
+        localStorage.removeItem('user');
+        window.location.href = 'index.html';
+      }
+    });
+
+    // Initialize 3-star rating
+    setRating(3);
+  </script>
+</body>
+</html>

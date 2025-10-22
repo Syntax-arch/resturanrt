@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>プライベートダイニング - レストラン予約システム</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="style.css" rel="stylesheet">
+  <style>
+    .room-card {
+      background: white;
+      border-radius: 12px;
+      padding: 0;
+      margin-bottom: 2rem;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      overflow: hidden;
+      transition: transform 0.3s ease;
+    }
+    .room-card:hover {
+      transform: translateY(-5px);
+    }
+    .room-image {
+      width: 100%;
+      height: 250px;
+      object-fit: cover;
+    }
+    .room-content {
+      padding: 1.5rem;
+    }
+    .capacity-badge {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      padding: 0.3rem 1rem;
+      border-radius: 15px;
+      font-size: 0.8rem;
+    }
+    .package-card {
+      background: linear-gradient(135deg, #4facfe, #00f2fe);
+      color: white;
+      border-radius: 12px;
+      padding: 2rem;
+      margin-bottom: 1.5rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="sakura-decoration"></div>
+  
+  <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #c62828;">
+    <div class="container">
+      <a class="navbar-brand fw-bold" href="dashboard.html">
+        🍣 レストラン予約システム
+      </a>
+      <div class="navbar-nav ms-auto">
+        <a href="dashboard.html" class="btn btn-outline-light btn-sm me-2">ダッシュボード</a>
+        <button class="btn btn-outline-light btn-sm" id="logoutBtn">ログアウト</button>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container mt-4">
+    <div class="text-center mb-5">
+      <h1>プライベートダイニング</h1>
+      <p class="lead">特別な日のための個室・貸切プラン</p>
+    </div>
+
+    <!-- Private Rooms -->
+    <h3 class="mb-4">🏮 個室のご案内</h3>
+    <div class="row">
+      <div class="col-md-6">
+        <div class="room-card">
+          <img src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=400&h=250&fit=crop" alt="桜の間" class="room-image">
+          <div class="room-content">
+            <div class="d-flex justify-content-between align-items-start mb-3">
+              <h5>桜の間</h5>
+              <span class="capacity-badge">4-6名様</span>
+            </div>
+            <p class="text-muted">落ち着いた和モダンな個室。ビジネス接待や家族での食事に最適です。</p>
+            <ul class="list-unstyled">
+              <li>✅ 完全個室</li>
+              <li>✅ プロジェクター完備</li>
+              <li>✅ 無料Wi-Fi</li>
+            </ul>
+            <button class="btn btn-japanese btn-sm" onclick="inquireRoom('桜の間')">お問い合わせ</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <div class="room-card">
+          <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=400&h=250&fit=crop" alt="藤の間" class="room-image">
+          <div class="room-content">
+            <div class="d-flex justify-content-between align-items-start mb-3">
+              <h5>藤の間</h5>
+              <span class="capacity-badge">8-12名様</span>
+            </div>
+            <p class="text-muted">広々とした宴会用個室。誕生日パーティーや同窓会などにご利用ください。</p>
+            <ul class="list-unstyled">
+              <li>✅ カラオケ機器</li>
+              <li>✅ 大型テーブル</li>
+              <li>✅ 専用バスルーム</li>
+            </ul>
+            <button class="btn btn-japanese btn-sm" onclick="inquireRoom('藤の間')">お問い合わせ</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Wedding Packages -->
+    <h3 class="mb-4 mt-5">💍 結婚式・披露宴</h3>
+    <div class="row">
+      <div class="col-md-4">
+        <div class="package-card" style="background: linear-gradient(135deg, #ff9a9e, #fecfef);">
+          <h5>スモールウェディング</h5>
+          <div class="h3 mt-3">¥150,000〜</div>
+          <p class="small">最大20名様</p>
+          <ul class="list-unstyled small">
+            <li>✅ 挙式・披露宴セット</li>
+            <li>✅ 写真撮影</li>
+            <li>✅ ウェディングケーキ</li>
+            <li>✅ ドレスレンタル</li>
+          </ul>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="package-card">
+          <h5>スタンダードプラン</h5>
+          <div class="h3 mt-3">¥300,000〜</div>
+          <p class="small">最大50名様</p>
+          <ul class="list-unstyled small">
+            <li>✅ フルコース料理</li>
+            <li>✅ ドリンク飲み放題</li>
+            <li>✅ 司会者付き</li>
+            <li>✅ 記念品</li>
+          </ul>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="package-card" style="background: linear-gradient(135deg, #43e97b, #38f9d7);">
+          <h5>プレミアムプラン</h5>
+          <div class="h3 mt-3">¥500,000〜</div>
+          <p class="small">最大100名様</p>
+          <ul class="list-unstyled small">
+            <li>✅ 完全貸切</li>
+            <li>✅ ソムリエサービス</li>
+            <li>✅ ライブ音楽</li>
+            <li>✅ ホテル送迎</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Corporate Events -->
+    <h3 class="mb-4 mt-5">💼 企業イベント</h3>
+    <div class="row">
+      <div class="col-md-6">
+        <div class="room-card">
+          <img src="https://images.unsplash.com/photo-1542744173-8e7e53415bb0?w=400&h=250&fit=crop" alt="会議・研修" class="room-image">
+          <div class="room-content">
+            <h5>会議・研修プラン</h5>
+            <p class="text-muted">ビジネス会議や社内研修に最適な環境をご提供。</p>
+            <ul>
+              <li>プロジェクター・スクリーン</li>
+              <li>ホワイトボード</li>
+              <li>高速Wi-Fi</li>
+              <li>ランチ・ディナー付き</li>
+            </ul>
+            <div class="price-tag">¥5,000/人〜</div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="room-card">
+          <img src="https://images.unsplash.com/photo-1544025162-d76694265947?w=400&h=250&fit=crop" alt="懇親会" class="room-image">
+          <div class="room-content">
+            <h5>懇親会・忘年会</h5>
+            <p class="text-muted">社内懇親会や忘年会・新年会にご利用ください。</p>
+            <ul>
+              <li>飲み放題付きプラン</li>
+              <li>カラオケ機器</li>
+              <li>景品・ゲーム準備</li>
+              <li>写真撮影サービス</li>
+            </ul>
+            <div class="price-tag">¥7,000/人〜</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Inquiry Form -->
+    <div class="text-center mt-5">
+      <h4>お問い合わせ</h4>
+      <p class="text-muted mb-4">ご希望の内容に合わせてご相談承ります</p>
+      <button class="btn btn-japanese" data-bs-toggle="modal" data-bs-target="#inquiryModal">
+        📧 お問い合わせフォーム
+      </button>
+    </div>
+  </div>
+
+  <!-- Inquiry Modal -->
+  <div class="modal fade" id="inquiryModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">プライベートダイニング お問い合わせ</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <form id="privateInquiryForm">
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label class="form-label">お名前 *</label>
+                <input type="text" class="form-control" value="" id="privateName" required>
+              </div>
+              <div class="col-md-6 mb-3">
+                <label class="form-label">メールアドレス *</label>
+                <input type="email" class="form-control" value="" id="privateEmail" required>
+              </div>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">ご希望の用途 *</label>
+              <select class="form-control" required>
+                <option value="">選択してください</option>
+                <option value="wedding">結婚式・披露宴</option>
+                <option value="corporate">企業イベント</option>
+                <option value="party">パーティー</option>
+                <option value="other">その他</option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">ご希望日時 *</label>
+              <input type="datetime-local" class="form-control" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">ご人数 *</label>
+              <input type="number" class="form-control" min="1" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">ご要望・ご質問</label>
+              <textarea class="form-control" rows="4" placeholder="ご要望などございましたらご記入ください"></textarea>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">キャンセル</button>
+          <button type="button" class="btn btn-japanese" onclick="submitInquiry()">送信する</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // Check authentication
+    const currentUser = JSON.parse(localStorage.getItem('user'));
+    if (!currentUser) {
+      window.location.href = 'login.html';
+    }
+
+    // Auto-fill form with user data
+    document.addEventListener('DOMContentLoaded', function() {
+      document.getElementById('privateName').value = currentUser.name;
+      document.getElementById('privateEmail').value = currentUser.email;
+    });
+
+    function inquireRoom(roomName) {
+      alert(`${roomName}についてのお問い合わせフォームを表示します`);
+      const modal = new bootstrap.Modal(document.getElementById('inquiryModal'));
+      modal.show();
+    }
+
+    function submitInquiry() {
+      alert('お問い合わせを送信しました。2営業日以内にご連絡いたします。');
+      bootstrap.Modal.getInstance(document.getElementById('inquiryModal')).hide();
+    }
+
+    // Logout
+    document.getElementById('logoutBtn').addEventListener('click', () => {
+      if (confirm('ログアウトしますか？')) {
+        localStorage.removeItem('user');
+        window.location.href = '

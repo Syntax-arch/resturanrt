@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>イベント & スペシャル - レストラン予約システム</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="style.css" rel="stylesheet">
+  <style>
+    .event-card {
+      background: white;
+      border-radius: 12px;
+      padding: 0;
+      margin-bottom: 2rem;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      overflow: hidden;
+      transition: transform 0.3s ease;
+    }
+    .event-card:hover {
+      transform: translateY(-5px);
+    }
+    .event-image {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+    }
+    .event-content {
+      padding: 1.5rem;
+    }
+    .event-badge {
+      background: linear-gradient(135deg, #c62828, #e53935);
+      color: white;
+      padding: 0.3rem 1rem;
+      border-radius: 15px;
+      font-size: 0.8rem;
+      margin-right: 0.5rem;
+    }
+    .calendar-highlight {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      border-radius: 12px;
+      padding: 2rem;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="sakura-decoration"></div>
+  
+  <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #c62828;">
+    <div class="container">
+      <a class="navbar-brand fw-bold" href="dashboard.html">
+        🍣 レストラン予約システム
+      </a>
+      <div class="navbar-nav ms-auto">
+        <a href="dashboard.html" class="btn btn-outline-light btn-sm me-2">ダッシュボード</a>
+        <button class="btn btn-outline-light btn-sm" id="logoutBtn">ログアウト</button>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container mt-4">
+    <div class="text-center mb-5">
+      <h1>イベント & スペシャル</h1>
+      <p class="lead">特別な日をより思い出深く</p>
+    </div>
+
+    <!-- Upcoming Events -->
+    <h3 class="mb-4">🎉 開催予定のイベント</h3>
+    <div class="row">
+      <div class="col-md-6">
+        <div class="event-card">
+          <img src="https://images.unsplash.com/photo-1511795409834-ef04bbd61622?w=400&h=200&fit=crop" alt="バレンタイン特別ディナー" class="event-image">
+          <div class="event-content">
+            <span class="event-badge">季節イベント</span>
+            <span class="event-badge" style="background: linear-gradient(135deg, #4facfe, #00f2fe);">限定メニュー</span>
+            <h5 class="mt-2">バレンタイン特別ディナー</h5>
+            <p class="text-muted">2024年2月10日〜14日</p>
+            <p>特別に用意した恋人たちのためのコース料理。チョコレート職人による特製デザート付き。</p>
+            <button class="btn btn-japanese btn-sm">詳細を見る</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <div class="event-card">
+          <img src="https://images.unsplash.com/photo-1514320291840-2e0a9bf2a9ae?w=400&h=200&fit=crop" alt="ライブジャズナイト" class="event-image">
+          <div class="event-content">
+            <span class="event-badge">エンターテイメント</span>
+            <span class="event-badge" style="background: linear-gradient(135deg, #43e97b, #38f9d7);">毎週金曜</span>
+            <h5 class="mt-2">ライブジャズナイト</h5>
+            <p class="text-muted">毎週金曜日 19:00〜22:00</p>
+            <p>プロのジャズミュージシャンによる生演奏。特別カクテルと共にお楽しみください。</p>
+            <button class="btn btn-japanese btn-sm">詳細を見る</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Seasonal Specials -->
+    <h3 class="mb-4 mt-5">🍁 季節のスペシャルメニュー</h3>
+    <div class="row">
+      <div class="col-md-4">
+        <div class="event-card">
+          <img src="https://images.unsplash.com/photo-1570196912127-0d4a2ee81d2c?w=400&h=200&fit=crop" alt="冬の味覚コース" class="event-image">
+          <div class="event-content">
+            <h5>冬の味覚コース</h5>
+            <p class="text-muted">1月〜2月限定</p>
+            <p>カニ、ふぐ、鴨など冬の食材をふんだんに使用した特別コース。</p>
+            <div class="price-tag">¥8,800</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="event-card">
+          <img src="https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?w=400&h=200&fit=crop" alt="春の訪れランチ" class="event-image">
+          <div class="event-content">
+            <h5>春の訪れランチ</h5>
+            <p class="text-muted">3月〜4月限定</p>
+            <p>山菜や春野菜を使用した、春の息吹を感じるランチコース。</p>
+            <div class="price-tag">¥3,200</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="event-card">
+          <img src="https://images.unsplash.com/photo-1563379926898-05f4575a45d8?w=400&h=200&fit=crop" alt="夏の海鮮祭り" class="event-image">
+          <div class="event-content">
+            <h5>夏の海鮮祭り</h5>
+            <p class="text-muted">7月〜8月限定</p>
+            <p>全国各地から厳選した新鮮な魚介類を使用した海鮮コース。</p>
+            <div class="price-tag">¥6,500</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Cooking Classes -->
+    <h3 class="mb-4 mt-5">👨‍🍳 料理教室</h3>
+    <div class="row">
+      <div class="col-md-6">
+        <div class="event-card">
+          <img src="https://images.unsplash.com/photo-1556909114-f6e7b5ef4de0?w=400&h=200&fit=crop" alt="和食基本講座" class="event-image">
+          <div class="event-content">
+            <h5>和食基本講座</h5>
+            <p class="text-muted">毎月第1土曜日 10:00〜13:00</p>
+            <p>だしの取り方から基本の和食料理まで学べる初心者向け講座。</p>
+            <div class="price-tag">¥5,000</div>
+            <button class="btn btn-japanese btn-sm mt-2">申し込む</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <div class="event-card">
+          <img src="https://images.unsplash.com/photo-1565557623262-b51c2513a641?w=400&h=200&fit=crop" alt="パスタマスタークラス" class="event-image">
+          <div class="event-content">
+            <h5>パスタマスタークラス</h5>
+            <p class="text-muted">毎月第3日曜日 14:00〜17:00</p>
+            <p>本場イタリアンシェフ直伝のパスタ作りを学ぶ特別クラス。</p>
+            <div class="price-tag">¥6,500</div>
+            <button class="btn btn-japanese btn-sm mt-2">申し込む</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Event Calendar -->
+    <div class="calendar-highlight mt-5">
+      <h4 class="mb-3">📅 イベントカレンダー</h4>
+      <p>今月のイベントスケジュール</p>
+      <div class="row text-center mt-4">
+        <div class="col-md-3 mb-3">
+          <div class="h5">2/10-14</div>
+          <small>バレンタイン特別ディナー</small>
+        </div>
+        <div class="col-md-3 mb-3">
+          <div class="h5">毎週金曜</div>
+          <small>ライブジャズナイト</small>
+        </div>
+        <div class="col-md-3 mb-3">
+          <div class="h5">2/20</div>
+          <small>ワイン試飲会</small>
+        </div>
+        <div class="col-md-3 mb-3">
+          <div class="h5">3/3</div>
+          <small>ひな祭り特別メニュー</small>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Check authentication
+    const currentUser = JSON.parse(localStorage.getItem('user'));
+    if (!currentUser) {
+      window.location.href = 'login.html';
+    }
+
+    // Logout
+    document.getElementById('logoutBtn').addEventListener('click', () => {
+      if (confirm('ログアウトしますか？')) {
+        localStorage.removeItem('user');
+        window.location.href = 'index.html';
+      }
+    });
+  </script>
+</body>
+</html>
