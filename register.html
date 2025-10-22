@@ -53,17 +53,16 @@
           .insert([{ name, email, password }])
           .select();
           
-        if (error) throw error;
-        
-        document.getElementById('message').innerHTML = `
-          <div class="alert alert-success">登録が成功しました！</div>
-        `;
-        document.getElementById('registerForm').reset();
-        
-       
+    if (error) throw error;
+
+
+localStorage.setItem('user', JSON.stringify(data[0]));
+document.getElementById('message').innerHTML = `
+  <div class="alert alert-success">登録が成功しました！ダッシュボードに移動します...</div>
+`;
+document.getElementById('registerForm').reset();
+
 setTimeout(() => {
-  
-  localStorage.setItem('user', JSON.stringify(data[0]));
   window.location.href = 'dashboard.html';
 }, 1500);
       } catch (error) {
