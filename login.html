@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>ログイン</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="style.css" rel="stylesheet">
+</head>
+<body>
+  <div class="sakura-decoration"></div>
+  <div class="container">
+    <div class="card japanese-card p-4">
+      <div class="card-header p-3 mb-3">
+        <h3 class="mb-0">ログイン</h3>
+      </div>
+      <form id="loginForm">
+        <div class="mb-3">
+          <label class="form-label">メールアドレス</label>
+          <input type="email" class="form-control" id="email" required>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">パスワード</label>
+          <input type="password" class="form-control" id="password" required>
+        </div>
+        <button type="submit" class="btn btn-success w-100">ログイン</button>
+      </form>
+      <div id="message" class="mt-3"></div>
+      <a href="index.html" class="d-block text-center mt-3">← ホームに戻る</a>
+    </div>
+  </div>
+
+  <script>
+    const SUPABASE_URL = 'https://nfcjbjohxzaikelxgmjg.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5mY2piam9oeHphaWtlbHhnbWpnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjEwNTgzMjAsImV4cCI6MjA3NjYzNDMyMH0.u0ta1NxSDbJ_9lf1TcMp3M0-_vNNBs6HByOj8wtKsX4';
+    
+    const { createClient } = supabase;
+    const supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    
+    document.getElementById('loginForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      
+      try {
+        const { data, error } = await supabaseClient
+          .from('users')
+          .select('*')
+          .eq('email', email)
+          .eq('password', password)
+          .single();
+          
+        if (error) throw error;
+        
+        if (data) {
+          localStorage.setItem('user', JSON.stringify(data));
+          document.getElementById('message').innerHTML = `
+            <div class="alert alert-success">ログイン成功！</div>
+          `;
+          
+          
+setTimeout(() => {
+  window.location.href = 'dashboard.html';
+}, 1000);
+        } else {
+          throw new Error('メールアドレスまたはパスワードが間違っています');
+        }
+      } catch (error) {
+        document.getElementById('message').innerHTML = `
+          <div class="alert alert-danger">${error.message}</div>
+        `;
+      }
+    });
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</body>
+</html>
