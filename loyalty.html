@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>会員特典 - レストラン予約システム</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="style.css" rel="stylesheet">
+  <style>
+    .tier-card {
+      background: white;
+      border-radius: 12px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+    .bronze { border-left: 5px solid #cd7f32; }
+    .silver { border-left: 5px solid #c0c0c0; }
+    .gold { border-left: 5px solid #ffd700; }
+    .platinum { border-left: 5px solid #e5e4e2; }
+    .points-display {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      border-radius: 12px;
+      padding: 2rem;
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    .benefit-item {
+      display: flex;
+      align-items: center;
+      margin-bottom: 1rem;
+      padding: 1rem;
+      background: #f8f9fa;
+      border-radius: 8px;
+    }
+  </style>
+</head>
+<body>
+  <div class="sakura-decoration"></div>
+  
+  <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #c62828;">
+    <div class="container">
+      <a class="navbar-brand fw-bold" href="dashboard.html">
+        🍣 レストラン予約システム
+      </a>
+      <div class="navbar-nav ms-auto">
+        <a href="dashboard.html" class="btn btn-outline-light btn-sm me-2">ダッシュボード</a>
+        <button class="btn btn-outline-light btn-sm" id="logoutBtn">ログアウト</button>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container mt-4">
+    <div class="text-center mb-5">
+      <h1>会員特典プログラム</h1>
+      <p class="lead">ご利用いただくほどにお得になる特典がいっぱい</p>
+    </div>
+
+    <!-- Points Display -->
+    <div class="points-display">
+      <h4>現在のポイント</h4>
+      <div class="display-4 mb-2">1,250</div>
+      <p>ポイント</p>
+      <div class="progress mb-3" style="height: 10px;">
+        <div class="progress-bar" style="width: 25%;">25%</div>
+      </div>
+      <small>ゴールド会員まであと 3,750 ポイント</small>
+    </div>
+
+    <!-- Membership Tiers -->
+    <h3 class="mb-4">🎯 会員ランク</h3>
+    <div class="row">
+      <div class="col-md-3">
+        <div class="tier-card bronze">
+          <div class="h1 mb-3">🥉</div>
+          <h5>ブロンズ会員</h5>
+          <div class="h6 text-muted mb-3">0-1,000ポイント</div>
+          <ul class="list-unstyled text-start small">
+            <li>✅ ポイント付与 5%</li>
+            <li>✅ 誕生日特典</li>
+            <li>✅ メルマガ配信</li>
+          </ul>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="tier-card silver">
+          <div class="h1 mb-3">🥈</div>
+          <h5>シルバー会員</h5>
+          <div class="h6 text-muted mb-3">1,001-5,000ポイント</div>
+          <ul class="list-unstyled text-start small">
+            <li>✅ ポイント付与 7%</li>
+            <li>✅ 優先予約</li>
+            <li>✅ ウェルカムドリンク</li>
+            <li>✅ 特別メニューアクセス</li>
+          </ul>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="tier-card gold">
+          <div class="h1 mb-3">🥇</div>
+          <h5>ゴールド会員</h5>
+          <div class="h6 text-muted mb-3">5,001-10,000ポイント</div>
+          <ul class="list-unstyled text-start small">
+            <li>✅ ポイント付与 10%</li>
+            <li>✅ 個室無料利用</li>
+            <li>✅ 記念日特典</li>
+            <li>✅ シェフ特製料理</li>
+          </ul>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="tier-card platinum">
+          <div class="h1 mb-3">💎</div>
+          <h5>プラチナ会員</h5>
+          <div class="h6 text-muted mb-3">10,001ポイント以上</div>
+          <ul class="list-unstyled text-start small">
+            <li>✅ ポイント付与 15%</li>
+            <li>✅ 完全貸切特典</li>
+            <li>✅ ソムリエサービス</li>
+            <li>✅ イベント優先招待</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Rewards Catalog -->
+    <h3 class="mb-4 mt-5">🎁 ポイント交換</h3>
+    <div class="row">
+      <div class="col-md-4 mb-3">
+        <div class="card text-center h-100">
+          <div class="card-body">
+            <div class="h1 mb-3">🍷</div>
+            <h6>ハウスワイン1杯</h6>
+            <div class="text-muted mb-3">100ポイント</div>
+            <button class="btn btn-japanese btn-sm">交換する</button>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4 mb-3">
+        <div class="card text-center h-100">
+          <div class="card-body">
+            <div class="h1 mb-3">🍰</div>
+            <h6>特製デザート</h6>
+            <div class="text-muted mb-3">200ポイント</div>
+            <button class="btn btn-japanese btn-sm">交換する</button>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4 mb-3">
+        <div class="card text-center h-100">
+          <div class="card-body">
+            <div class="h1 mb-3">🍣</div>
+            <h6>おまかせコース</h6>
+            <div class="text-muted mb-3">1,000ポイント</div>
+            <button class="btn btn-japanese btn-sm">交換する</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- How to Earn Points -->
+    <div class="row mt-5">
+      <div class="col-md-6">
+        <h5>📈 ポイント獲得方法</h5>
+        <div class="benefit-item">
+          <div class="me-3">💰</div>
+          <div>
+            <strong>食事ご利用</strong><br>
+            <small>100円ごとに1ポイント</small>
+          </div>
+        </div>
+        <div class="benefit-item">
+          <div class="me-3">📅</div>
+          <div>
+            <strong>月間来店ボーナス</strong><br>
+            <small>月3回来店で100ポイント</small>
+          </div>
+        </div>
+        <div class="benefit-item">
+          <div class="me-3">🎂</div>
+          <div>
+            <strong>誕生日月特典</strong><br>
+            <small>誕生日月に500ポイント</small>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <h5>💫 特別特典</h5>
+        <div class="benefit-item">
+          <div class="me-3">⭐</div>
+          <div>
+            <strong>レビュー投稿</strong><br>
+            <small>レビュー投稿で50ポイント</small>
+          </div>
+        </div>
+        <div class="benefit-item">
+          <div class="me-3">👥</div>
+          <div>
+            <strong>友達紹介</strong><br>
+            <small>紹介1件につき200ポイント</small>
+          </div>
+        </div>
+        <div class="benefit-item">
+          <div class="me-3">📱</div>
+          <div>
+            <strong>SNSフォロー</strong><br>
+            <small>SNSフォローで100ポイント</small>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Check authentication
+    const currentUser = JSON.parse(localStorage.getItem('user'));
+    if (!currentUser) {
+      window.location.href = 'login.html';
+    }
+
+    // Logout
+    document.getElementById('logoutBtn').addEventListener('click', () => {
+      if (confirm('ログアウトしますか？')) {
+        localStorage.removeItem('user');
+        window.location.href = 'index.html';
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>採用情報 - レストラン予約システム</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="style.css" rel="stylesheet">
+  <style>
+    .job-card {
+      background: white;
+      border-radius: 12px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      transition: transform 0.3s ease;
+    }
+    .job-card:hover {
+      transform: translateY(-5px);
+    }
+    .culture-card {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      border-radius: 12px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+    }
+    .benefit-item {
+      text-align: center;
+      padding: 1.5rem;
+    }
+    .application-steps {
+      background: #f8f9fa;
+      border-radius: 12px;
+      padding: 2rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="sakura-decoration"></div>
+  
+  <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #c62828;">
+    <div class="container">
+      <a class="navbar-brand fw-bold" href="dashboard.html">
+        🍣 レストラン予約システム
+      </a>
+      <div class="navbar-nav ms-auto">
+        <a href="dashboard.html" class="btn btn-outline-light btn-sm me-2">ダッシュボード</a>
+        <button class="btn btn-outline-light btn-sm" id="logoutBtn">ログアウト</button>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container mt-4">
+    <div class="text-center mb-5">
+      <h1>採用情報</h1>
+      <p class="lead">私たちと一緒に最高の食体験を創りませんか？</p>
+    </div>
+
+    <!-- Company Culture -->
+    <div class="culture-card text-center">
+      <h3 class="mb-4">私たちの想い</h3>
+      <p>「お客様に最高の笑顔を」をモットーに、一人ひとりのお客様に心のこもったサービスを提供しています。伝統を重んじながらも新しい挑戦を続ける当店で、あなたのキャリアを一緒に育てましょう。</p>
+    </div>
+
+    <!-- Current Openings -->
+    <h3 class="mb-4">💼 募集職種</h3>
+    <div class="job-card">
+      <div class="d-flex justify-content-between align-items-start mb-3">
+        <div>
+          <h5>サービススタッフ</h5>
+          <span class="badge bg-success">正社員</span>
+          <span class="badge bg-info">パートタイム</span>
+        </div>
+        <div class="text-end">
+          <div class="h6 text-muted">東京・銀座店</div>
+          <small class="text-muted">応募締切: 2024年3月31日</small>
+        </div>
+      </div>
+      <p class="text-muted">お客様に最高の食事体験を提供するサービススタッフを募集しています。未経験者も歓迎です。</p>
+      <h6>求める人物像</h6>
+      <ul>
+        <li>笑顔で接客ができる方</li>
+        <li>チームワークを大切にできる方</li>
+        <li>飲食業に情熱を持っている方</li>
+      </ul>
+      <button class="btn btn-japanese" onclick="applyJob('サービススタッフ')">詳細を見る</button>
+    </div>
+
+    <div class="job-card">
+      <div class="d-flex justify-content-between align-items-start mb-3">
+        <div>
+          <h5>キッチンスタッフ</h5>
+          <span class="badge bg-success">正社員</span>
+        </div>
+        <div class="text-end">
+          <div class="h6 text-muted">東京・銀座店</div>
+          <small class="text-muted">応募締切: 2024年3月15日</small>
+        </div>
+      </div>
+      <p class="text-muted">和食の基本を学びながら、新しい料理の創造に挑戦したい方を募集します。</p>
+      <h6>求める人物像</h6>
+      <ul>
+        <li>料理に対する情熱がある方</li>
+        <li>チームで協力して働ける方</li>
+        <li>成長意欲の高い方</li>
+      </ul>
+      <button class="btn btn-japanese" onclick="applyJob('キッチンスタッフ')">詳細を見る</button>
+    </div>
+
+    <!-- Employee Benefits -->
+    <h3 class="mb-4 mt-5">⭐ 福利厚生</h3>
+    <div class="row">
+      <div class="col-md-3 mb-3">
+        <div class="benefit-item">
+          <div class="h1 mb-3">💰</div>
+          <h6>競争力ある給与</h6>
+          <small class="text-muted">経験・能力を考慮</small>
+        </div>
+      </div>
+      <div class="col-md-3 mb-3">
+        <div class="benefit-item">
+          <div class="h1 mb-3">🏥</div>
+          <h6>健康保険完備</h6>
+          <small class="text-muted">社会保険完備</small>
+        </div>
+      </div>
+      <div class="col-md-3 mb-3">
+        <div class="benefit-item">
+          <div class="h1 mb-3">🎓</div>
+          <h6>教育訓練</h6>
+          <small class="text-muted">定期的な研修</small>
+        </div>
+      </div>
+      <div class="col-md-3 mb-3">
+        <div class="benefit-item">
+          <div class="h1 mb-3">🍽️</div>
+          <h6>食事補助</h6>
+          <small class="text-muted">勤務中の食事提供</small>
+        </div>
+      </div>
+    </div>
+
+    <!-- Application Process -->
+    <div class="application-steps mt-5">
+      <h4 class="text-center mb-4">📝 応募の流れ</h4>
+      <div class="row text-center">
+        <div class="col-md-3 mb-3">
+          <div class="h1 mb-3">1</div>
+          <h6>応募書類提出</h6>
+          <small class="text-muted">オンラインフォームから</small>
+        </div>
+        <div class="col-md-3 mb-3">
+          <div class="h1 mb-3">2</div>
+          <h6>書類選考</h6>
+          <small class="text-muted">1週間以内にご連絡</small>
+        </div>
+        <div class="col-md-3 mb-3">
+          <div class="h1 mb-3">3</div>
+          <h6>面接</h6>
+          <small class="text-muted">1-2回の面接</small>
+        </div>
+        <div class="col-md-3 mb-3">
+          <div class="h1 mb-3">4</div>
+          <h6>内定</h6>
+          <small class="text-muted">条件面談後決定</small>
+        </div>
+      </div>
+    </div>
+
+    <!-- Contact HR -->
+    <div class="text-center mt-5">
+      <h4>ご質問はこちら</h4>
+      <p class="text-muted">採用に関するご質問はお気軽にお問い合わせください</p>
+      <button class="btn btn-japanese" data-bs-toggle="modal" data-bs-target="#hrModal">
+        📧 人事部にお問い合わせ
+      </button>
+    </div>
+  </div>
+
+  <!-- HR Contact Modal -->
+  <div class="modal fade" id="hrModal" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">人事部へのお問い合わせ</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <form>
+            <div class="mb-3">
+              <label class="form-label">お名前 *</label>
+              <input type="text" class="form-control" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">メールアドレス *</label>
+              <input type="email" class="form-control" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">ご質問内容 *</label>
+              <textarea class="form-control" rows="4" required></textarea>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">キャンセル</button>
+          <button type="button" class="btn btn-japanese" onclick="submitHRInquiry()">送信する</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // Check authentication
+    const currentUser = JSON.parse(localStorage.getItem('user'));
+    if (!currentUser) {
+      window.location.href = 'login.html';
+    }
+
+    function applyJob(jobTitle) {
+      alert(`「${jobTitle}」の詳細ページを表示します`);
+      // In a real application, this would navigate to a detailed job page
+    }
+
+    function submitHRInquiry() {
+      alert('お問い合わせを送信しました。3営業日以内にご連絡いたします。');
+      bootstrap.Modal.getInstance(document.getElementById('hrModal')).hide();
+    }
+
+    // Logout
+    document.getElementById('logoutBtn').addEventListener('click', () => {
+      if (confirm('ログアウトしますか？')) {
+        localStorage.removeItem('user');
+        window.location.href = 'index.html';
+      }
+    });
+  </script>
+</body>
+</html> 
