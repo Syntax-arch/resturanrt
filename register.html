@@ -2,34 +2,280 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <title>ユーザー登録</title>
+  <title>新規登録 - レストラン予約システム</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="style.css" rel="stylesheet">
+  <style>
+    .register-container {
+      min-height: 100vh;
+      background: linear-gradient(135deg, 
+        rgba(240, 147, 251, 0.9) 0%, 
+        rgba(245, 87, 108, 0.9) 100%),
+        url('https://images.unsplash.com/photo-1555396273-367ea4eb4db5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80');
+      background-size: cover;
+      background-position: center;
+      background-blend-mode: overlay;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .register-container::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-image: 
+        radial-gradient(circle at 10% 20%, rgba(255, 119, 198, 0.4) 0%, transparent 50%),
+        radial-gradient(circle at 90% 80%, rgba(120, 119, 198, 0.4) 0%, transparent 50%);
+      animation: float 8s ease-in-out infinite;
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0px) scale(1); }
+      50% { transform: translateY(-15px) scale(1.02); }
+    }
+    .register-card {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 3rem;
+      box-shadow: 
+        0 25px 50px rgba(0, 0, 0, 0.15),
+        0 0 0 1px rgba(255, 255, 255, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      position: relative;
+      z-index: 2;
+      max-width: 450px;
+      width: 90%;
+      animation: slideUp 0.8s ease-out 0.2s both;
+    }
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(50px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    .register-header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    .logo {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      display: block;
+      animation: bounce 2s ease-in-out infinite;
+    }
+    @keyframes bounce {
+      0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+      40% { transform: translateY(-10px); }
+      60% { transform: translateY(-5px); }
+    }
+    .welcome-text {
+      color: #666;
+      font-size: 0.9rem;
+      margin-bottom: 0;
+    }
+    .form-floating {
+      margin-bottom: 1.5rem;
+    }
+    .form-control {
+      border-radius: 12px;
+      border: 2px solid #e1e5e9;
+      padding: 1rem;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+      background: rgba(255, 255, 255, 0.8);
+    }
+    .form-control:focus {
+      border-color: #f5576c;
+      box-shadow: 0 0 0 0.2rem rgba(245, 87, 108, 0.25);
+      background: white;
+    }
+    .register-btn {
+      background: linear-gradient(135deg, #f093fb, #f5576c);
+      border: none;
+      border-radius: 12px;
+      padding: 1rem 2rem;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: white;
+      width: 100%;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .register-btn::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+      transition: left 0.5s;
+    }
+    .register-btn:hover::before {
+      left: 100%;
+    }
+    .register-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 15px 30px rgba(245, 87, 108, 0.4);
+    }
+    .password-strength {
+      height: 4px;
+      background: #e1e5e9;
+      border-radius: 2px;
+      margin-top: 0.5rem;
+      overflow: hidden;
+    }
+    .strength-bar {
+      height: 100%;
+      width: 0%;
+      transition: all 0.3s ease;
+      border-radius: 2px;
+    }
+    .strength-weak { background: #ff4757; width: 33%; }
+    .strength-medium { background: #ffa502; width: 66%; }
+    .strength-strong { background: #2ed573; width: 100%; }
+    .photo-showcase {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      z-index: 3;
+    }
+    .showcase-photo {
+      width: 100px;
+      height: 80px;
+      border-radius: 12px;
+      object-fit: cover;
+      border: 2px solid rgba(255, 255, 255, 0.8);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      transition: transform 0.3s ease;
+    }
+    .showcase-photo:hover {
+      transform: scale(1.1);
+    }
+    .benefits-sidebar {
+      position: absolute;
+      top: 50%;
+      right: 20px;
+      transform: translateY(-50%);
+      background: rgba(255, 255, 255, 0.9);
+      padding: 1.5rem;
+      border-radius: 12px;
+      backdrop-filter: blur(10px);
+      max-width: 200px;
+    }
+    .benefit-item {
+      display: flex;
+      align-items: center;
+      margin-bottom: 1rem;
+      font-size: 0.9rem;
+    }
+    .benefit-item:last-child {
+      margin-bottom: 0;
+    }
+    .benefit-icon {
+      font-size: 1.2rem;
+      margin-right: 0.5rem;
+    }
+  </style>
 </head>
 <body>
-  <div class="sakura-decoration"></div>
-  <div class="container">
-    <div class="card japanese-card p-4">
-      <div class="card-header p-3 mb-3">
-        <h3 class="mb-0">ユーザー登録</h3>
+  <div class="register-container">
+    <!-- Photo Showcase -->
+    <div class="photo-showcase">
+      <img src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=100&h=80&q=80" alt="Japanese Appetizer" class="showcase-photo">
+      <img src="https://images.unsplash.com/photo-1588168333986-5078d3ae3976?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=100&h=80&q=80" alt="Steak" class="showcase-photo">
+      <img src="https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=100&h=80&q=80" alt="Dessert" class="showcase-photo">
+    </div>
+
+    <!-- Benefits Sidebar -->
+    <div class="benefits-sidebar">
+      <h6 class="mb-3">🎁 会員特典</h6>
+      <div class="benefit-item">
+        <span class="benefit-icon">🎯</span>
+        <span>ポイントプログラム</span>
       </div>
+      <div class="benefit-item">
+        <span class="benefit-icon">📅</span>
+        <span>優先予約</span>
+      </div>
+      <div class="benefit-item">
+        <span class="benefit-icon">🎂</span>
+        <span>誕生日特典</span>
+      </div>
+      <div class="benefit-item">
+        <span class="benefit-icon">💝</span>
+        <span>会員限定オファー</span>
+      </div>
+    </div>
+
+    <div class="register-card">
+      <div class="register-header">
+        <span class="logo">🎉</span>
+        <h2>新規登録</h2>
+        <p class="welcome-text">美味しい体験を始めましょう</p>
+      </div>
+
       <form id="registerForm">
-        <div class="mb-3">
-          <label class="form-label">名前</label>
+        <div class="form-floating">
           <input type="text" class="form-control" id="name" placeholder="山田 太郎" required>
+          <label for="name">👤 お名前</label>
         </div>
-        <div class="mb-3">
-          <label class="form-label">メールアドレス</label>
-          <input type="email" class="form-control" id="email" placeholder="example@email.com" required>
+        
+        <div class="form-floating">
+          <input type="email" class="form-control" id="email" placeholder="name@example.com" required>
+          <label for="email">📧 メールアドレス</label>
         </div>
-        <div class="mb-3">
-          <label class="form-label">パスワード</label>
-          <input type="password" class="form-control" id="password" required minlength="6">
+        
+        <div class="form-floating">
+          <input type="password" class="form-control" id="password" placeholder="Password" required minlength="6" oninput="updatePasswordStrength()">
+          <label for="password">🔒 パスワード</label>
+          <div class="password-strength">
+            <div class="strength-bar" id="passwordStrength"></div>
+          </div>
+          <div class="form-text">6文字以上のパスワードを設定してください</div>
         </div>
-        <button type="submit" class="btn btn-japanese w-100">登録</button>
+
+        <div class="form-floating">
+          <input type="password" class="form-control" id="confirmPassword" placeholder="Confirm Password" required oninput="checkPasswordMatch()">
+          <label for="confirmPassword">✅ パスワード確認</label>
+          <div class="form-text" id="passwordMatchText"></div>
+        </div>
+
+        <div class="form-check mb-4">
+          <input class="form-check-input" type="checkbox" id="agreeTerms" required>
+          <label class="form-check-label small" for="agreeTerms">
+            <a href="#" class="text-decoration-none">利用規約</a>と
+            <a href="#" class="text-decoration-none">プライバシーポリシー</a>に同意します
+          </label>
+        </div>
+
+        <button type="submit" class="register-btn">
+          🚀 アカウント作成
+        </button>
       </form>
+
       <div id="message" class="mt-3"></div>
-      <a href="index.html" class="d-block text-center mt-3">← ホームに戻る</a>
+
+      <div class="text-center mt-4">
+        <p class="small mb-2">すでにアカウントをお持ちの方は</p>
+        <a href="login.html" class="fw-bold text-decoration-none" style="color: #f5576c;">ログインはこちら</a>
+        <div class="mt-3">
+          <a href="index.html" class="small text-decoration-none" style="color: #666;">← ホームに戻る</a>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -40,51 +286,121 @@
       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5mY2piam9oeHphaWtlbHhnbWpnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjEwNTgzMjAsImV4cCI6MjA3NjYzNDMyMH0.u0ta1NxSDbJ_9lf1TcMp3M0-_vNNBs6HByOj8wtKsX4'
     );
 
+    function updatePasswordStrength() {
+      const password = document.getElementById('password').value;
+      const strengthBar = document.getElementById('passwordStrength');
+      
+      let strength = 0;
+      if (password.length >= 6) strength++;
+      if (password.length >= 8) strength++;
+      if (/[A-Z]/.test(password)) strength++;
+      if (/[0-9]/.test(password)) strength++;
+      if (/[^A-Za-z0-9]/.test(password)) strength++;
+      
+      strengthBar.className = 'strength-bar';
+      if (strength <= 2) {
+        strengthBar.classList.add('strength-weak');
+      } else if (strength <= 4) {
+        strengthBar.classList.add('strength-medium');
+      } else {
+        strengthBar.classList.add('strength-strong');
+      }
+    }
+
+    function checkPasswordMatch() {
+      const password = document.getElementById('password').value;
+      const confirmPassword = document.getElementById('confirmPassword').value;
+      const matchText = document.getElementById('passwordMatchText');
+      
+      if (confirmPassword === '') {
+        matchText.textContent = '';
+        matchText.className = 'form-text';
+      } else if (password === confirmPassword) {
+        matchText.textContent = '✅ パスワードが一致しています';
+        matchText.className = 'form-text text-success';
+      } else {
+        matchText.textContent = '❌ パスワードが一致しません';
+        matchText.className = 'form-text text-danger';
+      }
+    }
+
     document.getElementById('registerForm').addEventListener('submit', async (e) => {
       e.preventDefault();
       
       const name = document.getElementById('name').value;
       const email = document.getElementById('email').value;
       const password = document.getElementById('password').value;
-      
+      const confirmPassword = document.getElementById('confirmPassword').value;
       const messageDiv = document.getElementById('message');
-      messageDiv.innerHTML = '<div class="alert alert-info">登録中...</div>';
       
+      if (password !== confirmPassword) {
+        messageDiv.innerHTML = `
+          <div class="alert alert-danger alert-dismissible fade show">
+            ❌ パスワードが一致しません
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+          </div>
+        `;
+        return;
+      }
+
+      // Show loading state
+      const submitBtn = e.target.querySelector('button[type="submit"]');
+      const originalText = submitBtn.innerHTML;
+      submitBtn.innerHTML = '⏳ 登録中...';
+      submitBtn.disabled = true;
+
       try {
-        console.log('Sending data to Supabase...');
+        console.log('Attempting registration...');
         const { data, error } = await supabase
           .from('users')
           .insert([{ name, email, password }])
           .select();
           
         if (error) {
-          console.error('Supabase Error:', error);
+          console.error('Registration error:', error);
           throw error;
         }
 
-        console.log('Success! Data:', data);
-        
-        if (data && data.length > 0) {
-          // Store user and redirect
+        console.log('Registration successful:', data);
+
+        // Store user data and redirect
+        if (data && data[0]) {
           localStorage.setItem('user', JSON.stringify(data[0]));
-          messageDiv.innerHTML = '<div class="alert alert-success">登録成功！ダッシュボードに移動します...</div>';
+          messageDiv.innerHTML = `
+            <div class="alert alert-success alert-dismissible fade show">
+              🎉 登録が成功しました！ダッシュボードに移動します...
+            </div>
+          `;
           
           setTimeout(() => {
             window.location.href = 'dashboard.html';
           }, 2000);
-        } else {
-          throw new Error('データが返されませんでした');
         }
-        
       } catch (error) {
-        console.error('Registration Failed:', error);
+        console.error('Registration failed:', error);
         messageDiv.innerHTML = `
-          <div class="alert alert-danger">
-            <strong>エラー:</strong> ${error.message}
-            <br><small>詳細: ${JSON.stringify(error)}</small>
+          <div class="alert alert-danger alert-dismissible fade show">
+            ❌ エラー: ${error.message}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
           </div>
         `;
+      } finally {
+        // Reset button state
+        submitBtn.innerHTML = originalText;
+        submitBtn.disabled = false;
       }
+    });
+
+    // Add interactive effects
+    document.querySelectorAll('.form-control').forEach(input => {
+      input.addEventListener('focus', function() {
+        this.parentElement.classList.add('focused');
+      });
+      input.addEventListener('blur', function() {
+        if (!this.value) {
+          this.parentElement.classList.remove('focused');
+        }
+      });
     });
   </script>
 </body>
