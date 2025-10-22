@@ -7,26 +7,50 @@
   <style>
     body {
       background: linear-gradient(135deg, #f0f4ff, #ffffff);
-      font-family: "Noto Sans JP", sans-serif;
+      font-family: sans-serif;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
+      margin: 0;
+      padding: 20px;
     }
-    h1 { color: #2c3e50; font-weight: 700; margin-bottom: 2rem; }
-    .btn-container { display: flex; gap: 1rem; }
-    .btn { font-size: 1.1rem; padding: 0.7rem 1.5rem; border-radius: 30px; }
-    footer { position: fixed; bottom: 10px; color: #6c757d; }
+    h1 { 
+      color: #2c3e50; 
+      font-weight: 700; 
+      margin-bottom: 2rem; 
+      text-align: center;
+    }
+    .btn-container { 
+      display: flex; 
+      gap: 1rem; 
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .btn { 
+      font-size: 1.1rem; 
+      padding: 12px 24px; 
+      border-radius: 30px; 
+      text-decoration: none;
+      display: inline-block;
+    }
+    footer { 
+      position: fixed; 
+      bottom: 10px; 
+      color: #6c757d; 
+      text-align: center;
+      width: 100%;
+    }
   </style>
 </head>
 <body>
   <div class="text-center">
     <h1>レストラン予約システム</h1>
     <div class="btn-container">
-  <button onclick="window.location.href='register.html'" class="btn btn-japanese">ユーザー登録</button>
-  <button onclick="window.location.href='login.html'" class="btn btn-success">ログイン</button>
-</div>
+      <a href="register.html" class="btn btn-primary" style="color: white;">ユーザー登録</a>
+      <a href="login.html" class="btn btn-success" style="color: white;">ログイン</a>
+    </div>
   </div>
   <footer>© 2025 レストラン予約システム</footer>
 </body>
