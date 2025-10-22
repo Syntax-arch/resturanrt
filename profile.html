@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>プロフィール - レストラン予約システム</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="style.css" rel="stylesheet">
+  <style>
+    .profile-card {
+      border-radius: 15px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+    .profile-header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border-radius: 15px 15px 0 0;
+      padding: 2rem;
+      text-align: center;
+    }
+    .profile-avatar {
+      width: 100px;
+      height: 100px;
+      background: rgba(255,255,255,0.2);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.5rem;
+      margin: 0 auto 1rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="sakura-decoration"></div>
+  
+  <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #c62828;">
+    <div class="container">
+      <a class="navbar-brand fw-bold" href="dashboard.html">
+        🍣 レストラン予約システム
+      </a>
+      <div class="navbar-nav ms-auto">
+        <a href="dashboard.html" class="btn btn-outline-light btn-sm me-2">ダッシュボード</a>
+        <button class="btn btn-outline-light btn-sm" id="logoutBtn">ログアウト</button>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container mt-4">
+    <div class="row justify-content-center">
+      <div class="col-md-8">
+        <div class="card profile-card">
+          <div class="profile-header">
+            <div class="profile-avatar">👤</div>
+            <h3 id="userName">ユーザー名</h3>
+            <p class="mb-0">プロフィール情報</p>
+          </div>
+          
+          <div class="card-body p-4">
+            <div class="row">
+              <div class="col-md-6">
+                <div class="mb-4">
+                  <h5>基本情報</h5>
+                  <div class="border-bottom pb-3 mb-3">
+                    <strong>名前:</strong><br>
+                    <span id="profileName" class="text-muted">-</span>
+                  </div>
+                  <div class="border-bottom pb-3 mb-3">
+                    <strong>メールアドレス:</strong><br>
+                    <span id="profileEmail" class="text-muted">-</span>
+                  </div>
+                  <div class="border-bottom pb-3">
+                    <strong>登録日:</strong><br>
+                    <span id="profileJoinDate" class="text-muted">-</span>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="col-md-6">
+                <div class="mb-4">
+                  <h5>予約統計</h5>
+                  <div class="border-bottom pb-3 mb-3">
+                    <strong>総予約数:</strong><br>
+                    <span id="totalReservations" class="text-muted">0</span>
+                  </div>
+                  <div class="border-bottom pb-3 mb-3">
+                    <strong>今後の予約:</strong><br>
+                    <span id="upcomingReservations" class="text-muted">0</span>
+                  </div>
+                  <div class="border-bottom pb-3">
+                    <strong>過去の予約:</strong><br>
+                    <span id="pastReservations" class="text-muted">0</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="text-center mt-4">
+              <button class="btn btn-japanese me-2" onclick="editProfile()">プロフィール編集</button>
+              <button class="btn btn-outline-secondary" onclick="window.history.back()">戻る</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    // Check authentication
+    const currentUser = JSON.parse(localStorage.getItem('user'));
+    if (!currentUser) {
+      window.location.href = 'login.html';
+    }
+
+    const supabase = window.supabase.createClient(
+      'https://nfcjbjohxzaikelxgmjg.supabase.co',
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5mY2piam9oeHphaWtlbHhnbWpnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjEwNTgzMjAsImV4cCI6MjA3NjYzNDMyMH0.u0ta1NxSDbJ_9lf1TcMp3M0-_vNNBs6HByOj8wtKsX4'
+    );
+
+    // Load profile data
+    async function loadProfileData() {
+      try {
+        // Update basic info
+        document.getElementById('userName').textContent = currentUser.name;
+        document.getElementById('profileName').textContent = currentUser.name;
+        document.getElementById('profileEmail').textContent = currentUser.email;
+        document.getElementById('profileJoinDate').textContent = 
+          currentUser.created_at ? new Date(currentUser.created_at).toLocaleDateString('ja-JP') : '今日';
+
+        // Load reservation stats
+        const { data: reservations, error } = await supabase
+          .from('reservations')
+          .select('*')
+          .eq('user_id', currentUser.id);
+
+        if (!error && reservations) {
+          const today = new Date().toISOString().split('T')[0];
+          const total = reservations.length;
+          const upcoming = reservations.filter(r => r.date >= today).length;
+          const past = reservations.filter(r => r.date < today).length;
+
+          document.getElementById('totalReservations').textContent = total;
+          document.getElementById('upcomingReservations').textContent = upcoming;
+          document.getElementById('pastReservations').textContent = past;
+        }
+      } catch (error) {
+        console.error('Error loading profile data:', error);
+      }
+    }
+
+    function editProfile() {
+      alert('プロフィール編集機能は近日実装予定です');
+    }
+
+    // Logout
+    document.getElementById('logoutBtn').addEventListener('click', () => {
+      if (confirm('ログアウトしますか？')) {
+        localStorage.removeItem('user');
+        window.location.href = 'index.html';
+      }
+    });
+
+    // Load data
+    loadProfileData();
+  </script>
+</body>
+</html>

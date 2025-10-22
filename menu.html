@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>メニュー - レストラン予約システム</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="style.css" rel="stylesheet">
+  <style>
+    .menu-category {
+      background: white;
+      border-radius: 12px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+    .menu-item {
+      border-bottom: 1px solid #eee;
+      padding: 1.5rem 0;
+    }
+    .menu-item:last-child {
+      border-bottom: none;
+    }
+    .price-tag {
+      background: linear-gradient(135deg, #c62828, #e53935);
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      font-weight: bold;
+    }
+    .category-badge {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      padding: 0.5rem 1.5rem;
+      border-radius: 25px;
+      display: inline-block;
+      margin-bottom: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="sakura-decoration"></div>
+  
+  <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #c62828;">
+    <div class="container">
+      <a class="navbar-brand fw-bold" href="dashboard.html">
+        🍣 レストラン予約システム
+      </a>
+      <div class="navbar-nav ms-auto">
+        <a href="dashboard.html" class="btn btn-outline-light btn-sm me-2">ダッシュボード</a>
+        <button class="btn btn-outline-light btn-sm" id="logoutBtn">ログアウト</button>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container mt-4">
+    <div class="text-center mb-5">
+      <h1>当店のメニュー</h1>
+      <p class="lead">厳選された食材を使用した自慢の料理をご提供します</p>
+    </div>
+
+    <!-- Appetizers -->
+    <div class="menu-category">
+      <div class="category-badge">前菜</div>
+      <h3 class="mb-4">オードブル & 前菜</h3>
+      
+      <div class="menu-item">
+        <div class="row align-items-center">
+          <div class="col-md-8">
+            <h5>季節の野菜サラダ</h5>
+            <p class="text-muted mb-0">採れたての季節野菜を特製ドレッシングで</p>
+          </div>
+          <div class="col-md-4 text-end">
+            <span class="price-tag">¥980</span>
+          </div>
+        </div>
+      </div>
+      
+      <div class="menu-item">
+        <div class="row align-items-center">
+          <div class="col-md-8">
+            <h5>自家製鴨のパテ</h5>
+            <p class="text-muted mb-0">フレッシュバゲットとともに</p>
+          </div>
+          <div class="col-md-4 text-end">
+            <span class="price-tag">¥1,280</span>
+          </div>
+        </div>
+      </div>
+      
+      <div class="menu-item">
+        <div class="row align-items-center">
+          <div class="col-md-8">
+            <h5>海鮮のカルパッチョ</h5>
+            <p class="text-muted mb-0">新鮮な白身魚とエビのマリネ</p>
+          </div>
+          <div class="col-md-4 text-end">
+            <span class="price-tag">¥1,480</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Courses -->
+    <div class="menu-category">
+      <div class="category-badge">メイン</div>
+      <h3 class="mb-4">メイン料理</h3>
+      
+      <div class="menu-item">
+        <div class="row align-items-center">
+          <div class="col-md-8">
+            <h5>国産牛フィレステーキ</h5>
+            <p class="text-muted mb-0">200g・ソースお選びいただけます</p>
+          </div>
+          <div class="col-md-4 text-end">
+            <span class="price-tag">¥4,800</span>
+          </div>
+        </div>
+      </div>
+      
+      <div class="menu-item">
+        <div class="row align-items-center">
+          <div class="col-md-8">
+            <h5>海の幸パエリア</h5>
+            <p class="text-muted mb-0">エビ、イカ、ムール貝の本格パエリア</p>
+          </div>
+          <div class="col-md-4 text-end">
+            <span class="price-tag">¥2,800</span>
+          </div>
+        </div>
+      </div>
+      
+      <div class="menu-item">
+        <div class="row align-items-center">
+          <div class="col-md-8">
+            <h5>季節の魚のグリル</h5>
+            <p class="text-muted mb-0">本日の鮮魚をシンプルにグリル</p>
+          </div>
+          <div class="col-md-4 text-end">
+            <span class="price-tag">¥3,200</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Desserts -->
+    <div class="menu-category">
+      <div class="category-badge">デザート</div>
+      <h3 class="mb-4">デザート & ドリンク</h3>
+      
+      <div class="menu-item">
+        <div class="row align-items-center">
+          <div class="col-md-8">
+            <h5>ティラミス</h5>
+            <p class="text-muted mb-0">伝統的なレシピで仕上げたこだわりの一品</p>
+          </div>
+          <div class="col-md-4 text-end">
+            <span class="price-tag">¥780</span>
+          </div>
+        </div>
+      </div>
+      
+      <div class="menu-item">
+        <div class="row align-items-center">
+          <div class="col-md-8">
+            <h5>季節のフルーツパフェ</h5>
+            <p class="text-muted mb-0">旬のフルーツをふんだんに使用</p>
+          </div>
+          <div class="col-md-4 text-end">
+            <span class="price-tag">¥980</span>
+          </div>
+        </div>
+      </div>
+      
+      <div class="menu-item">
+        <div class="row align-items-center">
+          <div class="col-md-8">
+            <h5>ワイン各種</h5>
+            <p class="text-muted mb-0">グラス ¥800〜、ボトル ¥3,500〜</p>
+          </div>
+          <div class="col-md-4 text-end">
+            <span class="price-tag">¥800〜</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Course Menus -->
+    <div class="menu-category">
+      <div class="category-badge">コース</div>
+      <h3 class="mb-4">お得なコース料理</h3>
+      
+      <div class="row">
+        <div class="col-md-4 mb-3">
+          <div class="card text-center h-100">
+            <div class="card-body">
+              <h5 class="card-title">ランチコース</h5>
+              <div class="price-tag mb-3">¥2,500</div>
+              <p class="card-text">
+                ・前菜3種<br>
+                ・本日のスープ<br>
+                ・メイン料理<br>
+                ・ドリンク
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4 mb-3">
+          <div class="card text-center h-100">
+            <div class="card-body">
+              <h5 class="card-title">ディナーコース</h5>
+              <div class="price-tag mb-3">¥5,800</div>
+              <p class="card-text">
+                ・前菜5種<br>
+                ・魚料理<br>
+                ・肉料理<br>
+                ・デザート
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4 mb-3">
+          <div class="card text-center h-100">
+            <div class="card-body">
+              <h5 class="card-title">特選コース</h5>
+              <div class="price-tag mb-3">¥8,800</div>
+              <p class="card-text">
+                ・厳選前菜<br>
+                ・季節の食材をふんだんに<br>
+                ・ソムリエ厳選ワイン
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Check authentication
+    const currentUser = JSON.parse(localStorage.getItem('user'));
+    if (!currentUser) {
+      window.location.href = 'login.html';
+    }
+
+    // Logout
+    document.getElementById('logoutBtn').addEventListener('click', () => {
+      if (confirm('ログアウトしますか？')) {
+        localStorage.removeItem('user');
+        window.location.href = 'index.html';
+      }
+    });
+  </script>
+</body>
+</html>
