@@ -1,0 +1,229 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&display=swap');
+
+:root {
+  --primary-color: #c62828;
+  --secondary-color: #2e7d32;
+  --accent-color: #f9a825;
+  --light-bg: #fffaf0;
+  --dark-text: #3e2723;
+  --light-text: #fff;
+  --border-color: #8d6e63;
+}
+
+body {
+  font-family: "Noto Sans JP", sans-serif;
+  background-color: var(--light-bg);
+  color: var(--dark-text);
+  min-height: 100vh;
+  position: relative;
+}
+
+
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: 
+    radial-gradient(circle at 25% 25%, rgba(198, 40, 40, 0.1) 2px, transparent 2px),
+    radial-gradient(circle at 75% 75%, rgba(46, 125, 50, 0.1) 2px, transparent 2px);
+  background-size: 50px 50px;
+  z-index: -1;
+}
+
+
+.japanese-header {
+  position: relative;
+  text-align: center;
+  margin-bottom: 2rem;
+  padding: 1rem 0;
+}
+
+.japanese-header h1 {
+  font-weight: 700;
+  color: var(--primary-color);
+  position: relative;
+  display: inline-block;
+  margin-bottom: 0;
+}
+
+.japanese-header h1::after {
+  content: "";
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 3px;
+  background-color: var(--accent-color);
+}
+
+
+.btn-japanese {
+  background-color: var(--primary-color);
+  border: none;
+  color: var(--light-text);
+  border-radius: 30px;
+  padding: 0.7rem 1.5rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-japanese::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+  transition: left 0.5s;
+}
+
+.btn-japanese:hover::before {
+  left: 100%;
+}
+
+.btn-japanese:hover {
+  background-color: #a11c1c;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+}
+
+.btn-success {
+  background-color: var(--secondary-color);
+  border: none;
+}
+
+.btn-success:hover {
+  background-color: #1b5e20;
+}
+
+.btn-info {
+  background-color: var(--accent-color);
+  border: none;
+}
+
+.btn-info:hover {
+  background-color: #f57f17;
+}
+
+
+.japanese-card {
+  border-radius: 1rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(141, 110, 99, 0.2);
+  background-color: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(5px);
+}
+
+.japanese-card .card-header {
+  background-color: var(--primary-color);
+  color: var(--light-text);
+  border-radius: 1rem 1rem 0 0 !important;
+  text-align: center;
+  font-weight: 700;
+}
+
+
+.form-control {
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  padding: 0.75rem;
+}
+
+.form-control:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 0.2rem rgba(198, 40, 40, 0.25);
+}
+
+.form-label {
+  font-weight: 500;
+  color: var(--dark-text);
+}
+
+
+.japanese-table {
+  border-radius: 0.5rem;
+  overflow: hidden;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.japanese-table thead {
+  background-color: var(--primary-color);
+  color: var(--light-text);
+}
+
+.japanese-table th {
+  font-weight: 600;
+  padding: 1rem;
+}
+
+.japanese-table td {
+  padding: 1rem;
+  border-color: rgba(141, 110, 99, 0.2);
+}
+
+
+.japanese-footer {
+  position: fixed;
+  bottom: 10px;
+  width: 100%;
+  text-align: center;
+  color: var(--border-color);
+  font-size: 0.9rem;
+}
+
+
+.sakura-decoration {
+  position: absolute;
+  width: 100%;
+  height: 100px;
+  top: 0;
+  left: 0;
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path fill="%23c62828" d="M50,10 C60,30 80,30 90,10 C80,30 100,50 90,70 C80,50 60,50 50,70 C40,50 20,50 10,70 C0,50 20,30 10,10 C20,30 40,30 50,10 Z"/></svg>');
+  background-repeat: repeat-x;
+  background-size: 40px 40px;
+  opacity: 0.1;
+  z-index: -1;
+}
+
+
+.content-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem 0;
+}
+
+
+.home-container {
+  text-align: center;
+}
+
+.btn-container {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+
+@media (max-width: 768px) {
+  .btn-container {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .btn-container a {
+    width: 200px;
+  }
+}
