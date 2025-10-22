@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>ギャラリー - レストラン予約システム</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="style.css" rel="stylesheet">
+  <style>
+    .gallery-section {
+      background: white;
+      border-radius: 12px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+    .gallery-item {
+      position: relative;
+      border-radius: 10px;
+      overflow: hidden;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      transition: transform 0.3s ease;
+    }
+    .gallery-item:hover {
+      transform: translateY(-5px);
+    }
+    .gallery-image {
+      width: 100%;
+      height: 250px;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 3rem;
+    }
+    .gallery-caption {
+      padding: 1rem;
+      background: white;
+    }
+    .category-title {
+      background: linear-gradient(135deg, #c62828, #e53935);
+      color: white;
+      padding: 0.5rem 1.5rem;
+      border-radius: 25px;
+      display: inline-block;
+      margin-bottom: 1.5rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="sakura-decoration"></div>
+  
+  <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #c62828;">
+    <div class="container">
+      <a class="navbar-brand fw-bold" href="dashboard.html">
+        🍣 レストラン予約システム
+      </a>
+      <div class="navbar-nav ms-auto">
+        <a href="dashboard.html" class="btn btn-outline-light btn-sm me-2">ダッシュボード</a>
+        <button class="btn btn-outline-light btn-sm" id="logoutBtn">ログアウト</button>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container mt-4">
+    <div class="text-center mb-5">
+      <h1>店内ギャラリー</h1>
+      <p class="lead">当店の雰囲気をお楽しみください</p>
+    </div>
+
+    <!-- Interior Section -->
+    <div class="gallery-section">
+      <div class="category-title">店内の様子</div>
+      <div class="row">
+        <div class="col-md-4">
+          <div class="gallery-item">
+            <div class="gallery-image">🏮</div>
+            <div class="gallery-caption">
+              <h6>エントランス</h6>
+              <p class="text-muted small">伝統的な日本家屋をイメージした入口</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="gallery-item">
+            <div class="gallery-image">🎎</div>
+            <div class="gallery-caption">
+              <h6>メインダイニング</h6>
+              <p class="text-muted small">落ち着いた雰囲気のメイン席</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="gallery-item">
+            <div class="gallery-image">💮</div>
+            <div class="gallery-caption">
+              <h6>個室</h6>
+              <p class="text-muted small">プライベートな宴会に最適</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Food Section -->
+    <div class="gallery-section">
+      <div class="category-title">料理の一例</div>
+      <div class="row">
+        <div class="col-md-3">
+          <div class="gallery-item">
+            <div class="gallery-image" style="background: linear-gradient(135deg, #f093fb, #f5576c);">🍣</div>
+            <div class="gallery-caption">
+              <h6>季節の寿司</h6>
+              <p class="text-muted small">旬のネタを使用</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="gallery-item">
+            <div class="gallery-image" style="background: linear-gradient(135deg, #4facfe, #00f2fe);">🍤</div>
+            <div class="gallery-caption">
+              <h6>天ぷら盛合せ</h6>
+              <p class="text-muted small">サクサク食感</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="gallery-item">
+            <div class="gallery-image" style="background: linear-gradient(135deg, #43e97b, #38f9d7);">🍲</div>
+            <div class="gallery-caption">
+              <h6>鍋料理</h6>
+              <p class="text-muted small">冬の定番メニュー</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="gallery-item">
+            <div class="gallery-image" style="background: linear-gradient(135deg, #ff9a9e, #fecfef);">🍰</div>
+            <div class="gallery-caption">
+              <h6>デザート</h6>
+              <p class="text-muted small">手作りの和スイーツ</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Special Events -->
+    <div class="gallery-section">
+      <div class="category-title">特別イベント</div>
+      <div class="row">
+        <div class="col-md-6">
+          <div class="gallery-item">
+            <div class="gallery-image" style="background: linear-gradient(135deg, #a8edea, #fed6e3); height: 200px;">🎉</div>
+            <div class="gallery-caption">
+              <h6>宴会の様子</h6>
+              <p class="text-muted small">大人数でのご宴会も承ります</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="gallery-item">
+            <div class="gallery-image" style="background: linear-gradient(135deg, #d299c2, #fef9d7); height: 200px;">🎎</div>
+            <div class="gallery-caption">
+              <h6>季節の飾りつけ</h6>
+              <p class="text-muted small">日本の四季を感じる店内装飾</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Virtual Tour -->
+    <div class="gallery-section text-center">
+      <h4>バーチャルツアー</h4>
+      <p class="text-muted mb-4">当店の雰囲気を360度体験</p>
+      <div style="background: linear-gradient(135deg, #667eea, #764ba2); height: 300px; border-radius: 15px; display: flex; align-items: center; justify-content: center; color: white;">
+        <div>
+          <div style="font-size: 4rem;">🎥</div>
+          <h5>360° バーチャルツアー</h5>
+          <p>クリックして体験</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Check authentication
+    const currentUser = JSON.parse(localStorage.getItem('user'));
+    if (!currentUser) {
+      window.location.href = 'login.html';
+    }
+
+    // Logout
+    document.getElementById('logoutBtn').addEventListener('click', () => {
+      if (confirm('ログアウトしますか？')) {
+        localStorage.removeItem('user');
+        window.location.href = 'index.html';
+      }
+    });
+
+    // Simple image click handler
+    document.querySelectorAll('.gallery-image').forEach(item => {
+      item.addEventListener('click', function() {
+        const caption = this.nextElementSibling.querySelector('h6').textContent;
+        alert(`${caption}の詳細画像を表示`);
+      });
+    });
+  </script>
+</body>
+</html>

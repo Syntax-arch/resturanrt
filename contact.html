@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>お問い合わせ - レストラン予約システム</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="style.css" rel="stylesheet">
+  <style>
+    .contact-card {
+      background: white;
+      border-radius: 12px;
+      padding: 2rem;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+    .contact-method {
+      text-align: center;
+      padding: 2rem 1rem;
+      border-radius: 10px;
+      transition: transform 0.3s ease;
+    }
+    .contact-method:hover {
+      transform: translateY(-5px);
+    }
+    .contact-icon {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+    }
+    .contact-form .form-control {
+      border-radius: 8px;
+      padding: 0.75rem;
+    }
+    .map-container {
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+    .business-hours {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      border-radius: 12px;
+      padding: 2rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="sakura-decoration"></div>
+  
+  <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #c62828;">
+    <div class="container">
+      <a class="navbar-brand fw-bold" href="dashboard.html">
+        🍣 レストラン予約システム
+      </a>
+      <div class="navbar-nav ms-auto">
+        <a href="dashboard.html" class="btn btn-outline-light btn-sm me-2">ダッシュボード</a>
+        <button class="btn btn-outline-light btn-sm" id="logoutBtn">ログアウト</button>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container mt-4">
+    <div class="text-center mb-5">
+      <h1>お問い合わせ</h1>
+      <p class="lead">ご質問やご予約はお気軽にお問い合わせください</p>
+    </div>
+
+    <div class="row">
+      <!-- Contact Methods -->
+      <div class="col-md-4 mb-4">
+        <div class="contact-card h-100">
+          <div class="contact-method" style="background: linear-gradient(135deg, #4facfe, #00f2fe); color: white;">
+            <div class="contact-icon">📞</div>
+            <h5>電話でのお問い合わせ</h5>
+            <p class="mb-2"><strong>0120-123-456</strong></p>
+            <small>受付時間: 10:00 - 22:00</small>
+          </div>
+        </div>
+      </div>
+      
+      <div class="col-md-4 mb-4">
+        <div class="contact-card h-100">
+          <div class="contact-method" style="background: linear-gradient(135deg, #43e97b, #38f9d7); color: white;">
+            <div class="contact-icon">📧</div>
+            <h5>メールでのお問い合わせ</h5>
+            <p class="mb-2"><strong>info@restaurant.com</strong></p>
+            <small>24時間受付</small>
+          </div>
+        </div>
+      </div>
+      
+      <div class="col-md-4 mb-4">
+        <div class="contact-card h-100">
+          <div class="contact-method" style="background: linear-gradient(135deg, #ff9a9e, #fecfef); color: white;">
+            <div class="contact-icon">💬</div>
+            <h5>オンライン予約</h5>
+            <p class="mb-2"><strong>24時間受付</strong></p>
+            <small>こちらのシステムから</small>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <!-- Contact Form -->
+      <div class="col-md-8">
+        <div class="contact-card">
+          <h4 class="mb-4">お問い合わせフォーム</h4>
+          <form id="contactForm">
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label class="form-label">お名前 *</label>
+                <input type="text" class="form-control" id="contactName" required>
+              </div>
+              <div class="col-md-6 mb-3">
+                <label class="form-label">メールアドレス *</label>
+                <input type="email" class="form-control" id="contactEmail" required>
+              </div>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">件名 *</label>
+              <select class="form-control" id="contactSubject" required>
+                <option value="">選択してください</option>
+                <option value="reservation">予約について</option>
+                <option value="menu">メニューについて</option>
+                <option value="event">イベントについて</option>
+                <option value="complaint">苦情・ご意見</option>
+                <option value="other">その他</option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">メッセージ *</label>
+              <textarea class="form-control" id="contactMessage" rows="5" required placeholder="お問い合わせ内容を詳細にお書きください"></textarea>
+            </div>
+            <button type="submit" class="btn btn-japanese w-100">送信する</button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Business Info -->
+      <div class="col-md-4">
+        <div class="business-hours mb-4">
+          <h5 class="mb-3">🏮 営業時間</h5>
+          <div class="mb-2">
+            <strong>ランチ</strong><br>
+            11:30 - 14:30 (L.O. 14:00)
+          </div>
+          <div class="mb-2">
+            <strong>ディナー</strong><br>
+            17:30 - 22:00 (L.O. 21:00)
+          </div>
+          <div>
+            <strong>定休日</strong><br>
+            毎週月曜日
+          </div>
+        </div>
+
+        <div class="contact-card">
+          <h6 class="mb-3">📍 アクセス</h6>
+          <p class="small">
+            〒100-0001<br>
+            東京都千代田区千代田1-1-1<br>
+            JR東京駅 徒歩5分<br>
+            地下鉄丸ノ内線 徒歩3分
+          </p>
+          
+          <h6 class="mb-3 mt-4">💳 お支払い方法</h6>
+          <p class="small">
+            現金、クレジットカード<br>
+            (VISA, MasterCard, JCB, AMEX)<br>
+            電子マネー各種
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Map -->
+    <div class="contact-card mt-4">
+      <h5 class="mb-3">🗺️ アクセスマップ</h5>
+      <div class="map-container">
+        <div style="background: linear-gradient(135deg, #a8edea, #fed6e3); height: 300px; display: flex; align-items: center; justify-content: center; color: #666;">
+          <div class="text-center">
+            <div style="font-size: 4rem;">🗾</div>
+            <h5>インタラクティブマップ</h5>
+            <p>ここにGoogle Mapsが表示されます</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FAQ Quick Links -->
+    <div class="contact-card mt-4">
+      <h5 class="mb-3">💡 よくある質問</h5>
+      <div class="row">
+        <div class="col-md-6">
+          <ul class="list-unstyled">
+            <li class="mb-2"><a href="help.html" class="text-decoration-none">✅ 予約の変更方法</a></li>
+            <li class="mb-2"><a href="help.html" class="text-decoration-none">✅ キャンセルポリシー</a></li>
+            <li class="mb-2"><a href="help.html" class="text-decoration-none">✅ アレルギー対応</a></li>
+          </ul>
+        </div>
+        <div class="col-md-6">
+          <ul class="list-unstyled">
+            <li class="mb-2"><a href="help.html" class="text-decoration-none">✅ 駐車場について</a></li>
+            <li class="mb-2"><a href="help.html" class="text-decoration-none">✅ 宴会・貸切について</a></li>
+            <li class="mb-2"><a href="help.html" class="text-decoration-none">✅ Wi-Fi環境</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Check authentication
+    const currentUser = JSON.parse(localStorage.getItem('user'));
+    if (!currentUser) {
+      window.location.href = 'login.html';
+    }
+
+    // Auto-fill form with user data
+    document.addEventListener('DOMContentLoaded', function() {
+      document.getElementById('contactName').value = currentUser.name;
+      document.getElementById('contactEmail').value = currentUser.email;
+    });
+
+    // Contact form handler
+    document.getElementById('contactForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const name = document.getElementById('contactName').value;
+      const email = document.getElementById('contactEmail').value;
+      const subject = document.getElementById('contactSubject').value;
+      const message = document.getElementById('contactMessage').value;
+      
+      // Simulate form submission
+      alert(`お問い合わせを受け付けました！\n\n件名: ${subject}\n\n折り返しご連絡いたします。`);
+      this.reset();
+      document.getElementById('contactName').value = currentUser.name;
+      document.getElementById('contactEmail').value = currentUser.email;
+    });
+
+    // Logout
+    document.getElementById('logoutBtn').addEventListener('click', () => {
+      if (confirm('ログアウトしますか？')) {
+        localStorage.removeItem('user');
+        window.location.href = 'index.html';
+      }
+    });
+  </script>
+</body>
+</html>
