@@ -27,12 +27,7 @@
     .gallery-image {
       width: 100%;
       height: 250px;
-      background: linear-gradient(135deg, #667eea, #764ba2);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: white;
-      font-size: 3rem;
+      object-fit: cover;
     }
     .gallery-caption {
       padding: 1rem;
@@ -45,6 +40,23 @@
       border-radius: 25px;
       display: inline-block;
       margin-bottom: 1.5rem;
+    }
+    .image-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.7);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      color: white;
+    }
+    .gallery-item:hover .image-overlay {
+      opacity: 1;
     }
   </style>
 </head>
@@ -75,7 +87,10 @@
       <div class="row">
         <div class="col-md-4">
           <div class="gallery-item">
-            <div class="gallery-image">🏮</div>
+            <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=400&h=300&fit=crop" alt="エントランス" class="gallery-image">
+            <div class="image-overlay">
+              <h5>エントランス</h5>
+            </div>
             <div class="gallery-caption">
               <h6>エントランス</h6>
               <p class="text-muted small">伝統的な日本家屋をイメージした入口</p>
@@ -84,7 +99,10 @@
         </div>
         <div class="col-md-4">
           <div class="gallery-item">
-            <div class="gallery-image">🎎</div>
+            <img src="https://images.unsplash.com/photo-1559329007-40df8a9345d8?w=400&h=300&fit=crop" alt="メインダイニング" class="gallery-image">
+            <div class="image-overlay">
+              <h5>メインダイニング</h5>
+            </div>
             <div class="gallery-caption">
               <h6>メインダイニング</h6>
               <p class="text-muted small">落ち着いた雰囲気のメイン席</p>
@@ -93,7 +111,10 @@
         </div>
         <div class="col-md-4">
           <div class="gallery-item">
-            <div class="gallery-image">💮</div>
+            <img src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=400&h=300&fit=crop" alt="個室" class="gallery-image">
+            <div class="image-overlay">
+              <h5>個室</h5>
+            </div>
             <div class="gallery-caption">
               <h6>個室</h6>
               <p class="text-muted small">プライベートな宴会に最適</p>
@@ -109,7 +130,10 @@
       <div class="row">
         <div class="col-md-3">
           <div class="gallery-item">
-            <div class="gallery-image" style="background: linear-gradient(135deg, #f093fb, #f5576c);">🍣</div>
+            <img src="https://images.unsplash.com/photo-1579584425555-c3ce17fd4351?w=400&h=300&fit=crop" alt="季節の寿司" class="gallery-image">
+            <div class="image-overlay">
+              <h5>季節の寿司</h5>
+            </div>
             <div class="gallery-caption">
               <h6>季節の寿司</h6>
               <p class="text-muted small">旬のネタを使用</p>
@@ -118,7 +142,10 @@
         </div>
         <div class="col-md-3">
           <div class="gallery-item">
-            <div class="gallery-image" style="background: linear-gradient(135deg, #4facfe, #00f2fe);">🍤</div>
+            <img src="https://images.unsplash.com/photo-1563379926898-05f4575a45d8?w=400&h=300&fit=crop" alt="天ぷら盛合せ" class="gallery-image">
+            <div class="image-overlay">
+              <h5>天ぷら盛合せ</h5>
+            </div>
             <div class="gallery-caption">
               <h6>天ぷら盛合せ</h6>
               <p class="text-muted small">サクサク食感</p>
@@ -127,7 +154,10 @@
         </div>
         <div class="col-md-3">
           <div class="gallery-item">
-            <div class="gallery-image" style="background: linear-gradient(135deg, #43e97b, #38f9d7);">🍲</div>
+            <img src="https://images.unsplash.com/photo-1546833999-b9f581a1996d?w=400&h=300&fit=crop" alt="鍋料理" class="gallery-image">
+            <div class="image-overlay">
+              <h5>鍋料理</h5>
+            </div>
             <div class="gallery-caption">
               <h6>鍋料理</h6>
               <p class="text-muted small">冬の定番メニュー</p>
@@ -136,7 +166,10 @@
         </div>
         <div class="col-md-3">
           <div class="gallery-item">
-            <div class="gallery-image" style="background: linear-gradient(135deg, #ff9a9e, #fecfef);">🍰</div>
+            <img src="https://images.unsplash.com/photo-1565958011703-44f9829ba187?w=400&h=300&fit=crop" alt="デザート" class="gallery-image">
+            <div class="image-overlay">
+              <h5>デザート</h5>
+            </div>
             <div class="gallery-caption">
               <h6>デザート</h6>
               <p class="text-muted small">手作りの和スイーツ</p>
@@ -152,7 +185,10 @@
       <div class="row">
         <div class="col-md-6">
           <div class="gallery-item">
-            <div class="gallery-image" style="background: linear-gradient(135deg, #a8edea, #fed6e3); height: 200px;">🎉</div>
+            <img src="https://images.unsplash.com/photo-1544025162-d76694265947?w=400&h=250&fit=crop" alt="宴会の様子" class="gallery-image" style="height: 300px;">
+            <div class="image-overlay">
+              <h5>宴会の様子</h5>
+            </div>
             <div class="gallery-caption">
               <h6>宴会の様子</h6>
               <p class="text-muted small">大人数でのご宴会も承ります</p>
@@ -161,7 +197,10 @@
         </div>
         <div class="col-md-6">
           <div class="gallery-item">
-            <div class="gallery-image" style="background: linear-gradient(135deg, #d299c2, #fef9d7); height: 200px;">🎎</div>
+            <img src="https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?w=400&h=250&fit=crop" alt="季節の飾りつけ" class="gallery-image" style="height: 300px;">
+            <div class="image-overlay">
+              <h5>季節の飾りつけ</h5>
+            </div>
             <div class="gallery-caption">
               <h6>季節の飾りつけ</h6>
               <p class="text-muted small">日本の四季を感じる店内装飾</p>
@@ -171,42 +210,34 @@
       </div>
     </div>
 
-    <!-- Virtual Tour -->
-    <div class="gallery-section text-center">
-      <h4>バーチャルツアー</h4>
-      <p class="text-muted mb-4">当店の雰囲気を360度体験</p>
-      <div style="background: linear-gradient(135deg, #667eea, #764ba2); height: 300px; border-radius: 15px; display: flex; align-items: center; justify-content: center; color: white;">
-        <div>
-          <div style="font-size: 4rem;">🎥</div>
-          <h5>360° バーチャルツアー</h5>
-          <p>クリックして体験</p>
+    <!-- Kitchen & Chef -->
+    <div class="gallery-section">
+      <div class="category-title">厨房 & シェフ</div>
+      <div class="row">
+        <div class="col-md-4">
+          <div class="gallery-item">
+            <img src="https://images.unsplash.com/photo-1589647363585-f4a7d3877b10?w=400&h=300&fit=crop" alt="厨房" class="gallery-image">
+            <div class="image-overlay">
+              <h5>厨房</h5>
+            </div>
+            <div class="gallery-caption">
+              <h6>清潔な厨房</h6>
+              <p class="text-muted small">衛生管理の行き届いた厨房</p>
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
-  </div>
-
-  <script>
-    // Check authentication
-    const currentUser = JSON.parse(localStorage.getItem('user'));
-    if (!currentUser) {
-      window.location.href = 'login.html';
-    }
-
-    // Logout
-    document.getElementById('logoutBtn').addEventListener('click', () => {
-      if (confirm('ログアウトしますか？')) {
-        localStorage.removeItem('user');
-        window.location.href = 'index.html';
-      }
-    });
-
-    // Simple image click handler
-    document.querySelectorAll('.gallery-image').forEach(item => {
-      item.addEventListener('click', function() {
-        const caption = this.nextElementSibling.querySelector('h6').textContent;
-        alert(`${caption}の詳細画像を表示`);
-      });
-    });
-  </script>
-</body>
-</html>
+        <div class="col-md-4">
+          <div class="gallery-item">
+            <img src="https://images.unsplash.com/photo-1600565193348-f74bd3c7ccdf?w=400&h=300&fit=crop" alt="シェフ" class="gallery-image">
+            <div class="image-overlay">
+              <h5>シェフ</h5>
+            </div>
+            <div class="gallery-caption">
+              <h6>経験豊富なシェフ</h6>
+              <p class="text-muted small">20年の経験を持つベテランシェフ</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="gallery-item">
+            <img src="https://images.unsplash.com/photo-1556909114-f6e7
