@@ -1,32 +1,32 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <!-- PWA Meta Tags -->
-<meta name="application-name" content="Sakura Restaurant">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="apple-mobile-web-app-title" content="Sakura Restaurant">
-<meta name="description" content="本格日本料理レストランの予約システム">
-<meta name="format-detection" content="telephone=no">
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="msapplication-config" content="/icons/browserconfig.xml">
-<meta name="msapplication-TileColor" content="#c62828">
-<meta name="msapplication-tap-highlight" content="no">
-<meta name="theme-color" content="#c62828">
-
-<!-- Apple Touch Icons -->
-<link rel="apple-touch-icon" href="/icons/icon-152x152.png">
-<link rel="apple-touch-icon" sizes="152x152" href="/icons/icon-152x152.png">
-<link rel="apple-touch-icon" sizes="180x180" href="/icons/icon-180x180.png">
-<link rel="apple-touch-icon" sizes="167x167" href="/icons/icon-167x167.png">
-
-<!-- PWA Manifest -->
-<link rel="manifest" href="/manifest.json">
-
-<!-- Theme Color -->
-<meta name="theme-color" content="#c62828" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#a11c1c" media="(prefers-color-scheme: dark)">
   <meta charset="UTF-8">
+  <!-- PWA Meta Tags -->
+  <meta name="application-name" content="Sakura Restaurant">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Sakura Restaurant">
+  <meta name="description" content="本格日本料理レストランの予約システム">
+  <meta name="format-detection" content="telephone=no">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="msapplication-TileColor" content="#c62828">
+  <meta name="msapplication-tap-highlight" content="no">
+  <meta name="theme-color" content="#c62828">
+
+  <!-- Apple Touch Icons -->
+  <link rel="apple-touch-icon" href="/icons/icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="/icons/icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/icons/icon-180x180.png">
+  <link rel="apple-touch-icon" sizes="167x167" href="/icons/icon-167x167.png">
+
+  <!-- PWA Manifest -->
+  <link rel="manifest" href="/manifest.json">
+
+  <!-- Theme Color -->
+  <meta name="theme-color" content="#c62828" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#a11c1c" media="(prefers-color-scheme: dark)">
+  
   <title>Sakura Japanese Cuisine - レストラン予約システム</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="style.css" rel="stylesheet">
@@ -505,62 +505,129 @@
       });
     });
   </script>
+
+  <!-- PWA Initialization Script -->
   <script>
-// Initialize PWA
-document.addEventListener('DOMContentLoaded', async function() {
-    // Register Service Worker
-    const registration = await RestaurantUtils.PWA.registerServiceWorker();
-    
-    // Handle app install prompt
-    window.addEventListener('beforeinstallprompt', (e) => {
-        e.preventDefault();
-        RestaurantUtils.PWA.deferredPrompt = e;
-        RestaurantUtils.PWA.createInstallButton();
-    });
-    
-    // Track app installed event
-    window.addEventListener('appinstalled', () => {
-        RestaurantUtils.PWA.trackEvent('pwa_installed');
-        console.log('🎉 PWA installed successfully!');
-    });
-    
-    // Network status monitoring
-    RestaurantUtils.PWA.addNetworkListener((status) => {
-        const indicator = document.getElementById('networkStatus');
-        if (indicator) {
-            indicator.textContent = status === 'online' ? '🟢 オンライン' : '🔴 オフライン';
-            indicator.className = status === 'online' ? 'badge bg-success' : 'badge bg-danger';
+    // Initialize PWA on all pages
+    document.addEventListener('DOMContentLoaded', async function() {
+        // Register Service Worker
+        if ('serviceWorker' in navigator) {
+            try {
+                const registration = await navigator.serviceWorker.register('/sw.js');
+                console.log('✅ Service Worker registered:', registration);
+                
+                // Check for updates
+                registration.addEventListener('updatefound', () => {
+                    const newWorker = registration.installing;
+                    console.log('🔄 New Service Worker found:', newWorker);
+                });
+            } catch (error) {
+                console.error('❌ Service Worker registration failed:', error);
+            }
         }
         
-        if (status === 'online') {
-            RestaurantUtils.PWA.showLocalNotification('接続回復', {
-                body: 'インターネット接続が回復しました'
-            });
+        // Handle app install prompt
+        let deferredPrompt;
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            createInstallButton();
+        });
+        
+        // Create install button
+        function createInstallButton() {
+            if (!isAppInstalled() && deferredPrompt) {
+                // Check if button already exists
+                if (!document.getElementById('pwa-install-btn')) {
+                    const installBtn = document.createElement('button');
+                    installBtn.id = 'pwa-install-btn';
+                    installBtn.className = 'btn btn-success btn-sm me-2';
+                    installBtn.innerHTML = '📱 インストール';
+                    installBtn.onclick = showInstallPrompt;
+                    
+                    // Add to navigation
+                    const nav = document.querySelector('.navbar-nav');
+                    if (nav) {
+                        nav.insertBefore(installBtn, nav.firstChild);
+                    }
+                }
+            }
         }
+        
+        // Show install prompt
+        async function showInstallPrompt() {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                const { outcome } = await deferredPrompt.userChoice;
+                
+                if (outcome === 'accepted') {
+                    console.log('✅ User accepted PWA install');
+                    document.getElementById('pwa-install-btn')?.remove();
+                }
+                deferredPrompt = null;
+            }
+        }
+        
+        // Check if app is installed
+        function isAppInstalled() {
+            return window.matchMedia('(display-mode: standalone)').matches || 
+                   window.navigator.standalone ||
+                   document.referrer.includes('android-app://');
+        }
+        
+        // Network status monitoring
+        function updateNetworkStatus() {
+            const indicator = document.getElementById('networkStatus');
+            if (indicator) {
+                const isOnline = navigator.onLine;
+                indicator.textContent = isOnline ? '🟢 オンライン' : '🔴 オフライン';
+                indicator.className = isOnline ? 'badge bg-success' : 'badge bg-danger';
+                
+                // Show offline notification
+                if (!isOnline) {
+                    showOfflineNotification();
+                }
+            }
+        }
+        
+        // Show offline notification
+        function showOfflineNotification() {
+            // Check if notification already exists
+            if (!document.getElementById('offline-alert')) {
+                const alert = document.createElement('div');
+                alert.id = 'offline-alert';
+                alert.className = 'alert alert-warning alert-dismissible fade show position-fixed top-0 start-50 translate-middle-x mt-5';
+                alert.style.zIndex = '9999';
+                alert.innerHTML = `
+                    <strong>📶 オフライン</strong> インターネット接続がありません。基本機能はご利用いただけます。
+                    <button type="button" class="btn-close" onclick="this.parentElement.remove()"></button>
+                `;
+                document.body.appendChild(alert);
+            }
+        }
+        
+        // Initialize network status
+        updateNetworkStatus();
+        window.addEventListener('online', updateNetworkStatus);
+        window.addEventListener('offline', updateNetworkStatus);
+        
+        // Request notification permission on user interaction
+        document.addEventListener('click', async function requestNotifications() {
+            if ('Notification' in window && Notification.permission === 'default') {
+                await Notification.requestPermission();
+            }
+            document.removeEventListener('click', requestNotifications);
+        }, { once: true });
+        
+        // Add install button after a delay
+        setTimeout(createInstallButton, 1000);
     });
-    
-    // Request notification permission on user interaction
-    document.addEventListener('click', async () => {
-        if (Notification.permission === 'default') {
-            await RestaurantUtils.PWA.requestNotificationPermission();
-        }
-    }, { once: true });
-    
-    // Add install button to navigation
-    setTimeout(() => {
-        RestaurantUtils.PWA.createInstallButton();
-    }, 2000);
-});
 
-// Show PWA install prompt (can be called from any button)
-function showPWAInstallPrompt() {
-    RestaurantUtils.PWA.showInstallPrompt();
-}
-
-// Check if app is running in standalone mode
-function isRunningAsPWA() {
-    return RestaurantUtils.PWA.isAppInstalled();
-}
-</script>
+    // Global function to show install prompt
+    function showPWAInstall() {
+        const event = new Event('click');
+        document.getElementById('pwa-install-btn')?.dispatchEvent(event);
+    }
+  </script>
 </body>
 </html>
