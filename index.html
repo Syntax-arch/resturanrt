@@ -441,6 +441,184 @@
       </div>
     </div>
   </section>
+  <!-- ログインセクションを以下のように更新 -->
+<div class="login-section bg-light py-5">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-6">
+        <div class="card shadow">
+          <div class="card-header bg-primary text-white">
+            <h4 class="mb-0">🔐 ログイン</h4>
+          </div>
+          <div class="card-body p-4">
+            <!-- ログインタイプ選択 -->
+            <div class="mb-4">
+              <label class="form-label">ログインタイプを選択</label>
+              <select class="form-select" id="loginType">
+                <option value="customer">👤 お客様ログイン</option>
+                <option value="staff">👥 スタッフログイン</option>
+                <option value="admin">👑 管理者ログイン</option>
+              </select>
+            </div>
+
+            <!-- ログインフォーム -->
+            <form id="loginForm">
+              <div id="customerLogin">
+                <div class="form-floating mb-3">
+                  <input type="email" class="form-control" id="customerEmail" placeholder="name@example.com" required>
+                  <label for="customerEmail">📧 メールアドレス</label>
+                </div>
+                <div class="form-floating mb-3">
+                  <input type="password" class="form-control" id="customerPassword" placeholder="Password" required>
+                  <label for="customerPassword">🔒 パスワード</label>
+                </div>
+              </div>
+
+              <div id="staffLogin" class="d-none">
+                <div class="form-floating mb-3">
+                  <input type="text" class="form-control" id="staffCode" placeholder="STAFF001" required>
+                  <label for="staffCode">👥 スタッフコード</label>
+                </div>
+                <div class="form-floating mb-3">
+                  <input type="password" class="form-control" id="staffPassword" placeholder="Password" required>
+                  <label for="staffPassword">🔒 パスワード</label>
+                </div>
+              </div>
+
+              <div id="adminLogin" class="d-none">
+                <div class="form-floating mb-3">
+                  <input type="text" class="form-control" id="adminUsername" placeholder="admin" required>
+                  <label for="adminUsername">👑 ユーザー名</label>
+                </div>
+                <div class="form-floating mb-3">
+                  <input type="password" class="form-control" id="adminPassword" placeholder="Password" required>
+                  <label for="adminPassword">🔒 パスワード</label>
+                </div>
+              </div>
+
+              <button type="submit" class="btn btn-primary w-100 py-3">
+                🔐 ログイン
+              </button>
+            </form>
+
+            <div id="loginMessage" class="mt-3"></div>
+
+            <div class="text-center mt-4">
+              <a href="register.html" class="text-decoration-none">📝 新規会員登録はこちら</a>
+            </div>
+
+            <!-- 専用ログインページへのリンク -->
+            <div class="text-center mt-3">
+              <small class="text-muted">
+                専用ページ: 
+                <a href="staff-login.html" class="text-decoration-none">スタッフログイン</a> | 
+                <a href="admin-login.html" class="text-decoration-none">管理者ログイン</a>
+              </small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ログインタイプ切り替え
+document.getElementById('loginType').addEventListener('change', function() {
+  const type = this.value;
+  
+  // すべてのログインフォームを非表示
+  document.getElementById('customerLogin').classList.add('d-none');
+  document.getElementById('staffLogin').classList.add('d-none');
+  document.getElementById('adminLogin').classList.add('d-none');
+  
+  // 選択されたフォームを表示
+  document.getElementById(type + 'Login').classList.remove('d-none');
+});
+
+// ログインフォーム送信
+document.getElementById('loginForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  
+  const loginType = document.getElementById('loginType').value;
+  const messageDiv = document.getElementById('loginMessage');
+  const submitBtn = e.target.querySelector('button[type="submit"]');
+  
+  submitBtn.innerHTML = '⏳ 認証中...';
+  submitBtn.disabled = true;
+
+  try {
+    if (loginType === 'customer') {
+      // 顧客ログイン処理
+      const email = document.getElementById('customerEmail').value;
+      const password = document.getElementById('customerPassword').value;
+      
+      const { data, error } = await supabase
+        .from('customers')
+        .select('*')
+        .eq('email', email)
+        .eq('password', password)
+        .single();
+
+      if (error) throw error;
+
+      if (data) {
+        localStorage.setItem('currentUser', JSON.stringify(data));
+        messageDiv.innerHTML = '<div class="alert alert-success">✅ ログイン成功！</div>';
+        setTimeout(() => window.location.href = 'reservations.html', 1000);
+      }
+      
+    } else if (loginType === 'staff') {
+      // スタッフログイン処理
+      const staffCode = document.getElementById('staffCode').value;
+      const password = document.getElementById('staffPassword').value;
+      
+      const { data, error } = await supabase
+        .from('staff')
+        .select('*')
+        .eq('staff_code', staffCode)
+        .eq('password', password)
+        .eq('is_active', true)
+        .single();
+
+      if (error) throw error;
+
+      if (data) {
+        localStorage.setItem('staffUser', JSON.stringify(data));
+        messageDiv.innerHTML = '<div class="alert alert-success">✅ スタッフログイン成功！</div>';
+        setTimeout(() => window.location.href = 'staff-dashboard.html', 1000);
+      }
+      
+    } else if (loginType === 'admin') {
+      // 管理者ログイン処理
+      const username = document.getElementById('adminUsername').value;
+      const password = document.getElementById('adminPassword').value;
+      
+      const { data, error } = await supabase
+        .from('admin_users')
+        .select('*')
+        .eq('username', username)
+        .eq('password', password)
+        .eq('is_active', true)
+        .single();
+
+      if (error) throw error;
+
+      if (data) {
+        localStorage.setItem('adminUser', JSON.stringify(data));
+        messageDiv.innerHTML = '<div class="alert alert-success">✅ 管理者ログイン成功！</div>';
+        setTimeout(() => window.location.href = 'admin-dashboard.html', 1000);
+      }
+    }
+    
+  } catch (error) {
+    messageDiv.innerHTML = `<div class="alert alert-danger">❌ ログインに失敗しました: ${error.message}</div>`;
+  } finally {
+    submitBtn.innerHTML = '🔐 ログイン';
+    submitBtn.disabled = false;
+  }
+});
+</script>
 
   <!-- Final CTA Section -->
   <section class="features-section">
