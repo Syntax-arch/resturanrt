@@ -2,27 +2,87 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <title>予約一覧 - レストラン予約システム</title>
+  <title>リアルタイム予約 - レストラン予約システム</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="style.css" rel="stylesheet">
   <style>
-    body { background: #f8f9fa; font-family: "Noto Sans JP", sans-serif; }
-    .container { margin-top: 60px; }
-    table { background-color: #fff; border-radius: 0.5rem; overflow: hidden; }
+    .live-indicator {
+      background: linear-gradient(135deg, #00b09b, #96c93d);
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.7; }
+    }
+    .table-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+      gap: 1rem;
+      margin: 1rem 0;
+    }
+    .table-item {
+      border: 2px solid #e9ecef;
+      border-radius: 10px;
+      padding: 1rem;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .table-item.available {
+      border-color: #28a745;
+      background: rgba(40, 167, 69, 0.1);
+    }
+    .table-item.occupied {
+      border-color: #dc3545;
+      background: rgba(220, 53, 69, 0.1);
+      cursor: not-allowed;
+    }
+    .table-item.selected {
+      border-color: #007bff;
+      background: rgba(0, 123, 255, 0.2);
+      transform: scale(1.05);
+    }
+    .live-updates {
+      background: #f8f9fa;
+      border-radius: 10px;
+      padding: 1rem;
+      margin: 1rem 0;
+      max-height: 200px;
+      overflow-y: auto;
+    }
+    .update-item {
+      padding: 0.5rem;
+      border-bottom: 1px solid #dee2e6;
+      font-size: 0.9rem;
+    }
+    .availability-badge {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+    }
   </style>
 </head>
 <body>
   <div class="sakura-decoration"></div>
   
-  <!-- Navigation -->
   <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #c62828;">
     <div class="container">
       <a class="navbar-brand fw-bold" href="dashboard.html">
         🍣 レストラン予約システム
       </a>
       <div class="navbar-nav ms-auto">
-        <span class="navbar-text me-3" id="userWelcome">
-          ようこそ！
+        <span class="navbar-text me-3">
+          <span class="live-indicator">
+            <span class="dot" style="width: 8px; height: 8px; background: white; border-radius: 50%; animation: blink 1s infinite;"></span>
+            リアルタイム接続中
+          </span>
         </span>
         <a href="dashboard.html" class="btn btn-outline-light btn-sm me-2">ダッシュボード</a>
         <button class="btn btn-outline-light btn-sm" id="logoutBtn">ログアウト</button>
@@ -30,67 +90,154 @@
     </div>
   </nav>
 
-  <div class="container">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-      <div class="japanese-header">
-        <h2>予約一覧</h2>
+  <div class="container mt-4">
+    <div class="row">
+      <!-- Main Booking Section -->
+      <div class="col-md-8">
+        <div class="card">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <h4 class="mb-0">🎯 リアルタイム予約</h4>
+            <div id="connectionStatus" class="live-indicator">接続中...</div>
+          </div>
+          <div class="card-body">
+            <!-- Table Selection -->
+            <div class="mb-4">
+              <h5>🏮 テーブル選択</h5>
+              <div class="table-grid" id="tableGrid">
+                <!-- Tables will be loaded dynamically -->
+              </div>
+            </div>
+
+            <!-- Booking Form -->
+            <form id="reservationForm">
+              <div class="row">
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">👤 お客様名</label>
+                  <input type="text" class="form-control" id="customerName" required>
+                </div>
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">📧 メールアドレス</label>
+                  <input type="email" class="form-control" id="customerEmail" required>
+                </div>
+              </div>
+              
+              <div class="row">
+                <div class="col-md-4 mb-3">
+                  <label class="form-label">📅 日付</label>
+                  <input type="date" class="form-control" id="reservationDate" min="" required>
+                </div>
+                <div class="col-md-4 mb-3">
+                  <label class="form-label">⏰ 時間</label>
+                  <select class="form-control" id="reservationTime" required>
+                    <option value="">選択してください</option>
+                    <option value="17:00">17:00</option>
+                    <option value="17:30">17:30</option>
+                    <option value="18:00">18:00</option>
+                    <option value="18:30">18:30</option>
+                    <option value="19:00">19:00</option>
+                    <option value="19:30">19:30</option>
+                    <option value="20:00">20:00</option>
+                    <option value="20:30">20:30</option>
+                    <option value="21:00">21:00</option>
+                  </select>
+                </div>
+                <div class="col-md-4 mb-3">
+                  <label class="form-label">👥 人数</label>
+                  <input type="number" class="form-control" id="guests" min="1" max="20" required>
+                </div>
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label">💬 ご要望（任意）</label>
+                <textarea class="form-control" id="specialRequests" rows="3" placeholder="アレルギーやお祝いなど"></textarea>
+              </div>
+
+              <div class="alert alert-info">
+                <strong>💡 リアルタイム機能</strong>
+                <ul class="mb-0 mt-2">
+                  <li>空席状況がリアルタイムで更新されます</li>
+                  <li>他のお客様の予約が即時反映されます</li>
+                  <li>即時確認メッセージが表示されます</li>
+                </ul>
+              </div>
+
+              <button type="submit" class="btn btn-japanese w-100 py-3">
+                <span id="submitText">✅ リアルタイム予約を確定</span>
+                <div id="loadingSpinner" class="spinner-border spinner-border-sm ms-2 d-none" role="status"></div>
+              </button>
+            </form>
+          </div>
+        </div>
       </div>
-      <div>
-        <button class="btn btn-japanese me-2" data-bs-toggle="modal" data-bs-target="#addReservationModal">
-          新規予約
-        </button>
+
+      <!-- Live Updates Sidebar -->
+      <div class="col-md-4">
+        <!-- Availability Summary -->
+        <div class="card mb-4">
+          <div class="card-header">
+            <h6 class="mb-0">📊 本日の空席状況</h6>
+          </div>
+          <div class="card-body">
+            <div id="availabilitySummary">
+              <!-- Will be updated in real-time -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Live Updates -->
+        <div class="card">
+          <div class="card-header">
+            <h6 class="mb-0">🔔 リアルタイム更新</h6>
+          </div>
+          <div class="card-body p-0">
+            <div class="live-updates" id="liveUpdates">
+              <div class="update-item">システム接続中...</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick Stats -->
+        <div class="card mt-4">
+          <div class="card-body text-center">
+            <h6>⚡ 即時統計</h6>
+            <div class="row mt-3">
+              <div class="col-6">
+                <div class="h4 text-primary" id="todayBookings">0</div>
+                <small>本日予約</small>
+              </div>
+              <div class="col-6">
+                <div class="h4 text-success" id="availableTables">0</div>
+                <small>空席数</small>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-    
-    <table class="table table-striped table-hover text-center japanese-table">
-      <thead>
-        <tr>
-          <th>名前</th>
-          <th>日付</th>
-          <th>時間</th>
-          <th>人数</th>
-          <th>操作</th>
-        </tr>
-      </thead>
-      <tbody id="reservationsTable">
-        <!-- Data will be loaded here -->
-      </tbody>
-    </table>
-    
-    <a href="dashboard.html" class="btn btn-secondary mt-3">← ダッシュボードに戻る</a>
-  </div>
 
-  <!-- Add Reservation Modal -->
-  <div class="modal fade" id="addReservationModal" tabindex="-1">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">新規予約</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-        </div>
-        <div class="modal-body">
-          <form id="reservationForm">
-            <div class="mb-3">
-              <label class="form-label">お客様名</label>
-              <input type="text" class="form-control" id="customerName" required>
-            </div>
-            <div class="mb-3">
-              <label class="form-label">日付</label>
-              <input type="date" class="form-control" id="reservationDate" required>
-            </div>
-            <div class="mb-3">
-              <label class="form-label">時間</label>
-              <input type="time" class="form-control" id="reservationTime" required>
-            </div>
-            <div class="mb-3">
-              <label class="form-label">人数</label>
-              <input type="number" class="form-control" id="guests" min="1" required>
-            </div>
-          </form>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">キャンセル</button>
-          <button type="button" class="btn btn-japanese" id="saveReservation">保存</button>
+    <!-- Existing Reservations -->
+    <div class="card mt-4">
+      <div class="card-header">
+        <h5 class="mb-0">📋 予約一覧</h5>
+      </div>
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th>予約ID</th>
+                <th>お客様名</th>
+                <th>日時</th>
+                <th>人数</th>
+                <th>テーブル</th>
+                <th>ステータス</th>
+                <th>操作</th>
+              </tr>
+            </thead>
+            <tbody id="reservationsTable">
+              <!-- Reservations will be loaded here -->
+            </tbody>
+          </table>
         </div>
       </div>
     </div>
@@ -100,52 +247,158 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   
   <script>
-    // Check authentication FIRST
+    // Initialize Supabase with real-time capabilities
+    const SUPABASE_URL = 'https://nfcjbjohxzaikelxgmjg.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5mY2piam9oeHphaWtlbHhnbWpnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjEwNTgzMjAsImV4cCI6MjA3NjYzNDMyMH0.u0ta1NxSDbJ_9lf1TcMp3M0-_vNNBs6HByOj8wtKsX4';
+    
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    // Check authentication
     const currentUser = JSON.parse(localStorage.getItem('user'));
     if (!currentUser) {
       alert('ログインが必要です');
       window.location.href = 'login.html';
     }
 
-    // Update welcome message
-    document.getElementById('userWelcome').textContent = `ようこそ、${currentUser.name}さん！`;
+    // Set minimum date to today
+    document.getElementById('reservationDate').min = new Date().toISOString().split('T')[0];
 
-    // Supabase configuration
-    const SUPABASE_URL = 'https://nfcjbjohxzaikelxgmjg.supabase.co';
-    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5mY2piam9oeHphaWtlbHhnbWpnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjEwNTgzMjAsImV4cCI6MjA3NjYzNDMyMH0.u0ta1NxSDbJ_9lf1TcMp3M0-_vNNBs6HByOj8wtKsX4';
-    
-    const { createClient } = supabase;
-    const supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-    
+    // Real-time subscription for reservations
+    const reservationSubscription = supabase
+      .channel('reservations')
+      .on('postgres_changes', 
+        { event: '*', schema: 'public', table: 'reservations' },
+        (payload) => {
+          console.log('Real-time update received:', payload);
+          handleRealTimeUpdate(payload);
+        }
+      )
+      .subscribe();
+
+    // Load initial data
+    loadTables();
+    loadReservations();
+    loadTodayStats();
+
+    // Handle real-time updates
+    function handleRealTimeUpdate(payload) {
+      const updatesContainer = document.getElementById('liveUpdates');
+      const timestamp = new Date().toLocaleTimeString('ja-JP');
+      
+      let message = '';
+      switch(payload.eventType) {
+        case 'INSERT':
+          message = `🆕 新しい予約: ${payload.new.customer_name} (${payload.new.guests}名)`;
+          break;
+        case 'UPDATE':
+          message = `✏️ 予約更新: ${payload.new.customer_name}`;
+          break;
+        case 'DELETE':
+          message = `🗑️ 予約キャンセル: ${payload.old.customer_name}`;
+          break;
+      }
+      
+      // Add to live updates
+      const updateItem = document.createElement('div');
+      updateItem.className = 'update-item';
+      updateItem.innerHTML = `<small>${timestamp}</small><br>${message}`;
+      updatesContainer.insertBefore(updateItem, updatesContainer.firstChild);
+      
+      // Keep only last 10 updates
+      if (updatesContainer.children.length > 10) {
+        updatesContainer.removeChild(updatesContainer.lastChild);
+      }
+      
+      // Refresh data
+      loadTables();
+      loadReservations();
+      loadTodayStats();
+    }
+
+    // Load table availability
+    async function loadTables() {
+      try {
+        const { data: tables, error } = await supabase
+          .from('restaurant_tables')
+          .select('*')
+          .order('table_number');
+          
+        if (error) throw error;
+        
+        const tableGrid = document.getElementById('tableGrid');
+        tableGrid.innerHTML = '';
+        
+        tables.forEach(table => {
+          const tableItem = document.createElement('div');
+          tableItem.className = `table-item ${table.is_available ? 'available' : 'occupied'}`;
+          tableItem.innerHTML = `
+            <div class="fw-bold">${table.table_number}</div>
+            <small>${table.capacity}名</small>
+            <div class="mt-1">
+              <small class="badge ${table.is_available ? 'bg-success' : 'bg-danger'}">
+                ${table.is_available ? '空席' : '満席'}
+              </small>
+            </div>
+          `;
+          
+          if (table.is_available) {
+            tableItem.addEventListener('click', () => selectTable(table.table_number));
+          }
+          
+          tableGrid.appendChild(tableItem);
+        });
+      } catch (error) {
+        console.error('Error loading tables:', error);
+      }
+    }
+
+    // Table selection
+    let selectedTable = null;
+    function selectTable(tableNumber) {
+      selectedTable = tableNumber;
+      
+      // Update UI
+      document.querySelectorAll('.table-item').forEach(item => {
+        item.classList.remove('selected');
+      });
+      
+      event.target.closest('.table-item').classList.add('selected');
+      
+      // Show confirmation
+      addLiveUpdate(`✅ テーブル ${tableNumber} を選択しました`);
+    }
+
     // Load reservations
     async function loadReservations() {
       try {
-        const { data, error } = await supabaseClient
+        const { data: reservations, error } = await supabase
           .from('reservations')
           .select('*')
           .eq('user_id', currentUser.id)
-          .order('date', { ascending: true });
+          .order('date', { ascending: false });
           
         if (error) throw error;
         
         const tbody = document.getElementById('reservationsTable');
         tbody.innerHTML = '';
         
-        if (data.length === 0) {
-          tbody.innerHTML = '<tr><td colspan="5">予約がありません</td></tr>';
+        if (reservations.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="7" class="text-center">予約がありません</td></tr>';
           return;
         }
         
-        data.forEach(reservation => {
+        reservations.forEach(reservation => {
           const row = document.createElement('tr');
           row.innerHTML = `
+            <td><small>${reservation.id.slice(0, 8)}...</small></td>
             <td>${reservation.customer_name}</td>
-            <td>${reservation.date}</td>
-            <td>${reservation.time}</td>
+            <td>${reservation.date} ${reservation.time}</td>
             <td>${reservation.guests}人</td>
+            <td>${reservation.table_number || '-'}</td>
+            <td><span class="badge bg-success">確認済み</span></td>
             <td>
-              <button class="btn btn-sm btn-outline-danger" onclick="deleteReservation('${reservation.id}')">
-                削除
+              <button class="btn btn-sm btn-outline-danger" onclick="cancelReservation('${reservation.id}')">
+                キャンセル
               </button>
             </td>
           `;
@@ -155,73 +408,172 @@
         console.error('Error loading reservations:', error);
       }
     }
-    
-    // Add new reservation
-    document.getElementById('saveReservation').addEventListener('click', async () => {
+
+    // Load today's statistics
+    async function loadTodayStats() {
+      try {
+        const today = new Date().toISOString().split('T')[0];
+        
+        const { data: todayReservations, error: resError } = await supabase
+          .from('reservations')
+          .select('*')
+          .eq('date', today);
+          
+        const { data: availableTables, error: tableError } = await supabase
+          .from('restaurant_tables')
+          .select('*')
+          .eq('is_available', true);
+          
+        if (!resError && !tableError) {
+          document.getElementById('todayBookings').textContent = todayReservations.length;
+          document.getElementById('availableTables').textContent = availableTables.length;
+          
+          // Update availability summary
+          const summary = document.getElementById('availabilitySummary');
+          summary.innerHTML = `
+            <div class="text-center">
+              <div class="h3 ${availableTables.length > 5 ? 'text-success' : availableTables.length > 2 ? 'text-warning' : 'text-danger'}">
+                ${availableTables.length}
+              </div>
+              <div>空席テーブル</div>
+              <small class="text-muted">合計 ${todayReservations.length} 予約</small>
+            </div>
+          `;
+        }
+      } catch (error) {
+        console.error('Error loading stats:', error);
+      }
+    }
+
+    // Add live update message
+    function addLiveUpdate(message) {
+      const updatesContainer = document.getElementById('liveUpdates');
+      const timestamp = new Date().toLocaleTimeString('ja-JP');
+      
+      const updateItem = document.createElement('div');
+      updateItem.className = 'update-item';
+      updateItem.innerHTML = `<small>${timestamp}</small><br>${message}`;
+      updatesContainer.insertBefore(updateItem, updatesContainer.firstChild);
+      
+      if (updatesContainer.children.length > 10) {
+        updatesContainer.removeChild(updatesContainer.lastChild);
+      }
+    }
+
+    // Handle form submission
+    document.getElementById('reservationForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
       const customerName = document.getElementById('customerName').value;
+      const customerEmail = document.getElementById('customerEmail').value;
       const date = document.getElementById('reservationDate').value;
       const time = document.getElementById('reservationTime').value;
       const guests = document.getElementById('guests').value;
+      const specialRequests = document.getElementById('specialRequests').value;
       
       if (!customerName || !date || !time || !guests) {
-        alert('すべての項目を入力してください');
+        alert('必須項目を入力してください');
         return;
       }
       
+      // Show loading
+      const submitBtn = e.target.querySelector('button[type="submit"]');
+      const submitText = document.getElementById('submitText');
+      const loadingSpinner = document.getElementById('loadingSpinner');
+      
+      submitText.textContent = '予約処理中...';
+      loadingSpinner.classList.remove('d-none');
+      submitBtn.disabled = true;
+      
       try {
-        const { data, error } = await supabaseClient
+        const { data, error } = await supabase
           .from('reservations')
           .insert([{
             user_id: currentUser.id,
             customer_name: customerName,
+            customer_email: customerEmail,
             date: date,
             time: time,
-            guests: parseInt(guests)
-          }]);
+            guests: parseInt(guests),
+            table_number: selectedTable,
+            special_requests: specialRequests,
+            status: 'confirmed'
+          }])
+          .select();
           
         if (error) throw error;
         
-        // Close modal and refresh
-        bootstrap.Modal.getInstance(document.getElementById('addReservationModal')).hide();
-        document.getElementById('reservationForm').reset();
-        loadReservations();
+        // Success
+        addLiveUpdate(`🎉 予約が確定しました！ ${customerName}様`);
         
-        alert('予約が完了しました！');
+        // Reset form
+        document.getElementById('reservationForm').reset();
+        selectedTable = null;
+        document.querySelectorAll('.table-item').forEach(item => {
+          item.classList.remove('selected');
+        });
+        
+        // Show success message
+        submitText.textContent = '✅ 予約完了！';
+        setTimeout(() => {
+          submitText.textContent = '✅ リアルタイム予約を確定';
+          loadingSpinner.classList.add('d-none');
+          submitBtn.disabled = false;
+        }, 2000);
         
       } catch (error) {
-        alert('エラー: ' + error.message);
+        console.error('Error creating reservation:', error);
+        addLiveUpdate('❌ 予約エラーが発生しました');
+        
+        submitText.textContent = '❌ エラー - 再試行';
+        loadingSpinner.classList.add('d-none');
+        submitBtn.disabled = false;
+        
+        setTimeout(() => {
+          submitText.textContent = '✅ リアルタイム予約を確定';
+        }, 3000);
       }
     });
-    
-    // Delete reservation
-    window.deleteReservation = async (id) => {
-      if (confirm('この予約を削除しますか？')) {
+
+    // Cancel reservation
+    window.cancelReservation = async (reservationId) => {
+      if (confirm('この予約をキャンセルしますか？')) {
         try {
-          const { error } = await supabaseClient
+          const { error } = await supabase
             .from('reservations')
             .delete()
-            .eq('id', id);
+            .eq('id', reservationId);
             
           if (error) throw error;
           
+          addLiveUpdate('🗑️ 予約をキャンセルしました');
           loadReservations();
-          alert('予約を削除しました');
+          
         } catch (error) {
-          alert('エラー: ' + error.message);
+          alert('キャンセルエラー: ' + error.message);
         }
       }
     };
-    
+
     // Logout
     document.getElementById('logoutBtn').addEventListener('click', () => {
       if (confirm('ログアウトしますか？')) {
+        // Unsubscribe from real-time updates
+        supabase.removeChannel(reservationSubscription);
         localStorage.removeItem('user');
         window.location.href = 'index.html';
       }
     });
-    
-    // Load reservations on page load
-    loadReservations();
+
+    // Connection status
+    supabase.auth.onAuthStateChange((event, session) => {
+      const statusElement = document.getElementById('connectionStatus');
+      if (event === 'SIGNED_IN') {
+        statusElement.innerHTML = '🟢 接続完了';
+      } else if (event === 'SIGNED_OUT') {
+        statusElement.innerHTML = '🔴 接続切断';
+      }
+    });
   </script>
 </body>
 </html>
