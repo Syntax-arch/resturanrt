@@ -2,8 +2,6 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
   <!-- PWA Meta Tags -->
   <meta name="application-name" content="Sakura Restaurant">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -15,6 +13,7 @@
   <meta name="msapplication-TileColor" content="#c62828">
   <meta name="msapplication-tap-highlight" content="no">
   <meta name="theme-color" content="#c62828">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <!-- Apple Touch Icons -->
   <link rel="apple-touch-icon" href="/icons/icon-152x152.png">
@@ -29,45 +28,336 @@
   <meta name="theme-color" content="#c62828" media="(prefers-color-scheme: light)">
   <meta name="theme-color" content="#a11c1c" media="(prefers-color-scheme: dark)">
   
-  <title>ダッシュボード - レストラン予約システム</title>
-  
-  <!-- CSS Files -->
+  <title>ダッシュボード - 和食レストラン桜</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link href="style.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
   <style>
-    .stats-card {
+    :root {
+      --primary-color: #c62828;
+      --secondary-color: #f8bbd0;
+      --accent-color: #ff7043;
+      --success-color: #43a047;
+      --warning-color: #ff9800;
+      --info-color: #2196f3;
+    }
+    
+    body {
+      background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+      min-height: 100vh;
+      font-family: 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Yu Gothic', sans-serif;
+    }
+    
+    .sakura-decoration {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path fill="%23f8bbd0" d="M50 20c-5 0-10 3-13 8-3-5-8-8-13-8-8 0-15 7-15 15 0 10 10 18 25 30 15-12 25-20 25-30 0-8-7-15-15-15z"/></svg>');
+      background-size: 80px;
+      opacity: 0.1;
+      pointer-events: none;
+      z-index: -1;
+    }
+    
+    .navbar {
+      background: linear-gradient(135deg, var(--primary-color), #d32f2f) !important;
+      box-shadow: 0 4px 20px rgba(198, 40, 40, 0.3);
+      backdrop-filter: blur(10px);
+    }
+    
+    .welcome-section {
       background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
       color: white;
-      border-radius: 15px;
+      border-radius: 20px;
+      padding: 2.5rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .welcome-section::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+      animation: float 6s ease-in-out infinite;
+    }
+    
+    @keyframes float {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-20px) rotate(180deg); }
+    }
+    
+    .stats-card {
+      background: white;
+      border-radius: 20px;
       padding: 2rem;
       margin-bottom: 1.5rem;
-      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      border: none;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
+    
+    .stats-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+    }
+    
+    .stats-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+    }
+    
+    .stats-number {
+      font-size: 3rem;
+      font-weight: bold;
+      color: var(--primary-color);
+      line-height: 1;
+      margin-bottom: 0.5rem;
+    }
+    
+    .stats-icon {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      opacity: 0.8;
+    }
+    
     .quick-action {
       background: white;
-      border-radius: 12px;
-      padding: 1.5rem;
-      text-align: center;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-      transition: transform 0.3s ease;
-      border: 1px solid rgba(0,0,0,0.1);
-      height: 100%;
-    }
-    .quick-action:hover {
-      transform: translateY(-5px);
-    }
-    .welcome-section {
-      background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-      color: white;
       border-radius: 15px;
-      padding: 2rem;
-      margin-bottom: 2rem;
+      padding: 1.8rem 1rem;
+      text-align: center;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+      transition: all 0.3s ease;
+      border: 1px solid rgba(0,0,0,0.05);
+      height: 100%;
+      position: relative;
+      overflow: hidden;
     }
+    
+    .quick-action::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+      transform: scaleX(0);
+      transition: transform 0.3s ease;
+    }
+    
+    .quick-action:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+    }
+    
+    .quick-action:hover::before {
+      transform: scaleX(1);
+    }
+    
+    .quick-action-icon {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      display: inline-block;
+    }
+    
     .recent-reservations {
       background: white;
-      border-radius: 12px;
+      border-radius: 20px;
+      padding: 2rem;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      border: none;
+    }
+    
+    .reservation-item {
+      border-bottom: 1px solid #f0f0f0;
+      padding: 1.2rem 0;
+      transition: background-color 0.3s ease;
+    }
+    
+    .reservation-item:hover {
+      background-color: #f8f9fa;
+      border-radius: 10px;
+      margin: 0 -1rem;
+      padding: 1.2rem 1rem;
+    }
+    
+    .reservation-item:last-child {
+      border-bottom: none;
+    }
+    
+    .status-badge {
+      padding: 0.4rem 0.8rem;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+    
+    .status-confirmed { background: #e8f5e8; color: var(--success-color); }
+    .status-pending { background: #fff3e0; color: var(--warning-color); }
+    .status-cancelled { background: #ffebee; color: var(--primary-color); }
+    
+    .section-title {
+      position: relative;
+      padding-bottom: 1rem;
+      margin-bottom: 1.5rem;
+      color: #333;
+    }
+    
+    .section-title::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 60px;
+      height: 3px;
+      background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+      border-radius: 2px;
+    }
+    
+    .btn-japanese {
+      background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+      color: white;
+      border: none;
+      border-radius: 25px;
+      padding: 0.8rem 1.5rem;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      box-shadow: 0 8px 25px rgba(198, 40, 40, 0.3);
+    }
+    
+    .btn-japanese:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 35px rgba(198, 40, 40, 0.4);
+      color: white;
+    }
+    
+    .floating-notification {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 1050;
+      animation: slideInRight 0.5s ease;
+    }
+    
+    @keyframes slideInRight {
+      from { transform: translateX(100%); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+    
+    .progress-ring {
+      width: 80px;
+      height: 80px;
+    }
+    
+    .progress-bg {
+      fill: none;
+      stroke: #f0f0f0;
+      stroke-width: 8;
+    }
+    
+    .progress-fill {
+      fill: none;
+      stroke: var(--primary-color);
+      stroke-width: 8;
+      stroke-linecap: round;
+      transform: rotate(-90deg);
+      transform-origin: 50% 50%;
+      transition: stroke-dasharray 0.3s ease;
+    }
+    
+    .loyalty-card {
+      background: linear-gradient(135deg, #2c3e50, #34495e);
+      color: white;
+      border-radius: 20px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .loyalty-card::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+    }
+    
+    .weather-widget {
+      background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+      color: white;
+      border-radius: 15px;
       padding: 1.5rem;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      margin-bottom: 1.5rem;
+    }
+    
+    .notification-bell {
+      position: relative;
+      cursor: pointer;
+    }
+    
+    .notification-dot {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 8px;
+      height: 8px;
+      background: #ff4757;
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
+    
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.2); opacity: 0.7; }
+    }
+    
+    .mobile-bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: white;
+      box-shadow: 0 -4px 20px rgba(0,0,0,0.1);
+      display: none;
+      z-index: 1000;
+    }
+    
+    @media (max-width: 768px) {
+      .mobile-bottom-nav {
+        display: flex;
+      }
+      .container {
+        margin-bottom: 80px;
+      }
+      .stats-number {
+        font-size: 2.5rem;
+      }
+      .quick-action {
+        padding: 1.2rem 0.5rem;
+      }
+      .quick-action-icon {
+        font-size: 2rem;
+      }
     }
   </style>
 </head>
@@ -75,17 +365,21 @@
   <div class="sakura-decoration"></div>
   
   <!-- Navigation -->
-  <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #c62828;">
+  <nav class="navbar navbar-expand-lg navbar-dark">
     <div class="container">
       <a class="navbar-brand fw-bold" href="dashboard.html">
-        🍣 レストラン予約システム
+        <i class="fas fa-utensils me-2"></i>🍣 和食レストラン 桜
       </a>
-      <div class="navbar-nav ms-auto">
-        <span class="navbar-text me-3" id="userWelcome">
+      <div class="navbar-nav ms-auto align-items-center">
+        <div class="notification-bell me-3 position-relative">
+          <i class="fas fa-bell text-white"></i>
+          <div class="notification-dot"></div>
+        </div>
+        <span class="navbar-text me-3 d-none d-md-block" id="userWelcome">
           ようこそ！
         </span>
         <button class="btn btn-outline-light btn-sm" id="logoutBtn">
-          ログアウト
+          <i class="fas fa-sign-out-alt me-1"></i>ログアウト
         </button>
       </div>
     </div>
@@ -95,246 +389,275 @@
     <!-- Welcome Section -->
     <div class="welcome-section">
       <div class="row align-items-center">
-        <div class="col-md-8">
-          <h1 id="welcomeMessage">ようこそ！</h1>
-          <p class="mb-0">レストラン予約システムへようこそ。予約の管理や新規予約を作成できます。</p>
+        <div class="col-md-8 position-relative">
+          <h1 id="welcomeMessage" class="mb-3">ようこそ！</h1>
+          <p class="mb-3 fs-5">和食レストラン桜の予約管理システムへようこそ</p>
+          <div class="d-flex align-items-center">
+            <div class="weather-widget me-3">
+              <i class="fas fa-sun me-2"></i>
+              <span id="weatherTemp">24°C</span>
+            </div>
+            <div class="text-white-50">
+              <i class="fas fa-calendar-alt me-1"></i>
+              <span id="currentDate"></span>
+            </div>
+          </div>
         </div>
-        <div class="col-md-4 text-end">
-          <div class="display-4">🎉</div>
+        <div class="col-md-4 text-end position-relative">
+          <div class="display-1 opacity-25">🎌</div>
         </div>
       </div>
     </div>
 
     <!-- Stats Cards -->
     <div class="row">
-      <div class="col-md-4">
+      <div class="col-md-3">
         <div class="stats-card text-center">
-          <div class="display-4 mb-2" id="totalReservations">0</div>
-          <div class="h5">総予約数</div>
+          <div class="stats-icon">📅</div>
+          <div class="stats-number" id="totalReservations">0</div>
+          <div class="h6 text-muted">総予約数</div>
         </div>
       </div>
-      <div class="col-md-4">
-        <div class="stats-card text-center" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
-          <div class="display-4 mb-2" id="upcomingReservations">0</div>
-          <div class="h5">今後の予約</div>
+      <div class="col-md-3">
+        <div class="stats-card text-center">
+          <div class="stats-icon">⏳</div>
+          <div class="stats-number" id="upcomingReservations">0</div>
+          <div class="h6 text-muted">今後の予約</div>
         </div>
       </div>
-      <div class="col-md-4">
-        <div class="stats-card text-center" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);">
-          <div class="display-4 mb-2" id="todayReservations">0</div>
-          <div class="h5">今日の予約</div>
+      <div class="col-md-3">
+        <div class="stats-card text-center">
+          <div class="stats-icon">🎯</div>
+          <div class="stats-number" id="todayReservations">0</div>
+          <div class="h6 text-muted">今日の予約</div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="stats-card text-center">
+          <div class="stats-icon">⭐</div>
+          <div class="stats-number" id="loyaltyPoints">0</div>
+          <div class="h6 text-muted">ポイント</div>
         </div>
       </div>
     </div>
 
-    <!-- Quick Actions - Row 1: Core Features -->
+    <!-- Loyalty Progress -->
+    <div class="loyalty-card">
+      <div class="row align-items-center">
+        <div class="col-md-8">
+          <h5 class="mb-3"><i class="fas fa-crown me-2"></i>会員ステータス</h5>
+          <p class="mb-3">あと3回のご来店でゴールド会員に昇格！</p>
+          <div class="progress mb-3" style="height: 8px;">
+            <div class="progress-bar" style="width: 70%; background: linear-gradient(135deg, #FFD700, #FFA500);"></div>
+          </div>
+          <small>現在: シルバー会員 | 次: ゴールド会員</small>
+        </div>
+        <div class="col-md-4 text-center">
+          <div class="progress-ring">
+            <svg width="80" height="80" viewBox="0 0 80 80">
+              <circle class="progress-bg" cx="40" cy="40" r="36"></circle>
+              <circle class="progress-fill" cx="40" cy="40" r="36" 
+                      stroke-dasharray="226.194" stroke-dashoffset="67.858"></circle>
+              <text x="40" y="45" text-anchor="middle" font-size="12" font-weight="bold" fill="white">70%</text>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quick Actions Grid -->
     <div class="row mb-4">
       <div class="col-12">
-        <h4 class="mb-3">📊 メイン機能</h4>
+        <h4 class="section-title">🚀 クイックアクション</h4>
       </div>
-      <div class="col-md-3 mb-3">
+      
+      <!-- Row 1: Core Actions -->
+      <div class="col-md-3 col-6 mb-3">
         <a href="reservation.html" class="text-decoration-none">
           <div class="quick-action">
-            <div class="h1 mb-3">📅</div>
-            <h5>新規予約</h5>
-            <p class="text-muted small">新しい予約を作成</p>
+            <div class="quick-action-icon">➕</div>
+            <h6>新規予約</h6>
+            <p class="text-muted small mb-0">席を予約する</p>
           </div>
         </a>
       </div>
-      <div class="col-md-3 mb-3">
-        <a href="reservation.html" class="text-decoration-none">
+      <div class="col-md-3 col-6 mb-3">
+        <a href="reservations.html" class="text-decoration-none">
           <div class="quick-action">
-            <div class="h1 mb-3">📋</div>
-            <h5>予約一覧</h5>
-            <p class="text-muted small">すべての予約を表示</p>
+            <div class="quick-action-icon">📋</div>
+            <h6>予約管理</h6>
+            <p class="text-muted small mb-0">予約を確認・変更</p>
           </div>
         </a>
       </div>
-      <div class="col-md-3 mb-3">
+      <div class="col-md-3 col-6 mb-3">
         <a href="menu.html" class="text-decoration-none">
           <div class="quick-action">
-            <div class="h1 mb-3">🍽️</div>
-            <h5>メニュー</h5>
-            <p class="text-muted small">料理メニューを見る</p>
+            <div class="quick-action-icon">🍱</div>
+            <h6>メニュー</h6>
+            <p class="text-muted small mb-0">料理を見る</p>
           </div>
         </a>
       </div>
-      <div class="col-md-3 mb-3">
+      <div class="col-md-3 col-6 mb-3">
         <a href="profile.html" class="text-decoration-none">
           <div class="quick-action">
-            <div class="h1 mb-3">👤</div>
-            <h5>プロフィール</h5>
-            <p class="text-muted small">アカウント情報</p>
+            <div class="quick-action-icon">👤</div>
+            <h6>プロフィール</h6>
+            <p class="text-muted small mb-0">アカウント設定</p>
           </div>
         </a>
       </div>
-    </div>
 
-    <!-- Quick Actions - Row 2: Restaurant Info -->
-    <div class="row mb-4">
-      <div class="col-12">
-        <h4 class="mb-3">🏮 レストラン情報</h4>
-      </div>
-      <div class="col-md-3 mb-3">
+      <!-- Row 2: Restaurant Features -->
+      <div class="col-md-3 col-6 mb-3">
         <a href="gallery.html" class="text-decoration-none">
           <div class="quick-action">
-            <div class="h1 mb-3">🖼️</div>
-            <h5>ギャラリー</h5>
-            <p class="text-muted small">店内写真</p>
+            <div class="quick-action-icon">🖼️</div>
+            <h6>ギャラリー</h6>
+            <p class="text-muted small mb-0">店内の様子</p>
           </div>
         </a>
       </div>
-      <div class="col-md-3 mb-3">
+      <div class="col-md-3 col-6 mb-3">
         <a href="info.html" class="text-decoration-none">
           <div class="quick-action">
-            <div class="h1 mb-3">🏮</div>
-            <h5>店舗情報</h5>
-            <p class="text-muted small">レストラン詳細</p>
+            <div class="quick-action-icon">🏮</div>
+            <h6>店舗情報</h6>
+            <p class="text-muted small mb-0">アクセス・営業時間</p>
           </div>
         </a>
       </div>
-      <div class="col-md-3 mb-3">
+      <div class="col-md-3 col-6 mb-3">
         <a href="events.html" class="text-decoration-none">
           <div class="quick-action">
-            <div class="h1 mb-3">🎉</div>
-            <h5>イベント</h5>
-            <p class="text-muted small">特別イベント情報</p>
+            <div class="quick-action-icon">🎉</div>
+            <h6>イベント</h6>
+            <p class="text-muted small mb-0">特別メニュー</p>
           </div>
         </a>
       </div>
-      <div class="col-md-3 mb-3">
+      <div class="col-md-3 col-6 mb-3">
         <a href="private.html" class="text-decoration-none">
           <div class="quick-action">
-            <div class="h1 mb-3">💼</div>
-            <h5>貸切・個室</h5>
-            <p class="text-muted small">プライベートダイニング</p>
+            <div class="quick-action-icon">💼</div>
+            <h6>個室予約</h6>
+            <p class="text-muted small mb-0">プライベート利用</p>
           </div>
         </a>
       </div>
     </div>
 
-    <!-- Quick Actions - Row 3: Customer Experience -->
-    <div class="row mb-4">
-      <div class="col-12">
-        <h4 class="mb-3">⭐ カスタマーサービス</h4>
-      </div>
-      <div class="col-md-3 mb-3">
-        <a href="reviews.html" class="text-decoration-none">
-          <div class="quick-action">
-            <div class="h1 mb-3">⭐</div>
-            <h5>お客様の声</h5>
-            <p class="text-muted small">レビューを見る</p>
+    <!-- Recent Reservations & Notifications -->
+    <div class="row">
+      <!-- Recent Reservations -->
+      <div class="col-lg-8 mb-4">
+        <div class="recent-reservations">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <h4 class="section-title mb-0">📅 最近の予約</h4>
+            <a href="reservations.html" class="btn btn-japanese btn-sm">
+              <i class="fas fa-list me-1"></i>すべて表示
+            </a>
           </div>
-        </a>
-      </div>
-      <div class="col-md-3 mb-3">
-        <a href="loyalty.html" class="text-decoration-none">
-          <div class="quick-action">
-            <div class="h1 mb-3">🎁</div>
-            <h5>会員特典</h5>
-            <p class="text-muted small">ロイヤルティプログラム</p>
+          <div id="recentReservationsList">
+            <div class="text-center py-5">
+              <div class="text-muted mb-3">
+                <i class="fas fa-calendar-plus fa-2x mb-3"></i>
+                <div>予約がありません</div>
+              </div>
+              <a href="reservation.html" class="btn btn-japanese">
+                <i class="fas fa-plus me-1"></i>最初の予約を作成
+              </a>
+            </div>
           </div>
-        </a>
+        </div>
       </div>
-      <div class="col-md-3 mb-3">
-        <a href="contact.html" class="text-decoration-none">
-          <div class="quick-action">
-            <div class="h1 mb-3">📞</div>
-            <h5>お問い合わせ</h5>
-            <p class="text-muted small">ご連絡はこちら</p>
-          </div>
-        </a>
-      </div>
-      <div class="col-md-3 mb-3">
-        <a href="help.html" class="text-decoration-none">
-          <div class="quick-action">
-            <div class="h1 mb-3">❓</div>
-            <h5>ヘルプ</h5>
-            <p class="text-muted small">使い方ガイド</p>
-          </div>
-        </a>
-      </div>
-    </div>
 
-    <!-- Quick Actions - Row 4: Additional Features -->
-    <div class="row mb-4">
-      <div class="col-12">
-        <h4 class="mb-3">🔧 その他</h4>
-      </div>
-      <div class="col-md-3 mb-3">
-        <a href="careers.html" class="text-decoration-none">
-          <div class="quick-action">
-            <div class="h1 mb-3">💼</div>
-            <h5>採用情報</h5>
-            <p class="text-muted small">キャリア opportunities</p>
+      <!-- Notifications & Updates -->
+      <div class="col-lg-4 mb-4">
+        <div class="recent-reservations">
+          <h4 class="section-title">🔔 お知らせ</h4>
+          <div class="notification-list">
+            <div class="d-flex align-items-start mb-3 p-2 border-bottom">
+              <i class="fas fa-bell text-warning me-2 mt-1"></i>
+              <div>
+                <small class="fw-bold">新メニュー登場</small>
+                <p class="small mb-1">春の食材を使った新料理が追加されました</p>
+                <small class="text-muted">3日前</small>
+              </div>
+            </div>
+            <div class="d-flex align-items-start mb-3 p-2 border-bottom">
+              <i class="fas fa-star text-info me-2 mt-1"></i>
+              <div>
+                <small class="fw-bold">ポイントキャンペーン</small>
+                <p class="small mb-1">今月はポイントが2倍になります</p>
+                <small class="text-muted">1週間前</small>
+              </div>
+            </div>
+            <div class="d-flex align-items-start mb-3 p-2">
+              <i class="fas fa-calendar-alt text-success me-2 mt-1"></i>
+              <div>
+                <small class="fw-bold">ゴールデンウィーク</small>
+                <p class="small mb-1">特別コースの予約受付中</p>
+                <small class="text-muted">2週間前</small>
+              </div>
+            </div>
           </div>
-        </a>
-      </div>
-      <div class="col-md-3 mb-3">
-        <a href="app.html" class="text-decoration-none">
-          <div class="quick-action">
-            <div class="h1 mb-3">📱</div>
-            <h5>モバイルアプリ</h5>
-            <p class="text-muted small">ダウンロード</p>
-          </div>
-        </a>
-      </div>
-      <div class="col-md-3 mb-3">
-        <a href="giftcards.html" class="text-decoration-none">
-          <div class="quick-action">
-            <div class="h1 mb-3">🎫</div>
-            <h5>ギフトカード</h5>
-            <p class="text-muted small">購入・贈答</p>
-          </div>
-        </a>
-      </div>
-      <div class="col-md-3 mb-3">
-        <a href="catering.html" class="text-decoration-none">
-          <div class="quick-action">
-            <div class="h1 mb-3">🚚</div>
-            <h5>ケータリング</h5>
-            <p class="text-muted small">出張料理サービス</p>
-          </div>
-        </a>
-      </div>
-    </div>
+        </div>
 
-    <!-- Recent Reservations -->
-    <div class="recent-reservations">
-      <div class="d-flex justify-content-between align-items-center mb-3">
-        <h4>最近の予約</h4>
-        <a href="reservation.html" class="btn btn-japanese btn-sm">すべて表示</a>
-      </div>
-      <div id="recentReservationsList">
-        <div class="text-center py-4">
-          <div class="text-muted">予約がありません</div>
-          <a href="reservation.html" class="btn btn-japanese mt-2">最初の予約を作成</a>
+        <!-- Quick Stats -->
+        <div class="recent-reservations mt-3">
+          <h4 class="section-title">📊 利用状況</h4>
+          <div class="row text-center">
+            <div class="col-6 mb-3">
+              <div class="h4 text-primary mb-1" id="monthlyVisits">12</div>
+              <small class="text-muted">今月の来店</small>
+            </div>
+            <div class="col-6 mb-3">
+              <div class="h4 text-success mb-1" id="favoriteDishes">8</div>
+              <small class="text-muted">お気に入り料理</small>
+            </div>
+            <div class="col-6">
+              <div class="h4 text-warning mb-1" id="totalSpent">¥45,600</div>
+              <small class="text-muted">総利用金額</small>
+            </div>
+            <div class="col-6">
+              <div class="h4 text-info mb-1" id="memberSince">3ヶ月</div>
+              <small class="text-muted">会員歴</small>
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Profile Modal -->
-  <div class="modal fade" id="profileModal" tabindex="-1">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">プロフィール情報</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+  <!-- Mobile Bottom Navigation -->
+  <div class="mobile-bottom-nav">
+    <div class="container">
+      <div class="row text-center py-2">
+        <div class="col-3">
+          <a href="dashboard.html" class="text-decoration-none text-primary">
+            <i class="fas fa-home fa-lg"></i>
+            <div class="small">ホーム</div>
+          </a>
         </div>
-        <div class="modal-body">
-          <div class="mb-3">
-            <strong>名前:</strong> <span id="profileName">-</span>
-          </div>
-          <div class="mb-3">
-            <strong>メールアドレス:</strong> <span id="profileEmail">-</span>
-          </div>
-          <div class="mb-3">
-            <strong>登録日:</strong> <span id="profileCreatedAt">-</span>
-          </div>
+        <div class="col-3">
+          <a href="reservation.html" class="text-decoration-none text-muted">
+            <i class="fas fa-calendar-plus fa-lg"></i>
+            <div class="small">予約</div>
+          </a>
         </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">閉じる</button>
+        <div class="col-3">
+          <a href="menu.html" class="text-decoration-none text-muted">
+            <i class="fas fa-utensils fa-lg"></i>
+            <div class="small">メニュー</div>
+          </a>
+        </div>
+        <div class="col-3">
+          <a href="profile.html" class="text-decoration-none text-muted">
+            <i class="fas fa-user fa-lg"></i>
+            <div class="small">プロフィール</div>
+          </a>
         </div>
       </div>
     </div>
@@ -344,41 +667,51 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   
   <script>
-    // Check authentication
-    const currentUser = JSON.parse(localStorage.getItem('user'));
-    if (!currentUser) {
-      alert('ログインが必要です');
-      window.location.href = 'login.html';
+    // Initialize dashboard
+    document.addEventListener('DOMContentLoaded', function() {
+      initializeDashboard();
+    });
+
+    async function initializeDashboard() {
+      // Check authentication
+      const currentUser = JSON.parse(localStorage.getItem('user'));
+      if (!currentUser) {
+        showNotification('ログインが必要です', 'warning');
+        setTimeout(() => window.location.href = 'login.html', 2000);
+        return;
+      }
+
+      // Set current date
+      document.getElementById('currentDate').textContent = new Date().toLocaleDateString('ja-JP', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        weekday: 'long'
+      });
+
+      // Update welcome message
+      document.getElementById('userWelcome').textContent = `ようこそ、${currentUser.name}さん！`;
+      document.getElementById('welcomeMessage').textContent = `ようこそ、${currentUser.name}さん！`;
+
+      // Load dashboard data
+      await loadDashboardData(currentUser);
+      
+      // Initialize weather (mock data)
+      initializeWeather();
+      
+      // Initialize user stats
+      initializeUserStats(currentUser);
     }
 
-    // Supabase configuration
-    const SUPABASE_URL = 'https://nfcjbjohxzaikelxgmjg.supabase.co';
-    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5mY2piam9oeHphaWtlbHhnbWpnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjEwNTgzMjAsImV4cCI6MjA3NjYzNDMyMH0.u0ta1NxSDbJ_9lf1TcMp3M0-_vNNBs6HByOj8wtKsX4';
-    
-    // Initialize Supabase
-    const { createClient } = supabase;
-    const supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-    console.log('Dashboard loaded for user:', currentUser);
-
-    // Update welcome message
-    document.getElementById('userWelcome').textContent = `ようこそ、${currentUser.name}さん！`;
-    document.getElementById('welcomeMessage').textContent = `ようこそ、${currentUser.name}さん！`;
-    
-    // Set profile information
-    document.getElementById('profileName').textContent = currentUser.name;
-    document.getElementById('profileEmail').textContent = currentUser.email;
-    if (currentUser.created_at) {
-      document.getElementById('profileCreatedAt').textContent = new Date(currentUser.created_at).toLocaleDateString('ja-JP');
-    } else {
-      document.getElementById('profileCreatedAt').textContent = '今日';
-    }
-
-    // Load dashboard data
-    async function loadDashboardData() {
+    async function loadDashboardData(currentUser) {
       try {
-        console.log('Loading reservations for user:', currentUser.id);
+        // Supabase configuration
+        const SUPABASE_URL = 'https://nfcjbjohxzaikelxgmjg.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5mY2piam9oeHphaWtlbHhnbWpnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjEwNTgzMjAsImV4cCI6MjA3NjYzNDMyMH0.u0ta1NxSDbJ_9lf1TcMp3M0-_vNNBs6HByOj8wtKsX4';
         
+        const { createClient } = supabase;
+        const supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
         // Load user's reservations
         const { data: reservations, error } = await supabaseClient
           .from('reservations')
@@ -386,69 +719,75 @@
           .eq('user_id', currentUser.id)
           .order('created_at', { ascending: false });
 
-        if (error) {
-          console.error('Supabase error:', error);
-          throw error;
-        }
-
-        console.log('Reservations loaded:', reservations);
+        if (error) throw error;
 
         // Update stats
-        const total = reservations ? reservations.length : 0;
-        document.getElementById('totalReservations').textContent = total;
+        updateDashboardStats(reservations || []);
         
-        const today = new Date().toISOString().split('T')[0];
-        const upcoming = reservations ? reservations.filter(r => r.date >= today).length : 0;
-        const todayCount = reservations ? reservations.filter(r => r.date === today).length : 0;
-        
-        document.getElementById('upcomingReservations').textContent = upcoming;
-        document.getElementById('todayReservations').textContent = todayCount;
-
-        // Show recent reservations (last 3)
-        if (reservations && reservations.length > 0) {
-          const recentReservations = reservations.slice(0, 3);
-          displayRecentReservations(recentReservations);
-        }
+        // Display recent reservations
+        displayRecentReservations(reservations || []);
 
       } catch (error) {
         console.error('Error loading dashboard data:', error);
-        // Show error but don't break the page
-        document.getElementById('recentReservationsList').innerHTML = `
-          <div class="alert alert-warning">
-            データの読み込み中にエラーが発生しました
-          </div>
-        `;
+        showNotification('データの読み込みに失敗しました', 'error');
       }
+    }
+
+    function updateDashboardStats(reservations) {
+      const total = reservations.length;
+      const today = new Date().toISOString().split('T')[0];
+      const upcoming = reservations.filter(r => r.date >= today).length;
+      const todayCount = reservations.filter(r => r.date === today).length;
+
+      document.getElementById('totalReservations').textContent = total;
+      document.getElementById('upcomingReservations').textContent = upcoming;
+      document.getElementById('todayReservations').textContent = todayCount;
+      
+      // Calculate loyalty points (mock data)
+      const loyaltyPoints = total * 100;
+      document.getElementById('loyaltyPoints').textContent = loyaltyPoints;
     }
 
     function displayRecentReservations(reservations) {
       const container = document.getElementById('recentReservationsList');
       
+      if (reservations.length === 0) {
+        return; // Keep the default empty state
+      }
+
+      const recentReservations = reservations.slice(0, 5);
       let html = '';
-      reservations.forEach(reservation => {
-        const reservationDate = new Date(reservation.date + 'T' + reservation.time).toLocaleDateString('ja-JP', {
-          year: 'numeric',
+      
+      recentReservations.forEach(reservation => {
+        const reservationDate = new Date(reservation.date).toLocaleDateString('ja-JP', {
           month: 'long',
-          day: 'numeric'
+          day: 'numeric',
+          weekday: 'short'
         });
         
+        const statusClass = reservation.status === 'confirmed' ? 'status-confirmed' : 
+                           reservation.status === 'pending' ? 'status-pending' : 'status-cancelled';
+        
+        const statusText = reservation.status === 'confirmed' ? '確認済み' :
+                          reservation.status === 'pending' ? '保留中' : 'キャンセル';
+
         html += `
-          <div class="reservation-item border-bottom pb-3 mb-3">
+          <div class="reservation-item">
             <div class="row align-items-center">
-              <div class="col-md-4">
-                <strong>${reservation.customer_name}</strong>
+              <div class="col-12 col-sm-4 mb-2 mb-sm-0">
+                <strong>${reservation.customer_name || 'ゲスト'}</strong>
+                <div class="small text-muted">${reservation.guests}名</div>
               </div>
-              <div class="col-md-3">
-                ${reservationDate}
+              <div class="col-6 col-sm-3">
+                <div class="small text-muted">日時</div>
+                <div>${reservationDate} ${reservation.time}</div>
               </div>
-              <div class="col-md-2">
-                ${reservation.time}
+              <div class="col-6 col-sm-3">
+                <div class="small text-muted">合計</div>
+                <div>¥${(reservation.total_amount || 0).toLocaleString()}</div>
               </div>
-              <div class="col-md-2">
-                ${reservation.guests}人
-              </div>
-              <div class="col-md-1">
-                <span class="badge bg-success">確認済み</span>
+              <div class="col-12 col-sm-2 mt-2 mt-sm-0">
+                <span class="status-badge ${statusClass}">${statusText}</span>
               </div>
             </div>
           </div>
@@ -458,30 +797,72 @@
       container.innerHTML = html;
     }
 
-    // FIXED LOGOUT FUNCTION
+    function initializeWeather() {
+      // Mock weather data - in real app, you'd use a weather API
+      const temperatures = [22, 23, 24, 25, 26];
+      const randomTemp = temperatures[Math.floor(Math.random() * temperatures.length)];
+      document.getElementById('weatherTemp').textContent = `${randomTemp}°C`;
+    }
+
+    function initializeUserStats(currentUser) {
+      // Mock user statistics
+      document.getElementById('monthlyVisits').textContent = Math.floor(Math.random() * 10) + 8;
+      document.getElementById('favoriteDishes').textContent = Math.floor(Math.random() * 5) + 3;
+      document.getElementById('totalSpent').textContent = '¥' + (Math.floor(Math.random() * 20000) + 30000).toLocaleString();
+      
+      // Calculate membership duration
+      const joinDate = currentUser.created_at ? new Date(currentUser.created_at) : new Date();
+      const monthsDiff = Math.floor((new Date() - joinDate) / (1000 * 60 * 60 * 24 * 30));
+      document.getElementById('memberSince').textContent = monthsDiff > 0 ? `${monthsDiff}ヶ月` : '新規';
+    }
+
+    function showNotification(message, type = 'info') {
+      const alertClass = type === 'error' ? 'alert-danger' : 
+                        type === 'warning' ? 'alert-warning' : 
+                        type === 'success' ? 'alert-success' : 'alert-info';
+      
+      const notification = document.createElement('div');
+      notification.className = `alert ${alertClass} alert-dismissible fade show floating-notification`;
+      notification.innerHTML = `
+        ${message}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+      `;
+      
+      document.body.appendChild(notification);
+      
+      // Auto remove after 5 seconds
+      setTimeout(() => {
+        if (notification.parentNode) {
+          notification.remove();
+        }
+      }, 5000);
+    }
+
+    // Logout functionality
     document.getElementById('logoutBtn').addEventListener('click', () => {
       if (confirm('ログアウトしますか？')) {
         localStorage.removeItem('user');
-        window.location.href = 'index.html';
+        showNotification('ログアウトしました', 'success');
+        setTimeout(() => window.location.href = 'index.html', 1000);
       }
     });
 
-    // Load data when page loads
-    document.addEventListener('DOMContentLoaded', function() {
-      loadDashboardData();
+    // Notification bell click
+    document.querySelector('.notification-bell').addEventListener('click', () => {
+      showNotification('新しい通知はありません', 'info');
     });
 
     // PWA Initialization
-    document.addEventListener('DOMContentLoaded', async function() {
-        if ('serviceWorker' in navigator) {
-            try {
-                const registration = await navigator.serviceWorker.register('/sw.js');
-                console.log('✅ Service Worker registered');
-            } catch (error) {
-                console.error('❌ Service Worker registration failed:', error);
-            }
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', async () => {
+        try {
+          const registration = await navigator.serviceWorker.register('/sw.js');
+          console.log('✅ Service Worker registered:', registration);
+        } catch (error) {
+          console.error('❌ Service Worker registration failed:', error);
         }
-    });
+      });
+    }
   </script>
 </body>
 </html>
