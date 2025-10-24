@@ -2,88 +2,262 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <title>メニュー - レストラン予約システム</title>
+  <title>メニュー - 和食レストラン桜</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link href="style.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
   <style>
+    :root {
+      --primary-color: #c62828;
+      --secondary-color: #f8bbd0;
+      --accent-color: #ff7043;
+    }
+    
+    body {
+      background: linear-gradient(135deg, #f5f7fa 0%, #e3f2fd 100%);
+      min-height: 100vh;
+      font-family: 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Yu Gothic', sans-serif;
+    }
+    
+    .sakura-decoration {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path fill="%23f8bbd0" d="M50 20c-5 0-10 3-13 8-3-5-8-8-13-8-8 0-15 7-15 15 0 10 10 18 25 30 15-12 25-20 25-30 0-8-7-15-15-15z"/></svg>');
+      background-size: 80px;
+      opacity: 0.1;
+      pointer-events: none;
+      z-index: -1;
+    }
+    
+    .navbar {
+      background: linear-gradient(135deg, var(--primary-color), #d32f2f) !important;
+      box-shadow: 0 4px 20px rgba(198, 40, 40, 0.3);
+    }
+    
+    .hero-section {
+      background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), 
+                  url('https://images.unsplash.com/photo-1547592180-85f173990554?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80');
+      background-size: cover;
+      background-position: center;
+      color: white;
+      padding: 80px 0;
+      text-align: center;
+      margin-bottom: 3rem;
+      border-radius: 0 0 30px 30px;
+    }
+    
     .menu-category {
       background: white;
-      border-radius: 12px;
-      padding: 2rem;
-      margin-bottom: 2rem;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      border-radius: 20px;
+      padding: 2.5rem;
+      margin-bottom: 2.5rem;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      border: none;
+      position: relative;
+      overflow: hidden;
     }
+    
+    .menu-category::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+    }
+    
     .menu-item {
-      border-bottom: 1px solid #eee;
+      border-bottom: 1px solid #f0f0f0;
       padding: 1.5rem 0;
+      transition: background-color 0.3s ease;
     }
+    
+    .menu-item:hover {
+      background-color: #f8f9fa;
+      border-radius: 10px;
+      margin: 0 -1rem;
+      padding: 1.5rem 1rem;
+    }
+    
     .menu-item:last-child {
       border-bottom: none;
     }
+    
     .price-tag {
       background: linear-gradient(135deg, #c62828, #e53935);
       color: white;
-      padding: 0.5rem 1rem;
-      border-radius: 20px;
+      padding: 0.6rem 1.2rem;
+      border-radius: 25px;
       font-weight: bold;
+      font-size: 1.1rem;
+      box-shadow: 0 4px 15px rgba(198, 40, 40, 0.3);
     }
+    
     .category-badge {
       background: linear-gradient(135deg, #667eea, #764ba2);
       color: white;
-      padding: 0.5rem 1.5rem;
-      border-radius: 25px;
+      padding: 0.8rem 2rem;
+      border-radius: 30px;
       display: inline-block;
-      margin-bottom: 1rem;
+      margin-bottom: 1.5rem;
+      font-weight: 600;
+      font-size: 1.1rem;
+      box-shadow: 0 6px 20px rgba(102, 126, 234, 0.3);
     }
+    
     .menu-image {
       width: 100%;
-      height: 200px;
+      height: 180px;
       object-fit: cover;
-      border-radius: 10px;
-      margin-bottom: 1rem;
-    }
-    .course-card {
+      border-radius: 12px;
       transition: transform 0.3s ease;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.15);
     }
+    
+    .menu-image:hover {
+      transform: scale(1.05);
+    }
+    
+    .course-card {
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      border: none;
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+    
     .course-card:hover {
-      transform: translateY(-5px);
+      transform: translateY(-10px);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+    }
+    
+    .allergy-badge {
+      font-size: 0.7rem;
+      padding: 0.2rem 0.5rem;
+      margin-right: 0.3rem;
+    }
+    
+    .recommended-badge {
+      background: linear-gradient(135deg, #FFD700, #FFA500);
+      color: #000;
+      font-weight: 600;
+      padding: 0.3rem 0.8rem;
+      border-radius: 15px;
+      font-size: 0.8rem;
+      display: inline-block;
+      margin-left: 0.5rem;
+    }
+    
+    .section-title {
+      position: relative;
+      padding-bottom: 1rem;
+      margin-bottom: 2rem;
+      text-align: center;
+      color: #333;
+    }
+    
+    .section-title::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100px;
+      height: 3px;
+      background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+      border-radius: 2px;
+    }
+    
+    .floating-cart {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+      color: white;
+      border: none;
+      border-radius: 50px;
+      padding: 15px 25px;
+      box-shadow: 0 10px 25px rgba(198, 40, 40, 0.4);
+      z-index: 1000;
+      font-weight: 600;
     }
   </style>
 </head>
 <body>
   <div class="sakura-decoration"></div>
   
-  <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #c62828;">
+  <nav class="navbar navbar-expand-lg navbar-dark">
     <div class="container">
       <a class="navbar-brand fw-bold" href="dashboard.html">
-        🍣 レストラン予約システム
+        <i class="fas fa-utensils me-2"></i>🍣 和食レストラン 桜
       </a>
       <div class="navbar-nav ms-auto">
-        <a href="dashboard.html" class="btn btn-outline-light btn-sm me-2">ダッシュボード</a>
-        <button class="btn btn-outline-light btn-sm" id="logoutBtn">ログアウト</button>
+        <a href="dashboard.html" class="btn btn-outline-light btn-sm me-2">
+          <i class="fas fa-home me-1"></i>ダッシュボード
+        </a>
+        <button class="btn btn-outline-light btn-sm" id="logoutBtn">
+          <i class="fas fa-sign-out-alt me-1"></i>ログアウト
+        </button>
       </div>
     </div>
   </nav>
 
-  <div class="container mt-4">
-    <div class="text-center mb-5">
-      <h1>当店のメニュー</h1>
-      <p class="lead">厳選された食材を使用した自慢の料理をご提供します</p>
+  <!-- Hero Section -->
+  <div class="hero-section">
+    <div class="container">
+      <h1 class="display-4 fw-bold mb-3">和食メニュー</h1>
+      <p class="lead mb-4">四季折々の食材を使った、伝統と革新の和食料理</p>
+      <div class="row justify-content-center">
+        <div class="col-auto">
+          <span class="badge bg-light text-dark me-2 p-2"><i class="fas fa-fish me-1"></i>厳選食材</span>
+          <span class="badge bg-light text-dark me-2 p-2"><i class="fas fa-seedling me-1"></i>地元産野菜</span>
+          <span class="badge bg-light text-dark p-2"><i class="fas fa-utensils me-1"></i>職人技</span>
+        </div>
+      </div>
     </div>
+  </div>
 
-    <!-- Appetizers -->
+  <div class="container">
+    <!-- Appetizers & Starters -->
     <div class="menu-category">
-      <div class="category-badge">前菜</div>
-      <h3 class="mb-4">オードブル & 前菜</h3>
+      <div class="category-badge">先付・前菜</div>
+      <h3 class="section-title">季節の先付・前菜</h3>
       
       <div class="menu-item">
         <div class="row align-items-center">
           <div class="col-md-3">
-            <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=400&h=300&fit=crop" alt="季節の野菜サラダ" class="menu-image">
+            <img src="https://images.unsplash.com/photo-1544551763-46a013bb70d5?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=300&q=80" alt="季節の八寸" class="menu-image">
           </div>
           <div class="col-md-6">
-            <h5>季節の野菜サラダ</h5>
-            <p class="text-muted mb-0">採れたての季節野菜を特製ドレッシングで</p>
+            <h5>季節の八寸 <span class="recommended-badge">おすすめ</span></h5>
+            <p class="text-muted mb-2">旬の食材を5品ほど取り合わせた彩り豊かな前菜盛り合わせ</p>
+            <div>
+              <span class="badge bg-warning text-dark allergy-badge">卵</span>
+              <span class="badge bg-info text-dark allergy-badge">エビ</span>
+              <span class="badge bg-success text-dark allergy-badge">小麦</span>
+            </div>
+          </div>
+          <div class="col-md-3 text-end">
+            <span class="price-tag">¥1,800</span>
+          </div>
+        </div>
+      </div>
+      
+      <div class="menu-item">
+        <div class="row align-items-center">
+          <div class="col-md-3">
+            <img src="https://images.unsplash.com/photo-1583623025817-180190022df9?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=300&q=80" alt="茶碗蒸し" class="menu-image">
+          </div>
+          <div class="col-md-6">
+            <h5>季節の茶碗蒸し</h5>
+            <p class="text-muted mb-2">出汁の効いたなめらかな卵に、海老、鶏肉、銀杏を添えて</p>
+            <div>
+              <span class="badge bg-warning text-dark allergy-badge">卵</span>
+              <span class="badge bg-info text-dark allergy-badge">エビ</span>
+            </div>
           </div>
           <div class="col-md-3 text-end">
             <span class="price-tag">¥980</span>
@@ -94,50 +268,41 @@
       <div class="menu-item">
         <div class="row align-items-center">
           <div class="col-md-3">
-            <img src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=400&h=300&fit=crop" alt="自家製鴨のパテ" class="menu-image">
+            <img src="https://images.unsplash.com/photo-1587332212137-734226b5c132?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=300&q=80" alt="鰻の白焼き" class="menu-image">
           </div>
           <div class="col-md-6">
-            <h5>自家製鴨のパテ</h5>
-            <p class="text-muted mb-0">フレッシュバゲットとともに</p>
+            <h5>鰻の白焼き <span class="recommended-badge">季節限定</span></h5>
+            <p class="text-muted mb-2">備長炭でじっくり焼き上げた香ばしい鰻、わさび醤油で</p>
+            <div>
+              <span class="badge bg-info text-dark allergy-badge">魚</span>
+            </div>
           </div>
           <div class="col-md-3 text-end">
-            <span class="price-tag">¥1,280</span>
-          </div>
-        </div>
-      </div>
-      
-      <div class="menu-item">
-        <div class="row align-items-center">
-          <div class="col-md-3">
-            <img src="https://images.unsplash.com/photo-1563379926898-05f4575a45d8?w=400&h=300&fit=crop" alt="海鮮のカルパッチョ" class="menu-image">
-          </div>
-          <div class="col-md-6">
-            <h5>海鮮のカルパッチョ</h5>
-            <p class="text-muted mb-0">新鮮な白身魚とエビのマリネ</p>
-          </div>
-          <div class="col-md-3 text-end">
-            <span class="price-tag">¥1,480</span>
+            <span class="price-tag">¥2,200</span>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Main Courses -->
+    <!-- Sashimi -->
     <div class="menu-category">
-      <div class="category-badge">メイン</div>
-      <h3 class="mb-4">メイン料理</h3>
+      <div class="category-badge">造り・刺身</div>
+      <h3 class="section-title">鮮魚の造り</h3>
       
       <div class="menu-item">
         <div class="row align-items-center">
           <div class="col-md-3">
-            <img src="https://images.unsplash.com/photo-1588168333986-5078d3ae3976?w=400&h=300&fit=crop" alt="国産牛フィレステーキ" class="menu-image">
+            <img src="https://images.unsplash.com/photo-1579584425555-c3ce17fd4351?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=300&q=80" alt="特上刺身盛り合わせ" class="menu-image">
           </div>
           <div class="col-md-6">
-            <h5>国産牛フィレステーキ</h5>
-            <p class="text-muted mb-0">200g・ソースお選びいただけます</p>
+            <h5>特上刺身盛り合わせ <span class="recommended-badge">人気</span></h5>
+            <p class="text-muted mb-2">本日仕入れた鮮魚5種を豪快に盛り合わせ</p>
+            <div>
+              <span class="badge bg-info text-dark allergy-badge">魚介類</span>
+            </div>
           </div>
           <div class="col-md-3 text-end">
-            <span class="price-tag">¥4,800</span>
+            <span class="price-tag">¥3,500</span>
           </div>
         </div>
       </div>
@@ -145,11 +310,14 @@
       <div class="menu-item">
         <div class="row align-items-center">
           <div class="col-md-3">
-            <img src="https://images.unsplash.com/photo-1569050469557-3ad6c3c8ed12?w=400&h=300&fit=crop" alt="海の幸パエリア" class="menu-image">
+            <img src="https://images.unsplash.com/photo-1563612116629-0c0dc0dbfa5c?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=300&q=80" alt="本マグロ中トロ" class="menu-image">
           </div>
           <div class="col-md-6">
-            <h5>海の幸パエリア</h5>
-            <p class="text-muted mb-0">エビ、イカ、ムール貝の本格パエリア</p>
+            <h5>本マグロ中トロ</h5>
+            <p class="text-muted mb-2">豊洲市場直送の本マグロ、脂ののった中トロを厚切りで</p>
+            <div>
+              <span class="badge bg-info text-dark allergy-badge">魚</span>
+            </div>
           </div>
           <div class="col-md-3 text-end">
             <span class="price-tag">¥2,800</span>
@@ -160,14 +328,182 @@
       <div class="menu-item">
         <div class="row align-items-center">
           <div class="col-md-3">
-            <img src="https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?w=400&h=300&fit=crop" alt="季節の魚のグリル" class="menu-image">
+            <img src="https://images.unsplash.com/photo-1579584425555-c3ce17fd4351?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=300&q=80" alt="季節の白身魚盛り" class="menu-image">
           </div>
           <div class="col-md-6">
-            <h5>季節の魚のグリル</h5>
-            <p class="text-muted mb-0">本日の鮮魚をシンプルにグリル</p>
+            <h5>季節の白身魚盛り</h5>
+            <p class="text-muted mb-2">ヒラメ、カンパチ、イサキなど旬の白身魚3種</p>
+            <div>
+              <span class="badge bg-info text-dark allergy-badge">魚</span>
+            </div>
+          </div>
+          <div class="col-md-3 text-end">
+            <span class="price-tag">¥2,200</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Grilled Dishes -->
+    <div class="menu-category">
+      <div class="category-badge">焼物</div>
+      <h3 class="section-title">炭火焼き・グリル</h3>
+      
+      <div class="menu-item">
+        <div class="row align-items-center">
+          <div class="col-md-3">
+            <img src="https://images.unsplash.com/photo-1594048504350-9d5744ef5454?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=300&q=80" alt="国産和牛ステーキ" class="menu-image">
+          </div>
+          <div class="col-md-6">
+            <h5>国産和牛ステーキ <span class="recommended-badge">極上</span></h5>
+            <p class="text-muted mb-2">A5ランクの和牛を備長炭で焼き上げ、特製ポン酢で</p>
+            <div>
+              <span class="badge bg-danger text-white allergy-badge">牛肉</span>
+            </div>
+          </div>
+          <div class="col-md-3 text-end">
+            <span class="price-tag">¥6,800</span>
+          </div>
+        </div>
+      </div>
+      
+      <div class="menu-item">
+        <div class="row align-items-center">
+          <div class="col-md-3">
+            <img src="https://images.unsplash.com/photo-1626645735466-533422a82d7f?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=300&q=80" alt="銀だらの西京焼き" class="menu-image">
+          </div>
+          <div class="col-md-6">
+            <h5>銀だらの西京焼き</h5>
+            <p class="text-muted mb-2">白味噌に2日間漬け込んだ銀だらをじっくり焼き上げ</p>
+            <div>
+              <span class="badge bg-info text-dark allergy-badge">魚</span>
+              <span class="badge bg-success text-dark allergy-badge">大豆</span>
+            </div>
+          </div>
+          <div class="col-md-3 text-end">
+            <span class="price-tag">¥1,800</span>
+          </div>
+        </div>
+      </div>
+      
+      <div class="menu-item">
+        <div class="row align-items-center">
+          <div class="col-md-3">
+            <img src="https://images.unsplash.com/photo-1626645735466-533422a82d7f?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=300&q=80" alt="若鶏の照り焼き" class="menu-image">
+          </div>
+          <div class="col-md-6">
+            <h5>若鶏の照り焼き</h5>
+            <p class="text-muted mb-2">地鶏のもも肉を甘辛いたれで香ばしく焼き上げ</p>
+            <div>
+              <span class="badge bg-secondary text-white allergy-badge">鶏肉</span>
+            </div>
+          </div>
+          <div class="col-md-3 text-end">
+            <span class="price-tag">¥1,500</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Simmered Dishes -->
+    <div class="menu-category">
+      <div class="category-badge">煮物</div>
+      <h3 class="section-title">煮物・炊き合わせ</h3>
+      
+      <div class="menu-item">
+        <div class="row align-items-center">
+          <div class="col-md-3">
+            <img src="https://images.unsplash.com/photo-1546549032-9571cd6b27df?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=300&q=80" alt="和牛のしゃぶしゃぶ" class="menu-image">
+          </div>
+          <div class="col-md-6">
+            <h5>和牛のしゃぶしゃぶ <span class="recommended-badge">冬限定</span></h5>
+            <p class="text-muted mb-2">A5和牛を昆布だしでさっと湯通し、特製ごまだれで</p>
+            <div>
+              <span class="badge bg-danger text-white allergy-badge">牛肉</span>
+              <span class="badge bg-success text-dark allergy-badge">ごま</span>
+            </div>
+          </div>
+          <div class="col-md-3 text-end">
+            <span class="price-tag">¥4,500</span>
+          </div>
+        </div>
+      </div>
+      
+      <div class="menu-item">
+        <div class="row align-items-center">
+          <div class="col-md-3">
+            <img src="https://images.unsplash.com/photo-1546549032-9571cd6b27df?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=300&q=80" alt="鯛の潮汁" class="menu-image">
+          </div>
+          <div class="col-md-6">
+            <h5>鯛の潮汁</h5>
+            <p class="text-muted mb-2">瀬戸内海産の真鯛を昆布だしでさっと煮た澄まし汁</p>
+            <div>
+              <span class="badge bg-info text-dark allergy-badge">魚</span>
+            </div>
+          </div>
+          <div class="col-md-3 text-end">
+            <span class="price-tag">¥1,200</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Rice & Noodles -->
+    <div class="menu-category">
+      <div class="category-badge">主食</div>
+      <h3 class="section-title">ご飯物・麺類</h3>
+      
+      <div class="menu-item">
+        <div class="row align-items-center">
+          <div class="col-md-3">
+            <img src="https://images.unsplash.com/photo-1563245372-f21724e3856d?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=300&q=80" alt="特製海鮮丼" class="menu-image">
+          </div>
+          <div class="col-md-6">
+            <h5>特製海鮮丼 <span class="recommended-badge">人気</span></h5>
+            <p class="text-muted mb-2">旬の魚介を8種類以上贅沢に盛り合わせた特製丼</p>
+            <div>
+              <span class="badge bg-info text-dark allergy-badge">魚介類</span>
+            </div>
+          </div>
+          <div class="col-md-3 text-end">
+            <span class="price-tag">¥2,800</span>
+          </div>
+        </div>
+      </div>
+      
+      <div class="menu-item">
+        <div class="row align-items-center">
+          <div class="col-md-3">
+            <img src="https://images.unsplash.com/photo-1563245372-f21724e3856d?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=300&q=80" alt="和牛ちらし寿司" class="menu-image">
+          </div>
+          <div class="col-md-6">
+            <h5>和牛ちらし寿司</h5>
+            <p class="text-muted mb-2">炙り和牛と季節の野菜を酢飯の上に豪快にトッピング</p>
+            <div>
+              <span class="badge bg-danger text-white allergy-badge">牛肉</span>
+            </div>
           </div>
           <div class="col-md-3 text-end">
             <span class="price-tag">¥3,200</span>
+          </div>
+        </div>
+      </div>
+      
+      <div class="menu-item">
+        <div class="row align-items-center">
+          <div class="col-md-3">
+            <img src="https://images.unsplash.com/photo-1563245372-f21724e3856d?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=300&q=80" alt="鴨南蛮そば" class="menu-image">
+          </div>
+          <div class="col-md-6">
+            <h5>鴨南蛮そば</h5>
+            <p class="text-muted mb-2">国産鴨の旨味が染み出た濃厚つゆの鴨南蛮</p>
+            <div>
+              <span class="badge bg-secondary text-white allergy-badge">鴨肉</span>
+              <span class="badge bg-success text-dark allergy-badge">小麦</span>
+            </div>
+          </div>
+          <div class="col-md-3 text-end">
+            <span class="price-tag">¥1,500</span>
           </div>
         </div>
       </div>
@@ -175,32 +511,21 @@
 
     <!-- Desserts -->
     <div class="menu-category">
-      <div class="category-badge">デザート</div>
-      <h3 class="mb-4">デザート & ドリンク</h3>
+      <div class="category-badge">甘味</div>
+      <h3 class="section-title">デザート・甘味</h3>
       
       <div class="menu-item">
         <div class="row align-items-center">
           <div class="col-md-3">
-            <img src="https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?w=400&h=300&fit=crop" alt="ティラミス" class="menu-image">
+            <img src="https://images.unsplash.com/photo-1563729784474-d77dbb933a9e?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=300&q=80" alt="抹茶ティラミス" class="menu-image">
           </div>
           <div class="col-md-6">
-            <h5>ティラミス</h5>
-            <p class="text-muted mb-0">伝統的なレシピで仕上げたこだわりの一品</p>
-          </div>
-          <div class="col-md-3 text-end">
-            <span class="price-tag">¥780</span>
-          </div>
-        </div>
-      </div>
-      
-      <div class="menu-item">
-        <div class="row align-items-center">
-          <div class="col-md-3">
-            <img src="https://images.unsplash.com/photo-1488477181946-6428a0291777?w=400&h=300&fit=crop" alt="季節のフルーツパフェ" class="menu-image">
-          </div>
-          <div class="col-md-6">
-            <h5>季節のフルーツパフェ</h5>
-            <p class="text-muted mb-0">旬のフルーツをふんだんに使用</p>
+            <h5>抹茶ティラミス <span class="recommended-badge">新作</span></h5>
+            <p class="text-muted mb-2">宇治抹茶を使用した和風アレンジのティラミス</p>
+            <div>
+              <span class="badge bg-warning text-dark allergy-badge">卵</span>
+              <span class="badge bg-success text-dark allergy-badge">乳製品</span>
+            </div>
           </div>
           <div class="col-md-3 text-end">
             <span class="price-tag">¥980</span>
@@ -211,14 +536,17 @@
       <div class="menu-item">
         <div class="row align-items-center">
           <div class="col-md-3">
-            <img src="https://images.unsplash.com/photo-1470337458703-46ad1756a187?w=400&h=300&fit=crop" alt="ワイン各種" class="menu-image">
+            <img src="https://images.unsplash.com/photo-1563729784474-d77dbb933a9e?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=300&q=80" alt="黒糖わらび餅" class="menu-image">
           </div>
           <div class="col-md-6">
-            <h5>ワイン各種</h5>
-            <p class="text-muted mb-0">グラス ¥800〜、ボトル ¥3,500〜</p>
+            <h5>黒糖わらび餅</h5>
+            <p class="text-muted mb-2">沖縄産黒糖を使用したもっちり食感のわらび餅</p>
+            <div>
+              <span class="badge bg-success text-dark allergy-badge">大豆</span>
+            </div>
           </div>
           <div class="col-md-3 text-end">
-            <span class="price-tag">¥800〜</span>
+            <span class="price-tag">¥780</span>
           </div>
         </div>
       </div>
@@ -226,57 +554,69 @@
 
     <!-- Course Menus -->
     <div class="menu-category">
-      <div class="category-badge">コース</div>
-      <h3 class="mb-4">お得なコース料理</h3>
+      <div class="category-badge">コース料理</div>
+      <h3 class="section-title">お得なコース料理</h3>
       
       <div class="row">
-        <div class="col-md-4 mb-3">
+        <div class="col-md-4 mb-4">
           <div class="card text-center h-100 course-card">
-            <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=400&h=250&fit=crop" class="card-img-top" alt="ランチコース">
+            <img src="https://images.unsplash.com/photo-1547592180-85f173990554?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=250&q=80" class="card-img-top" alt="桜コース">
             <div class="card-body">
-              <h5 class="card-title">ランチコース</h5>
-              <div class="price-tag mb-3">¥2,500</div>
-              <p class="card-text">
-                ・前菜3種<br>
-                ・本日のスープ<br>
-                ・メイン料理<br>
-                ・ドリンク
-              </p>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-4 mb-3">
-          <div class="card text-center h-100 course-card">
-            <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=400&h=250&fit=crop" class="card-img-top" alt="ディナーコース">
-            <div class="card-body">
-              <h5 class="card-title">ディナーコース</h5>
-              <div class="price-tag mb-3">¥5,800</div>
-              <p class="card-text">
-                ・前菜5種<br>
-                ・魚料理<br>
-                ・肉料理<br>
-                ・デザート
-              </p>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-4 mb-3">
-          <div class="card text-center h-100 course-card">
-            <img src="https://images.unsplash.com/photo-1559339352-11d035aa65de?w=400&h=250&fit=crop" class="card-img-top" alt="特選コース">
-            <div class="card-body">
-              <h5 class="card-title">特選コース</h5>
+              <h5 class="card-title">桜コース</h5>
               <div class="price-tag mb-3">¥8,800</div>
               <p class="card-text">
-                ・厳選前菜<br>
-                ・季節の食材をふんだんに<br>
-                ・ソムリエ厳選ワイン
+                ・先付三種<br>
+                ・お造り盛り合わせ<br>
+                ・焼物二種<br>
+                ・煮物<br>
+                ・食事・デザート
               </p>
+              <small class="text-muted">約2時間</small>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4 mb-4">
+          <div class="card text-center h-100 course-card">
+            <img src="https://images.unsplash.com/photo-1547592180-85f173990554?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=250&q=80" class="card-img-top" alt="月コース">
+            <div class="card-body">
+              <h5 class="card-title">月コース <span class="recommended-badge">人気</span></h5>
+              <div class="price-tag mb-3">¥12,800</div>
+              <p class="card-text">
+                ・八寸<br>
+                ・お造り五点盛り<br>
+                ・強肴<br>
+                ・焼物・煮物<br>
+                ・食事・水物
+              </p>
+              <small class="text-muted">約2.5時間</small>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4 mb-4">
+          <div class="card text-center h-100 course-card">
+            <img src="https://images.unsplash.com/photo-1547592180-85f173990554?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=250&q=80" class="card-img-top" alt="雪コース">
+            <div class="card-body">
+              <h5 class="card-title">雪コース</h5>
+              <div class="price-tag mb-3">¥16,800</div>
+              <p class="card-text">
+                ・先付・八寸<br>
+                ・お造り七点盛り<br>
+                ・焼物三種<br>
+                ・煮物・強肴<br>
+                ・食事・水物
+              </p>
+              <small class="text-muted">約3時間</small>
             </div>
           </div>
         </div>
       </div>
     </div>
   </div>
+
+  <!-- Floating Cart Button -->
+  <button class="floating-cart" onclick="showOrderModal()">
+    <i class="fas fa-utensils me-2"></i>オンライン注文
+  </button>
 
   <script>
     // Check authentication
@@ -291,6 +631,20 @@
         localStorage.removeItem('user');
         window.location.href = 'index.html';
       }
+    });
+
+    function showOrderModal() {
+      alert('オンライン注文機能は近日実装予定です！');
+    }
+
+    // Add smooth hover effects
+    document.querySelectorAll('.menu-item').forEach(item => {
+      item.addEventListener('mouseenter', function() {
+        this.style.transform = 'scale(1.02)';
+      });
+      item.addEventListener('mouseleave', function() {
+        this.style.transform = 'scale(1)';
+      });
     });
   </script>
 </body>
