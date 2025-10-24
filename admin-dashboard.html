@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>管理者ダッシュボード - レストラン予約システム</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="style.css" rel="stylesheet">
+  <style>
+    .admin-sidebar {
+      background: #2c3e50;
+      color: white;
+      min-height: 100vh;
+      padding: 0;
+    }
+    .admin-sidebar .nav-link {
+      color: #ecf0f1;
+      padding: 1rem 1.5rem;
+      border-bottom: 1px solid #34495e;
+      transition: all 0.3s ease;
+    }
+    .admin-sidebar .nav-link:hover,
+    .admin-sidebar .nav-link.active {
+      background: #34495e;
+      color: #3498db;
+    }
+    .admin-main {
+      background: #f8f9fa;
+      min-height: 100vh;
+    }
+    .admin-card {
+      border: none;
+      border-radius: 15px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      transition: transform 0.3s ease;
+    }
+    .admin-card:hover {
+      transform: translateY(-5px);
+    }
+    .stat-card {
+      text-align: center;
+      padding: 1.5rem;
+    }
+    .stat-number {
+      font-size: 2.5rem;
+      font-weight: bold;
+      margin-bottom: 0.5rem;
+    }
+    .recent-activity {
+      max-height: 400px;
+      overflow-y: auto;
+    }
+    .activity-item {
+      padding: 0.75rem;
+      border-bottom: 1px solid #eee;
+    }
+  </style>
+</head>
+<body>
+  <!-- Admin Navigation -->
+  <nav class="navbar navbar-dark" style="background-color: #c62828;">
+    <div class="container-fluid">
+      <a class="navbar-brand fw-bold" href="admin-dashboard.html">
+        👑 管理者ダッシュボード
+      </a>
+      <div class="navbar-nav ms-auto flex-row">
+        <span class="navbar-text me-3" id="adminWelcome">
+          管理者
+        </span>
+        <button class="btn btn-outline-light btn-sm me-2" onclick="refreshDashboard()">
+          🔄 更新
+        </button>
+        <button class="btn btn-outline-light btn-sm" id="adminLogoutBtn">
+          ログアウト
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container-fluid">
+    <div class="row">
+      <!-- Sidebar -->
+      <div class="col-md-2 admin-sidebar">
+        <div class="d-flex flex-column flex-shrink-0 p-3">
+          <ul class="nav nav-pills flex-column mb-auto">
+            <li class="nav-item">
+              <a href="#dashboard" class="nav-link active" onclick="showSection('dashboard')">
+                📊 ダッシュボード
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="#reservations" class="nav-link" onclick="showSection('reservations')">
+                📅 予約管理
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="#staff" class="nav-link" onclick="showSection('staff')">
+                👥 スタッフ管理
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="#menu" class="nav-link" onclick="showSection('menu')">
+                🍽️ メニュー管理
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="#analytics" class="nav-link" onclick="showSection('analytics')">
+                📈 分析レポート
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="#settings" class="nav-link" onclick="showSection('settings')">
+                ⚙️ システム設定
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Main Content -->
+      <div class="col-md-10 admin-main p-4">
+        
+        <!-- Dashboard Section -->
+        <div id="dashboard-section" class="section-content">
+          <div class="d-flex justify-content-between align-items-center mb-4">
+            <h3>📊 経営ダッシュボード</h3>
+            <div class="btn-group">
+              <button class="btn btn-outline-primary btn-sm" onclick="loadStats('today')">今日</button>
+              <button class="btn btn-outline-primary btn-sm" onclick="loadStats('week')">今週</button>
+              <button class="btn btn-outline-primary btn-sm" onclick="loadStats('month')">今月</button>
+            </div>
+          </div>
+
+          <!-- Stats Cards -->
+          <div class="row mb-4">
+            <div class="col-md-3 mb-3">
+              <div class="card admin-card stat-card text-white" style="background: linear-gradient(135deg, #667eea, #764ba2);">
+                <div class="stat-number" id="totalReservations">0</div>
+                <div>総予約数</div>
+              </div>
+            </div>
+            <div class="col-md-3 mb-3">
+              <div class="card admin-card stat-card text-white" style="background: linear-gradient(135deg, #f093fb, #f5576c);">
+                <div class="stat-number" id="todayRevenue">¥0</div>
+                <div>本日売上</div>
+              </div>
+            </div>
+            <div class="col-md-3 mb-3">
+              <div class="card admin-card stat-card text-white" style="background: linear-gradient(135deg, #4facfe, #00f2fe);">
+                <div class="stat-number" id="activeStaff">0</div>
+                <div>出勤スタッフ</div>
+              </div>
+            </div>
+            <div class="col-md-3 mb-3">
+              <div class="card admin-card stat-card text-white" style="background: linear-gradient(135deg, #43e97b, #38f9d7);">
+                <div class="stat-number" id="tableOccupancy">0%</div>
+                <div>席稼働率</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <!-- Recent Reservations -->
+            <div class="col-md-6 mb-4">
+              <div class="card admin-card h-100">
+                <div class="card-header">
+                  <h6 class="mb-0">🆕 最近の予約</h6>
+                </div>
+                <div class="card-body recent-activity" id="recentReservations">
+                  <!-- Recent reservations will be loaded here -->
+                </div>
+              </div>
+            </div>
+
+            <!-- Staff Schedule -->
+            <div class="col-md-6 mb-4">
+              <div class="card admin-card h-100">
+                <div class="card-header">
+                  <h6 class="mb-0">👥 本日のスタッフ</h6>
+                </div>
+                <div class="card-body" id="todayStaff">
+                  <!-- Today's staff will be loaded here -->
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Quick Actions -->
+          <div class="row">
+            <div class="col-12">
+              <div class="card admin-card">
+                <div class="card-header">
+                  <h6 class="mb-0">⚡ クイックアクション</h6>
+                </div>
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col-md-3 text-center mb-3">
+                      <button class="btn btn-primary w-100" onclick="showSection('reservations')">
+                        📅 予約作成
+                      </button>
+                    </div>
+                    <div class="col-md-3 text-center mb-3">
+                      <button class="btn btn-success w-100" onclick="showSection('staff')">
+                        👥 シフト作成
+                      </button>
+                    </div>
+                    <div class="col-md-3 text-center mb-3">
+                      <button class="btn btn-info w-100" onclick="showSection('menu')">
+                        🍽️ メニュー編集
+                      </button>
+                    </div>
+                    <div class="col-md-3 text-center mb-3">
+                      <button class="btn btn-warning w-100" onclick="generateDailyReport()">
+                        📈 日次レポート
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Reservations Management Section -->
+        <div id="reservations-section" class="section-content d-none">
+          <h3 class="mb-4">📅 予約管理</h3>
+          <!-- Reservation management content will go here -->
+          <div class="alert alert-info">
+            🔧 予約管理機能は近日実装予定
+          </div>
+        </div>
+
+        <!-- Staff Management Section -->
+        <div id="staff-section" class="section-content d-none">
+          <h3 class="mb-4">👥 スタッフ管理</h3>
+          <!-- Staff management content will go here -->
+          <div class="alert alert-info">
+            🔧 スタッフ管理機能は近日実装予定
+          </div>
+        </div>
+
+        <!-- Menu Management Section -->
+        <div id="menu-section" class="section-content d-none">
+          <h3 class="mb-4">🍽️ メニュー管理</h3>
+          <!-- Menu management content will go here -->
+          <div class="alert alert-info">
+            🔧 メニュー管理機能は近日実装予定
+          </div>
+        </div>
+
+        <!-- Analytics Section -->
+        <div id="analytics-section" class="section-content d-none">
+          <h3 class="mb-4">📈 分析レポート</h3>
+          <!-- Analytics content will go here -->
+          <div class="alert alert-info">
+            🔧 分析機能は近日実装予定
+          </div>
+        </div>
+
+        <!-- Settings Section -->
+        <div id="settings-section" class="section-content d-none">
+          <h3 class="mb-4">⚙️ システム設定</h3>
+          <!-- Settings content will go here -->
+          <div class="alert alert-info">
+            🔧 システム設定機能は近日実装予定
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  
+  <script>
+    const supabase = window.supabase.createClient(
+      'https://nfcjbjohxzaikelxgmjg.supabase.co',
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5mY2piam9oeHphaWtlbHhnbWpnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjEwNTgzMjAsImV4cCI6MjA3NjYzNDMyMH0.u0ta1NxSDbJ_9lf1TcMp3M0-_vNNBs6HByOj8wtKsX4'
+    );
+
+    // Check admin authentication
+    const adminUser = JSON.parse(localStorage.getItem('adminUser'));
+    if (!adminUser) {
+      alert('管理者権限が必要です');
+      window.location.href = 'admin-login.html';
+    }
+
+    // Update welcome message
+    document.getElementById('adminWelcome').textContent = `ようこそ、${adminUser.username}さん`;
+
+    // Section navigation
+    function showSection(sectionName) {
+      // Hide all sections
+      document.querySelectorAll('.section-content').forEach(section => {
+        section.classList.add('d-none');
+      });
+      
+      // Show selected section
+      document.getElementById(`${sectionName}-section`).classList.remove('d-none');
+      
+      // Update active nav link
+      document.querySelectorAll('.admin-sidebar .nav-link').forEach(link => {
+        link.classList.remove('active');
+      });
+      event.target.classList.add('active');
+    }
+
+    // Load dashboard statistics
+    async function loadStats(period = 'today') {
+      try {
+        const today = new Date().toISOString().split('T')[0];
+        
+        // Get today's reservations
+        const { data: reservations, error: resError } = await supabase
+          .from('reservations')
+          .select('*')
+          .eq('date', today);
+          
+        if (!resError) {
+          document.getElementById('totalReservations').textContent = reservations.length;
+          
+          // Calculate revenue (simplified - ¥5,000 per reservation)
+          const revenue = reservations.length * 5000;
+          document.getElementById('todayRevenue').textContent = `¥${revenue.toLocaleString()}`;
+          
+          // Load recent reservations
+          const recentContainer = document.getElementById('recentReservations');
+          recentContainer.innerHTML = '';
+          
+          reservations.slice(0, 5).forEach(reservation => {
+            const item = document.createElement('div');
+            item.className = 'activity-item';
+            item.innerHTML = `
+              <div class="d-flex justify-content-between">
+                <strong>${reservation.customer_name}</strong>
+                <small class="text-muted">${reservation.time}</small>
+              </div>
+              <small>${reservation.guests}名 - テーブル${reservation.table_number || '未定'}</small>
+            `;
+            recentContainer.appendChild(item);
+          });
+        }
+        
+        // Get today's staff
+        const { data: staff, error: staffError } = await supabase
+          .from('staff_schedules')
+          .select(`
+            staff (name, role),
+            start_time,
+            end_time
+          `)
+          .eq('date', today);
+          
+        if (!staffError) {
+          document.getElementById('activeStaff').textContent = staff.length;
+          
+          const staffContainer = document.getElementById('todayStaff');
+          staffContainer.innerHTML = '';
+          
+          staff.forEach(schedule => {
+            const item = document.createElement('div');
+            item.className = 'activity-item';
+            item.innerHTML = `
+              <div class="d-flex justify-content-between">
+                <strong>${schedule.staff.name}</strong>
+                <small class="text-muted">${schedule.staff.role}</small>
+              </div>
+              <small>${schedule.start_time} - ${schedule.end_time}</small>
+            `;
+            staffContainer.appendChild(item);
+          });
+        }
+        
+        // Calculate table occupancy (simplified)
+        const occupancy = Math.min(100, Math.round((reservations.length / 10) * 100));
+        document.getElementById('tableOccupancy').textContent = `${occupancy}%`;
+        
+      } catch (error) {
+        console.error('Error loading stats:', error);
+      }
+    }
+
+    // Refresh dashboard
+    function refreshDashboard() {
+      loadStats('today');
+    }
+
+    // Generate daily report
+    function generateDailyReport() {
+      alert('📊 日次レポートを生成しました！');
+      // In full implementation, this would generate a PDF report
+    }
+
+    // Logout
+    document.getElementById('adminLogoutBtn').addEventListener('click', () => {
+      if (confirm('管理者からログアウトしますか？')) {
+        localStorage.removeItem('adminUser');
+        window.location.href = 'admin-login.html';
+      }
+    });
+
+    // Initialize dashboard
+    loadStats('today');
+  </script>
+</body>
+</html>

@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>管理者ログイン - レストラン予約システム</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="style.css" rel="stylesheet">
+  <style>
+    .admin-login-container {
+      min-height: 100vh;
+      background: linear-gradient(135deg, 
+        rgba(44, 62, 80, 0.9) 0%, 
+        rgba(52, 73, 94, 0.9) 100%),
+        url('https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80');
+      background-size: cover;
+      background-position: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .admin-login-card {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 3rem;
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      max-width: 400px;
+      width: 90%;
+    }
+    .admin-header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    .admin-logo {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <div class="admin-login-container">
+    <div class="admin-login-card">
+      <div class="admin-header">
+        <span class="admin-logo">👑</span>
+        <h2>管理者ログイン</h2>
+        <p class="text-muted">スタッフ専用エリア</p>
+      </div>
+
+      <form id="adminLoginForm">
+        <div class="form-floating mb-3">
+          <input type="text" class="form-control" id="adminUsername" placeholder="username" required>
+          <label for="adminUsername">👤 ユーザー名</label>
+        </div>
+        
+        <div class="form-floating mb-4">
+          <input type="password" class="form-control" id="adminPassword" placeholder="Password" required>
+          <label for="adminPassword">🔒 パスワード</label>
+        </div>
+
+        <button type="submit" class="btn btn-dark w-100 py-3">
+          🔐 管理者ログイン
+        </button>
+      </form>
+
+      <div id="adminMessage" class="mt-3"></div>
+
+      <div class="text-center mt-4">
+        <a href="index.html" class="text-decoration-none">← 一般サイトへ戻る</a>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    const supabase = window.supabase.createClient(
+      'https://nfcjbjohxzaikelxgmjg.supabase.co',
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5mY2piam9oeHphaWtlbHhnbWpnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjEwNTgzMjAsImV4cCI6MjA3NjYzNDMyMH0.u0ta1NxSDbJ_9lf1TcMp3M0-_vNNBs6HByOj8wtKsX4'
+    );
+
+    document.getElementById('adminLoginForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const username = document.getElementById('adminUsername').value;
+      const password = document.getElementById('adminPassword').value;
+      const messageDiv = document.getElementById('adminMessage');
+      
+      // Show loading
+      const submitBtn = e.target.querySelector('button[type="submit"]');
+      submitBtn.innerHTML = '⏳ 認証中...';
+      submitBtn.disabled = true;
+
+      try {
+        const { data, error } = await supabase
+          .from('admin_users')
+          .select('*')
+          .eq('username', username)
+          .eq('password', password)
+          .eq('is_active', true)
+          .single();
+          
+        if (error) throw error;
+
+        if (data) {
+          // Store admin session
+          localStorage.setItem('adminUser', JSON.stringify(data));
+          
+          // Update last login
+          await supabase
+            .from('admin_users')
+            .update({ last_login: new Date().toISOString() })
+            .eq('id', data.id);
+          
+          messageDiv.innerHTML = `
+            <div class="alert alert-success">
+              ✅ 管理者認証成功！ダッシュボードへ移動します...
+            </div>
+          `;
+          
+          setTimeout(() => {
+            window.location.href = 'admin-dashboard.html';
+          }, 1500);
+        } else {
+          throw new Error('ユーザー名またはパスワードが間違っています');
+        }
+      } catch (error) {
+        messageDiv.innerHTML = `
+          <div class="alert alert-danger">
+            ❌ ${error.message}
+          </div>
+        `;
+        
+        submitBtn.innerHTML = '🔐 管理者ログイン';
+        submitBtn.disabled = false;
+      }
+    });
+  </script>
+</body>
+</html>
