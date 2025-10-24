@@ -564,6 +564,36 @@
 
     // Initialize dashboard
     loadStats('today');
+    // Check admin authentication
+const adminUser = JSON.parse(localStorage.getItem('adminUser'));
+if (!adminUser) {
+  alert('管理者権限が必要です');
+  window.location.href = 'admin-login.html';
+}
+
+// Optional: Verify the admin user still exists in database
+async function verifyAdminUser() {
+  try {
+    const { data, error } = await supabase
+      .from('admin_users')
+      .select('id, is_active')
+      .eq('id', adminUser.id)
+      .eq('is_active', true);
+
+    if (error || !data || data.length === 0) {
+      localStorage.removeItem('adminUser');
+      window.location.href = 'admin-login.html';
+      return;
+    }
+  } catch (error) {
+    console.error('Admin verification failed:', error);
+    // Continue anyway - network issue might be temporary
+  }
+}
+
+// Run verification (optional)
+verifyAdminUser();
   </script>
+  
 </body>
 </html>

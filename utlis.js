@@ -1043,3 +1043,85 @@ function showSection(sectionName) {
     loadAdminList();
   }
 }
+
+document.getElementById('adminLoginForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  
+  const username = document.getElementById('adminUsername').value.trim();
+  const password = document.getElementById('adminPassword').value;
+  const messageDiv = document.getElementById('adminMessage');
+  
+  // Basic validation
+  if (!username || !password) {
+    messageDiv.innerHTML = '<div class="alert alert-danger">❌ ユーザー名とパスワードを入力してください</div>';
+    return;
+  }
+
+  // Show loading
+  const submitBtn = e.target.querySelector('button[type="submit"]');
+  submitBtn.innerHTML = '⏳ 認証中...';
+  submitBtn.disabled = true;
+
+  try {
+    // Query for matching admin user
+    const { data, error } = await supabase
+      .from('admin_users')
+      .select('*')
+      .eq('username', username)
+      .eq('password', password)
+      .eq('is_active', true);
+
+    if (error) {
+      console.error('Supabase error:', error);
+      throw new Error('データベースエラーが発生しました');
+    }
+
+    if (!data || data.length === 0) {
+      throw new Error('ユーザー名またはパスワードが間違っています');
+    }
+
+    if (data.length > 1) {
+      console.warn('Multiple admin users found with same credentials:', data);
+      // Still proceed with the first one
+    }
+
+    const adminUser = data[0];
+    
+    // Store admin session
+    localStorage.setItem('adminUser', JSON.stringify(adminUser));
+    
+    // Update last login
+    try {
+      await supabase
+        .from('admin_users')
+        .update({ last_login: new Date().toISOString() })
+        .eq('id', adminUser.id);
+    } catch (updateError) {
+      console.warn('Failed to update last login:', updateError);
+      // Continue anyway - this is not critical
+    }
+    
+    messageDiv.innerHTML = `
+      <div class="alert alert-success">
+        ✅ 管理者認証成功！<br>
+        <strong>${adminUser.username}</strong> さん、ようこそ！<br>
+        ダッシュボードへ移動します...
+      </div>
+    `;
+    
+    setTimeout(() => {
+      window.location.href = 'admin-dashboard.html';
+    }, 2000);
+
+  } catch (error) {
+    console.error('Login error:', error);
+    messageDiv.innerHTML = `
+      <div class="alert alert-danger">
+        ❌ ${error.message}
+      </div>
+    `;
+  } finally {
+    submitBtn.innerHTML = '🔐 管理者ログイン';
+    submitBtn.disabled = false;
+  }
+});
