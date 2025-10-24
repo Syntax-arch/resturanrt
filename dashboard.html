@@ -506,6 +506,40 @@ if (!currentUser) {
 
       container.innerHTML = html;
     }
+    <!-- PWA Quick Actions -->
+<div class="row mb-4">
+  <div class="col-12">
+    <h4 class="mb-3">📱 PWA機能</h4>
+  </div>
+  <div class="col-md-3 mb-3">
+    <div class="quick-action" onclick="showPWAInstall()" style="cursor: pointer;">
+      <div class="h1 mb-3">📲</div>
+      <h5>アプリインストール</h5>
+      <p class="text-muted small">ホーム画面に追加</p>
+    </div>
+  </div>
+  <div class="col-md-3 mb-3">
+    <div class="quick-action" onclick="checkStorage()" style="cursor: pointer;">
+      <div class="h1 mb-3">💾</div>
+      <h5>ストレージ確認</h5>
+      <p class="text-muted small">キャッシュ管理</p>
+    </div>
+  </div>
+  <div class="col-md-3 mb-3">
+    <div class="quick-action" onclick="toggleNotifications()" style="cursor: pointer;">
+      <div class="h1 mb-3">🔔</div>
+      <h5>通知設定</h5>
+      <p class="text-muted small">プッシュ通知</p>
+    </div>
+  </div>
+  <div class="col-md-3 mb-3">
+    <div class="quick-action" onclick="clearCache()" style="cursor: pointer;">
+      <div class="h1 mb-3">🗑️</div>
+      <h5>キャッシュ削除</h5>
+      <p class="text-muted small">データ更新</p>
+    </div>
+  </div>
+</div>
 
     // Logout function
     document.getElementById('logoutBtn').addEventListener('click', () => {

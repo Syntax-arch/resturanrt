@@ -235,5 +235,62 @@
       }
     });
   </script>
+  <script>
+// Initialize PWA
+document.addEventListener('DOMContentLoaded', async function() {
+    // Register Service Worker
+    const registration = await RestaurantUtils.PWA.registerServiceWorker();
+    
+    // Handle app install prompt
+    window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        RestaurantUtils.PWA.deferredPrompt = e;
+        RestaurantUtils.PWA.createInstallButton();
+    });
+    
+    // Track app installed event
+    window.addEventListener('appinstalled', () => {
+        RestaurantUtils.PWA.trackEvent('pwa_installed');
+        console.log('🎉 PWA installed successfully!');
+    });
+    
+    // Network status monitoring
+    RestaurantUtils.PWA.addNetworkListener((status) => {
+        const indicator = document.getElementById('networkStatus');
+        if (indicator) {
+            indicator.textContent = status === 'online' ? '🟢 オンライン' : '🔴 オフライン';
+            indicator.className = status === 'online' ? 'badge bg-success' : 'badge bg-danger';
+        }
+        
+        if (status === 'online') {
+            RestaurantUtils.PWA.showLocalNotification('接続回復', {
+                body: 'インターネット接続が回復しました'
+            });
+        }
+    });
+    
+    // Request notification permission on user interaction
+    document.addEventListener('click', async () => {
+        if (Notification.permission === 'default') {
+            await RestaurantUtils.PWA.requestNotificationPermission();
+        }
+    }, { once: true });
+    
+    // Add install button to navigation
+    setTimeout(() => {
+        RestaurantUtils.PWA.createInstallButton();
+    }, 2000);
+});
+
+// Show PWA install prompt (can be called from any button)
+function showPWAInstallPrompt() {
+    RestaurantUtils.PWA.showInstallPrompt();
+}
+
+// Check if app is running in standalone mode
+function isRunningAsPWA() {
+    return RestaurantUtils.PWA.isAppInstalled();
+}
+</script>
 </body>
 </html> 

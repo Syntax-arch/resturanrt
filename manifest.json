@@ -1,0 +1,116 @@
+{
+  "name": "Sakura Japanese Cuisine",
+  "short_name": "Sakura Restaurant",
+  "description": "本格日本料理レストランの予約システム",
+  "lang": "ja",
+  "dir": "ltr",
+  "theme_color": "#c62828",
+  "background_color": "#fffaf0",
+  "display": "standalone",
+  "orientation": "portrait",
+  "scope": "/",
+  "start_url": "/index.html",
+  "categories": ["food", "lifestyle", "business"],
+  "screenshots": [
+    {
+      "src": "/screenshots/mobile-booking.png",
+      "sizes": "375x812",
+      "type": "image/png",
+      "form_factor": "narrow"
+    },
+    {
+      "src": "/screenshots/tablet-dashboard.png",
+      "sizes": "768x1024",
+      "type": "image/png",
+      "form_factor": "wide"
+    }
+  ],
+  "icons": [
+    {
+      "src": "/icons/icon-72x72.png",
+      "sizes": "72x72",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/icon-96x96.png",
+      "sizes": "96x96",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/icon-128x128.png",
+      "sizes": "128x128",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/icon-144x144.png",
+      "sizes": "144x144",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/icon-152x152.png",
+      "sizes": "152x152",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/icon-384x384.png",
+      "sizes": "384x384",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "新規予約",
+      "short_name": "予約",
+      "description": "新しい予約を作成",
+      "url": "/reservation.html",
+      "icons": [
+        {
+          "src": "/icons/shortcut-booking-96x96.png",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "メニュー閲覧",
+      "short_name": "メニュー",
+      "description": "料理メニューを見る",
+      "url": "/menu.html",
+      "icons": [
+        {
+          "src": "/icons/shortcut-menu-96x96.png",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "ダッシュボード",
+      "short_name": "ホーム",
+      "description": "メインダッシュボード",
+      "url": "/dashboard.html",
+      "icons": [
+        {
+          "src": "/icons/shortcut-dashboard-96x96.png",
+          "sizes": "96x96"
+        }
+      ]
+    }
+  ]
+}
