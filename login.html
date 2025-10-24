@@ -2,6 +2,31 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
+  <!-- PWA Meta Tags -->
+  <meta name="application-name" content="Sakura Restaurant">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Sakura Restaurant">
+  <meta name="description" content="本格日本料理レストランの予約システム">
+  <meta name="format-detection" content="telephone=no">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="msapplication-TileColor" content="#c62828">
+  <meta name="msapplication-tap-highlight" content="no">
+  <meta name="theme-color" content="#c62828">
+
+  <!-- Apple Touch Icons -->
+  <link rel="apple-touch-icon" href="/icons/icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="/icons/icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/icons/icon-180x180.png">
+  <link rel="apple-touch-icon" sizes="167x167" href="/icons/icon-167x167.png">
+
+  <!-- PWA Manifest -->
+  <link rel="manifest" href="/manifest.json">
+
+  <!-- Theme Color -->
+  <meta name="theme-color" content="#c62828" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#a11c1c" media="(prefers-color-scheme: dark)">
+  
   <title>ログイン - レストラン予約システム</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="style.css" rel="stylesheet">
@@ -358,103 +383,19 @@
         }
       });
     });
+
+    // PWA Initialization Script
+    document.addEventListener('DOMContentLoaded', async function() {
+        // Register Service Worker
+        if ('serviceWorker' in navigator) {
+            try {
+                const registration = await navigator.serviceWorker.register('/sw.js');
+                console.log('✅ Service Worker registered:', registration);
+            } catch (error) {
+                console.error('❌ Service Worker registration failed:', error);
+            }
+        }
+    });
   </script>
-  <!-- PWA Install Section -->
-<section class="section section-light" id="pwa-section">
-  <div class="container text-center">
-    <div class="row justify-content-center">
-      <div class="col-md-8">
-        <h3>📱 モバイルアプリのようにご利用いただけます</h3>
-        <p class="lead mb-4">ホーム画面にインストールして、オフラインでも予約可能</p>
-        
-        <div class="row mb-4">
-          <div class="col-md-4 mb-3">
-            <div class="text-center">
-              <div class="h1 mb-3">⚡</div>
-              <h6>高速動作</h6>
-              <small class="text-muted">アプリのようなパフォーマンス</small>
-            </div>
-          </div>
-          <div class="col-md-4 mb-3">
-            <div class="text-center">
-              <div class="h1 mb-3">📶</div>
-              <h6>オフライン対応</h6>
-              <small class="text-muted">接続が不安定でも利用可能</small>
-            </div>
-          </div>
-          <div class="col-md-4 mb-3">
-            <div class="text-center">
-              <div class="h1 mb-3">🔔</div>
-              <h6>プッシュ通知</h6>
-              <small class="text-muted">予約リマインダーを受け取れます</small>
-            </div>
-          </div>
-        </div>
-        
-        <button class="btn btn-japanese btn-lg" onclick="showPWAInstall()">
-          📲 アプリをインストール
-        </button>
-        <p class="text-muted mt-2 small">iOS:共有→ホーム画面に追加 / Android:メニュー→アプリをインストール</p>
-      </div>
-    </div>
-  </div>
-</section>
-  <script>
-// Initialize PWA
-document.addEventListener('DOMContentLoaded', async function() {
-    // Register Service Worker
-    const registration = await RestaurantUtils.PWA.registerServiceWorker();
-    
-    // Handle app install prompt
-    window.addEventListener('beforeinstallprompt', (e) => {
-        e.preventDefault();
-        RestaurantUtils.PWA.deferredPrompt = e;
-        RestaurantUtils.PWA.createInstallButton();
-    });
-    
-    // Track app installed event
-    window.addEventListener('appinstalled', () => {
-        RestaurantUtils.PWA.trackEvent('pwa_installed');
-        console.log('🎉 PWA installed successfully!');
-    });
-    
-    // Network status monitoring
-    RestaurantUtils.PWA.addNetworkListener((status) => {
-        const indicator = document.getElementById('networkStatus');
-        if (indicator) {
-            indicator.textContent = status === 'online' ? '🟢 オンライン' : '🔴 オフライン';
-            indicator.className = status === 'online' ? 'badge bg-success' : 'badge bg-danger';
-        }
-        
-        if (status === 'online') {
-            RestaurantUtils.PWA.showLocalNotification('接続回復', {
-                body: 'インターネット接続が回復しました'
-            });
-        }
-    });
-    
-    // Request notification permission on user interaction
-    document.addEventListener('click', async () => {
-        if (Notification.permission === 'default') {
-            await RestaurantUtils.PWA.requestNotificationPermission();
-        }
-    }, { once: true });
-    
-    // Add install button to navigation
-    setTimeout(() => {
-        RestaurantUtils.PWA.createInstallButton();
-    }, 2000);
-});
-
-// Show PWA install prompt (can be called from any button)
-function showPWAInstallPrompt() {
-    RestaurantUtils.PWA.showInstallPrompt();
-}
-
-// Check if app is running in standalone mode
-function isRunningAsPWA() {
-    return RestaurantUtils.PWA.isAppInstalled();
-}
-</script>
 </body>
 </html>
