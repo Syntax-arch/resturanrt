@@ -444,3 +444,335 @@ PWAUtils.deferredPrompt = null;
 
 // Add to main RestaurantUtils class
 RestaurantUtils.PWA = PWAUtils;
+// Reservation Management Functions
+let allReservations = [];
+let currentReservationsPage = 1;
+const reservationsPerPage = 10;
+
+async function loadReservations() {
+    try {
+        const { data: reservations, error } = await supabase
+            .from('reservations')
+            .select('*')
+            .order('date', { ascending: false })
+            .order('time', { ascending: false });
+            
+        if (error) throw error;
+        
+        allReservations = reservations || [];
+        displayReservations();
+        updateReservationsCount();
+        
+    } catch (error) {
+        console.error('Error loading reservations:', error);
+        showAlert('予約データの読み込みに失敗しました', 'error');
+    }
+}
+
+function displayReservations(reservations = allReservations) {
+    const tbody = document.getElementById('reservationsTable');
+    const startIndex = (currentReservationsPage - 1) * reservationsPerPage;
+    const paginatedReservations = reservations.slice(startIndex, startIndex + reservationsPerPage);
+    
+    tbody.innerHTML = '';
+    
+    if (paginatedReservations.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="8" class="text-center">予約がありません</td></tr>';
+        return;
+    }
+    
+    paginatedReservations.forEach(reservation => {
+        const row = document.createElement('tr');
+        const statusBadge = getStatusBadge(reservation.status);
+        
+        row.innerHTML = `
+            <td><small class="text-muted">${reservation.id.slice(0, 8)}</small></td>
+            <td>
+                <strong>${reservation.customer_name}</strong>
+                ${reservation.customer_email ? `<br><small class="text-muted">${reservation.customer_email}</small>` : ''}
+            </td>
+            <td>${reservation.date}</td>
+            <td>${reservation.time}</td>
+            <td>${reservation.guests}名</td>
+            <td>${reservation.table_number || '-'}</td>
+            <td>${statusBadge}</td>
+            <td>
+                <button class="btn btn-sm btn-outline-primary me-1" onclick="editReservation('${reservation.id}')">
+                    ✏️
+                </button>
+                <button class="btn btn-sm btn-outline-danger" onclick="cancelReservation('${reservation.id}')">
+                    🗑️
+                </button>
+            </td>
+        `;
+        tbody.appendChild(row);
+    });
+    
+    updateReservationsPagination(reservations.length);
+}
+
+function getStatusBadge(status) {
+    const badges = {
+        'confirmed': '<span class="badge bg-success">確認済み</span>',
+        'pending': '<span class="badge bg-warning">保留中</span>',
+        'cancelled': '<span class="badge bg-danger">キャンセル</span>'
+    };
+    return badges[status] || '<span class="badge bg-secondary">不明</span>';
+}
+
+function filterReservations() {
+    const dateFilter = document.getElementById('filterDate').value;
+    const statusFilter = document.getElementById('filterStatus').value;
+    const customerFilter = document.getElementById('filterCustomer').value.toLowerCase();
+    
+    let filtered = allReservations;
+    
+    if (dateFilter) {
+        filtered = filtered.filter(r => r.date === dateFilter);
+    }
+    
+    if (statusFilter) {
+        filtered = filtered.filter(r => r.status === statusFilter);
+    }
+    
+    if (customerFilter) {
+        filtered = filtered.filter(r => 
+            r.customer_name.toLowerCase().includes(customerFilter) ||
+            (r.customer_email && r.customer_email.toLowerCase().includes(customerFilter))
+        );
+    }
+    
+    currentReservationsPage = 1;
+    displayReservations(filtered);
+    updateReservationsCount(filtered.length);
+}
+
+function clearFilters() {
+    document.getElementById('filterDate').value = '';
+    document.getElementById('filterStatus').value = '';
+    document.getElementById('filterCustomer').value = '';
+    currentReservationsPage = 1;
+    displayReservations();
+    updateReservationsCount();
+}
+
+function updateReservationsCount(count = allReservations.length) {
+    document.getElementById('reservationsCount').textContent = `${count}件の予約`;
+}
+
+function updateReservationsPagination(totalItems) {
+    const totalPages = Math.ceil(totalItems / reservationsPerPage);
+    const pagination = document.getElementById('reservationsPagination');
+    
+    pagination.innerHTML = '';
+    
+    for (let i = 1; i <= totalPages; i++) {
+        const li = document.createElement('li');
+        li.className = `page-item ${i === currentReservationsPage ? 'active' : ''}`;
+        li.innerHTML = `<a class="page-link" href="#" onclick="changeReservationsPage(${i})">${i}</a>`;
+        pagination.appendChild(li);
+    }
+}
+
+function changeReservationsPage(page) {
+    currentReservationsPage = page;
+    displayReservations();
+}
+
+// Staff Management Functions
+async function loadStaff() {
+    try {
+        const { data: staff, error } = await supabase
+            .from('staff')
+            .select('*')
+            .order('name');
+            
+        if (error) throw error;
+        
+        displayStaff(staff || []);
+        updateStaffStats(staff || []);
+        
+    } catch (error) {
+        console.error('Error loading staff:', error);
+        showAlert('スタッフデータの読み込みに失敗しました', 'error');
+    }
+}
+
+function displayStaff(staff) {
+    const tbody = document.getElementById('staffTable');
+    tbody.innerHTML = '';
+    
+    if (staff.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="6" class="text-center">スタッフが登録されていません</td></tr>';
+        return;
+    }
+    
+    staff.forEach(employee => {
+        const row = document.createElement('tr');
+        const statusBadge = employee.is_active ? 
+            '<span class="badge bg-success">アクティブ</span>' : 
+            '<span class="badge bg-secondary">非アクティブ</span>';
+        
+        row.innerHTML = `
+            <td>
+                <strong>${employee.name}</strong>
+                <br><small class="text-muted">${employee.email}</small>
+            </td>
+            <td>${getRoleDisplayName(employee.role)}</td>
+            <td>${employee.phone || '-'}</td>
+            <td>${employee.hourly_rate ? `¥${employee.hourly_rate.toLocaleString()}` : '-'}</td>
+            <td>${statusBadge}</td>
+            <td>
+                <button class="btn btn-sm btn-outline-primary me-1" onclick="editStaff('${employee.id}')">
+                    ✏️
+                </button>
+                <button class="btn btn-sm btn-outline-${employee.is_active ? 'warning' : 'success'}" 
+                        onclick="toggleStaffStatus('${employee.id}', ${!employee.is_active})">
+                    ${employee.is_active ? '⏸️' : '▶️'}
+                </button>
+            </td>
+        `;
+        tbody.appendChild(row);
+    });
+}
+
+function getRoleDisplayName(role) {
+    const roles = {
+        'manager': 'マネージャー',
+        'chef': 'シェフ',
+        'server': 'サービス',
+        'kitchen': 'キッチン',
+        'cleaner': '清掃'
+    };
+    return roles[role] || role;
+}
+
+function updateStaffStats(staff) {
+    const totalStaff = staff.length;
+    const activeStaff = staff.filter(s => s.is_active).length;
+    
+    document.getElementById('totalStaff').textContent = totalStaff;
+    document.getElementById('activeStaffCount').textContent = activeStaff;
+    
+    // These would be calculated from schedules in a full implementation
+    document.getElementById('workingToday').textContent = Math.floor(activeStaff * 0.7); // Simulated
+    document.getElementById('weeklyHours').textContent = `${totalStaff * 40}h`; // Simulated
+}
+
+async function saveStaff() {
+    const name = document.getElementById('staffName').value;
+    const email = document.getElementById('staffEmail').value;
+    const phone = document.getElementById('staffPhone').value;
+    const role = document.getElementById('staffRole').value;
+    const hourlyRate = document.getElementById('staffHourlyRate').value;
+    
+    if (!name || !email || !role) {
+        showAlert('必須項目を入力してください', 'error');
+        return;
+    }
+    
+    try {
+        const { data, error } = await supabase
+            .from('staff')
+            .insert([{
+                name,
+                email,
+                phone,
+                role,
+                hourly_rate: hourlyRate ? parseFloat(hourlyRate) : null
+            }])
+            .select();
+            
+        if (error) throw error;
+        
+        showAlert('スタッフを追加しました', 'success');
+        bootstrap.Modal.getInstance(document.getElementById('addStaffModal')).hide();
+        document.getElementById('staffForm').reset();
+        loadStaff();
+        
+    } catch (error) {
+        console.error('Error saving staff:', error);
+        showAlert('スタッフの追加に失敗しました', 'error');
+    }
+}
+
+function searchStaff() {
+    const query = event.target.value.toLowerCase();
+    const rows = document.querySelectorAll('#staffTable tr');
+    
+    rows.forEach(row => {
+        const text = row.textContent.toLowerCase();
+        row.style.display = text.includes(query) ? '' : 'none';
+    });
+}
+
+// Utility Functions
+function showAlert(message, type = 'info') {
+    const alertClass = {
+        'success': 'alert-success',
+        'error': 'alert-danger',
+        'warning': 'alert-warning',
+        'info': 'alert-info'
+    }[type] || 'alert-info';
+    
+    const alert = document.createElement('div');
+    alert.className = `alert ${alertClass} alert-dismissible fade show position-fixed top-0 end-0 m-3`;
+    alert.style.zIndex = '9999';
+    alert.innerHTML = `
+        ${message}
+        <button type="button" class="btn-close" onclick="this.parentElement.remove()"></button>
+    `;
+    
+    document.body.appendChild(alert);
+    
+    setTimeout(() => {
+        if (alert.parentElement) {
+            alert.remove();
+        }
+    }, 5000);
+}
+
+// Initialize all admin features when showing sections
+function showSection(sectionName) {
+    // Hide all sections
+    document.querySelectorAll('.section-content').forEach(section => {
+        section.classList.add('d-none');
+    });
+    
+    // Show selected section
+    document.getElementById(`${sectionName}-section`).classList.remove('d-none');
+    
+    // Update active nav link
+    document.querySelectorAll('.admin-sidebar .nav-link').forEach(link => {
+        link.classList.remove('active');
+    });
+    event.target.classList.add('active');
+    
+    // Load section-specific data
+    switch(sectionName) {
+        case 'reservations':
+            loadReservations();
+            break;
+        case 'staff':
+            loadStaff();
+            break;
+        case 'menu':
+            loadMenuItems();
+            break;
+        case 'analytics':
+            loadAnalytics();
+            break;
+        case 'settings':
+            loadSettings();
+            break;
+    }
+}
+
+// Add Bootstrap JS for modal functionality
+document.head.innerHTML += '<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>';
+
+// Initialize when admin dashboard loads
+setTimeout(() => {
+    loadReservations();
+    loadStaff();
+}, 1000);
