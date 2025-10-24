@@ -1,8 +1,32 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  
   <meta charset="UTF-8">
+  <!-- PWA Meta Tags -->
+  <meta name="application-name" content="Sakura Restaurant">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Sakura Restaurant">
+  <meta name="description" content="本格日本料理レストランの予約システム">
+  <meta name="format-detection" content="telephone=no">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="msapplication-TileColor" content="#c62828">
+  <meta name="msapplication-tap-highlight" content="no">
+  <meta name="theme-color" content="#c62828">
+
+  <!-- Apple Touch Icons -->
+  <link rel="apple-touch-icon" href="/icons/icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="/icons/icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/icons/icon-180x180.png">
+  <link rel="apple-touch-icon" sizes="167x167" href="/icons/icon-167x167.png">
+
+  <!-- PWA Manifest -->
+  <link rel="manifest" href="/manifest.json">
+
+  <!-- Theme Color -->
+  <meta name="theme-color" content="#c62828" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#a11c1c" media="(prefers-color-scheme: dark)">
+  
   <title>ダッシュボード - レストラン予約システム</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="style.css" rel="stylesheet">
@@ -23,6 +47,7 @@
       box-shadow: 0 4px 15px rgba(0,0,0,0.1);
       transition: transform 0.3s ease;
       border: 1px solid rgba(0,0,0,0.1);
+      height: 100%;
     }
     .quick-action:hover {
       transform: translateY(-5px);
@@ -98,7 +123,7 @@
       </div>
     </div>
 
-        <!-- Quick Actions - Row 1: Core Features -->
+    <!-- Quick Actions - Row 1: Core Features -->
     <div class="row mb-4">
       <div class="col-12">
         <h4 class="mb-3">📊 メイン機能</h4>
@@ -227,7 +252,7 @@
       </div>
     </div>
 
-    <!-- Quick Actions - Row 4: Additional -->
+    <!-- Quick Actions - Row 4: Additional Features -->
     <div class="row mb-4">
       <div class="col-12">
         <h4 class="mb-3">🔧 その他</h4>
@@ -242,112 +267,34 @@
         </a>
       </div>
       <div class="col-md-3 mb-3">
-        <div class="quick-action" style="cursor: not-allowed; opacity: 0.6;">
-          <div class="h1 mb-3">📱</div>
-          <h5>モバイルアプリ</h5>
-          <p class="text-muted small">近日公開</p>
-        </div>
+        <a href="app.html" class="text-decoration-none">
+          <div class="quick-action">
+            <div class="h1 mb-3">📱</div>
+            <h5>モバイルアプリ</h5>
+            <p class="text-muted small">ダウンロード</p>
+          </div>
+        </a>
       </div>
       <div class="col-md-3 mb-3">
-        <div class="quick-action" style="cursor: not-allowed; opacity: 0.6;">
-          <div class="h1 mb-3">🎫</div>
-          <h5>ギフトカード</h5>
-          <p class="text-muted small">近日公開</p>
-        </div>
+        <a href="giftcards.html" class="text-decoration-none">
+          <div class="quick-action">
+            <div class="h1 mb-3">🎫</div>
+            <h5>ギフトカード</h5>
+            <p class="text-muted small">購入・贈答</p>
+          </div>
+        </a>
       </div>
       <div class="col-md-3 mb-3">
-        <div class="quick-action" style="cursor: not-allowed; opacity: 0.6;">
-          <div class="h1 mb-3">🚚</div>
-          <h5>ケータリング</h5>
-          <p class="text-muted small">近日公開</p>
-        </div>
+        <a href="catering.html" class="text-decoration-none">
+          <div class="quick-action">
+            <div class="h1 mb-3">🚚</div>
+            <h5>ケータリング</h5>
+            <p class="text-muted small">出張料理サービス</p>
+          </div>
+        </a>
       </div>
     </div>
 
-<!-- Additional Actions -->
-<div class="row mb-4">
-  <div class="col-md-3 mb-3">
-    <a href="menu.html" class="text-decoration-none">
-      <div class="quick-action">
-        <div class="h1 mb-3">🍽️</div>
-        <h5>メニュー</h5>
-        <p class="text-muted small">料理メニューを見る</p>
-      </div>
-    </a>
-  </div>
-  <div class="col-md-3 mb-3">
-    <a href="info.html" class="text-decoration-none">
-      <div class="quick-action">
-        <div class="h1 mb-3">🏮</div>
-        <h5>店舗情報</h5>
-        <p class="text-muted small">レストラン詳細</p>
-      </div>
-    </a>
-  </div>
-  <div class="col-md-3 mb-3">
-    <a href="gallery.html" class="text-decoration-none">
-      <div class="quick-action">
-        <div class="h1 mb-3">🖼️</div>
-        <h5>ギャラリー</h5>
-        <p class="text-muted small">店内写真</p>
-      </div>
-    </a>
-  </div>
-  <div class="col-md-3 mb-3">
-    <a href="contact.html" class="text-decoration-none">
-      <div class="quick-action">
-        <div class="h1 mb-3">📞</div>
-        <h5>お問い合わせ</h5>
-        <p class="text-muted small">ご連絡はこちら</p>
-      </div>
-    </a>
-  </div>
-  <!-- In the "その他" section of dashboard.html -->
-<div class="row mb-4">
-  <div class="col-12">
-    <h4 class="mb-3">🔧 その他</h4>
-  </div>
-  <div class="col-md-3 mb-3">
-    <a href="careers.html" class="text-decoration-none">
-      <div class="quick-action">
-        <div class="h1 mb-3">💼</div>
-        <h5>採用情報</h5>
-        <p class="text-muted small">キャリア opportunities</p>
-      </div>
-    </a>
-  </div>
-  <div class="col-md-3 mb-3">
-    <a href="app.html" class="text-decoration-none">
-      <div class="quick-action">
-        <div class="h1 mb-3">📱</div>
-        <h5>モバイルアプリ</h5>
-        <p class="text-muted small">ダウンロード</p>
-      </div>
-    </a>
-  </div>
-  <div class="col-md-3 mb-3">
-    <a href="giftcards.html" class="text-decoration-none">
-      <div class="quick-action">
-        <div class="h1 mb-3">🎫</div>
-        <h5>ギフトカード</h5>
-        <p class="text-muted small">購入・贈答</p>
-      </div>
-    </a>
-  </div>
-  <div class="col-md-3 mb-3">
-    <a href="catering.html" class="text-decoration-none">
-      <div class="quick-action">
-        <div class="h1 mb-3">🚚</div>
-        <h5>ケータリング</h5>
-        <p class="text-muted small">出張料理サービス</p>
-      </div>
-    </a>
-  </div>
-</div>
-</div>
-    </a>
-  </div>
-</div>
     <!-- Recent Reservations -->
     <div class="recent-reservations">
       <div class="d-flex justify-content-between align-items-center mb-3">
@@ -393,12 +340,12 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   
   <script>
-   
-const currentUser = JSON.parse(localStorage.getItem('user'));
-if (!currentUser) {
-  alert('ログインが必要です');
-  window.location.href = 'login.html';
-}
+    // Check authentication
+    const currentUser = JSON.parse(localStorage.getItem('user'));
+    if (!currentUser) {
+      alert('ログインが必要です');
+      window.location.href = 'login.html';
+    }
 
     // Supabase configuration
     const SUPABASE_URL = 'https://nfcjbjohxzaikelxgmjg.supabase.co';
@@ -408,17 +355,17 @@ if (!currentUser) {
     const { createClient } = supabase;
     const supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    console.log('Dashboard loaded for user:', user);
+    console.log('Dashboard loaded for user:', currentUser);
 
     // Update welcome message
-    document.getElementById('userWelcome').textContent = `ようこそ、${user.name}さん！`;
-    document.getElementById('welcomeMessage').textContent = `ようこそ、${user.name}さん！`;
+    document.getElementById('userWelcome').textContent = `ようこそ、${currentUser.name}さん！`;
+    document.getElementById('welcomeMessage').textContent = `ようこそ、${currentUser.name}さん！`;
     
     // Set profile information
-    document.getElementById('profileName').textContent = user.name;
-    document.getElementById('profileEmail').textContent = user.email;
-    if (user.created_at) {
-      document.getElementById('profileCreatedAt').textContent = new Date(user.created_at).toLocaleDateString('ja-JP');
+    document.getElementById('profileName').textContent = currentUser.name;
+    document.getElementById('profileEmail').textContent = currentUser.email;
+    if (currentUser.created_at) {
+      document.getElementById('profileCreatedAt').textContent = new Date(currentUser.created_at).toLocaleDateString('ja-JP');
     } else {
       document.getElementById('profileCreatedAt').textContent = '今日';
     }
@@ -426,13 +373,13 @@ if (!currentUser) {
     // Load dashboard data
     async function loadDashboardData() {
       try {
-        console.log('Loading reservations for user:', user.id);
+        console.log('Loading reservations for user:', currentUser.id);
         
         // Load user's reservations
         const { data: reservations, error } = await supabaseClient
           .from('reservations')
           .select('*')
-          .eq('user_id', user.id)
+          .eq('user_id', currentUser.id)
           .order('created_at', { ascending: false });
 
         if (error) {
@@ -506,42 +453,8 @@ if (!currentUser) {
 
       container.innerHTML = html;
     }
-    <!-- PWA Quick Actions -->
-<div class="row mb-4">
-  <div class="col-12">
-    <h4 class="mb-3">📱 PWA機能</h4>
-  </div>
-  <div class="col-md-3 mb-3">
-    <div class="quick-action" onclick="showPWAInstall()" style="cursor: pointer;">
-      <div class="h1 mb-3">📲</div>
-      <h5>アプリインストール</h5>
-      <p class="text-muted small">ホーム画面に追加</p>
-    </div>
-  </div>
-  <div class="col-md-3 mb-3">
-    <div class="quick-action" onclick="checkStorage()" style="cursor: pointer;">
-      <div class="h1 mb-3">💾</div>
-      <h5>ストレージ確認</h5>
-      <p class="text-muted small">キャッシュ管理</p>
-    </div>
-  </div>
-  <div class="col-md-3 mb-3">
-    <div class="quick-action" onclick="toggleNotifications()" style="cursor: pointer;">
-      <div class="h1 mb-3">🔔</div>
-      <h5>通知設定</h5>
-      <p class="text-muted small">プッシュ通知</p>
-    </div>
-  </div>
-  <div class="col-md-3 mb-3">
-    <div class="quick-action" onclick="clearCache()" style="cursor: pointer;">
-      <div class="h1 mb-3">🗑️</div>
-      <h5>キャッシュ削除</h5>
-      <p class="text-muted small">データ更新</p>
-    </div>
-  </div>
-</div>
 
-    // Logout function
+    // FIXED LOGOUT FUNCTION
     document.getElementById('logoutBtn').addEventListener('click', () => {
       if (confirm('ログアウトしますか？')) {
         localStorage.removeItem('user');
@@ -549,14 +462,22 @@ if (!currentUser) {
       }
     });
 
-    // Help function
-    function showHelp() {
-      alert('お問い合わせ: support@restaurant.com\n電話: 0120-123-456\n\n使い方:\n1. 「新規予約」で予約を作成\n2. 「予約一覧」で管理\n3. プロフィールで情報確認');
-    }
-
     // Load data when page loads
     document.addEventListener('DOMContentLoaded', function() {
       loadDashboardData();
+    });
+
+    // PWA Initialization Script
+    document.addEventListener('DOMContentLoaded', async function() {
+        // Register Service Worker
+        if ('serviceWorker' in navigator) {
+            try {
+                const registration = await navigator.serviceWorker.register('/sw.js');
+                console.log('✅ Service Worker registered:', registration);
+            } catch (error) {
+                console.error('❌ Service Worker registration failed:', error);
+            }
+        }
     });
   </script>
 </body>
