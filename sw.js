@@ -186,3 +186,153 @@ self.addEventListener('notificationclick', (event) => {
     );
   }
 });
+
+// Generate staff code
+function generateStaffCode() {
+  const prefix = 'STAFF';
+  const random = Math.floor(1000 + Math.random() * 9000);
+  return `${prefix}${random}`;
+}
+
+// Initialize staff code when modal opens
+document.getElementById('addStaffModal').addEventListener('show.bs.modal', function() {
+  document.getElementById('staffCode').value = generateStaffCode();
+});
+
+// Register new staff
+async function registerStaff() {
+  const staffData = {
+    name: document.getElementById('staffName').value,
+    role: document.getElementById('staffRole').value,
+    email: document.getElementById('staffEmail').value,
+    phone: document.getElementById('staffPhone').value,
+    staff_code: document.getElementById('staffCode').value,
+    password: document.getElementById('staffPassword').value,
+    is_active: document.getElementById('staffActive').checked
+  };
+
+  try {
+    const { data, error } = await supabase
+      .from('staff')
+      .insert([staffData]);
+
+    if (error) throw error;
+
+    // Close modal and reset form
+    bootstrap.Modal.getInstance(document.getElementById('addStaffModal')).hide();
+    document.getElementById('addStaffForm').reset();
+    
+    // Reload staff list
+    loadStaffList();
+    
+    alert('✅ スタッフを登録しました！');
+    
+  } catch (error) {
+    alert('❌ スタッフ登録に失敗しました: ' + error.message);
+  }
+}
+
+// Load staff list
+async function loadStaffList() {
+  try {
+    const { data: staff, error } = await supabase
+      .from('staff')
+      .select('*')
+      .order('created_at', { ascending: false });
+
+    if (error) throw error;
+
+    const container = document.getElementById('staffList');
+    container.innerHTML = '';
+
+    if (staff.length === 0) {
+      container.innerHTML = '<div class="text-center text-muted py-4">スタッフが登録されていません</div>';
+      return;
+    }
+
+    staff.forEach(person => {
+      const staffCard = document.createElement('div');
+      staffCard.className = 'card mb-3';
+      staffCard.innerHTML = `
+        <div class="card-body">
+          <div class="row align-items-center">
+            <div class="col-md-3">
+              <h6 class="mb-1">${person.name}</h6>
+              <small class="text-muted">${person.role}</small>
+            </div>
+            <div class="col-md-2">
+              <small class="text-muted">コード</small>
+              <div>${person.staff_code}</div>
+            </div>
+            <div class="col-md-3">
+              <small class="text-muted">連絡先</small>
+              <div>${person.email || '-'}</div>
+              <small>${person.phone || '-'}</small>
+            </div>
+            <div class="col-md-2">
+              <small class="text-muted">ステータス</small>
+              <div>
+                <span class="badge ${person.is_active ? 'bg-success' : 'bg-secondary'}">
+                  ${person.is_active ? 'アクティブ' : '非アクティブ'}
+                </span>
+              </div>
+            </div>
+            <div class="col-md-2 text-end">
+              <button class="btn btn-sm btn-outline-primary me-1" onclick="editStaff(${person.id})">
+                ✏️ 編集
+              </button>
+              <button class="btn btn-sm btn-outline-danger" onclick="deleteStaff(${person.id})">
+                🗑️ 削除
+              </button>
+            </div>
+          </div>
+        </div>
+      `;
+      container.appendChild(staffCard);
+    });
+
+  } catch (error) {
+    console.error('Error loading staff:', error);
+  }
+}
+
+// Edit staff function
+async function editStaff(staffId) {
+  // Implementation for editing staff
+  alert('編集機能は近日実装予定');
+}
+
+// Delete staff function
+async function deleteStaff(staffId) {
+  if (confirm('このスタッフを削除しますか？')) {
+    try {
+      const { error } = await supabase
+        .from('staff')
+        .delete()
+        .eq('id', staffId);
+
+      if (error) throw error;
+
+      loadStaffList();
+      alert('✅ スタッフを削除しました');
+      
+    } catch (error) {
+      alert('❌ 削除に失敗しました: ' + error.message);
+    }
+  }
+}
+
+// Load staff list when section is shown
+function showSection(sectionName) {
+  // ... existing code ...
+  
+  // Show selected section
+  document.getElementById(`${sectionName}-section`).classList.remove('d-none');
+  
+  // Load section-specific data
+  if (sectionName === 'staff') {
+    loadStaffList();
+  }
+  
+  // ... rest of existing code ...
+}
