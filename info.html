@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <title>店舗情報 - レストラン予約システム</title>
+  <title>Restaurant Information - Reservation System</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
   <style>
@@ -15,7 +15,7 @@
     body {
       background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
       min-height: 100vh;
-      font-family: 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Yu Gothic', sans-serif;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
     
     .sakura-decoration {
@@ -46,6 +46,7 @@
       text-align: center;
       margin-bottom: 4rem;
       border-radius: 0 0 30px 30px;
+      position: relative;
     }
     
     .info-card {
@@ -91,6 +92,7 @@
       border-radius: 15px;
       margin-bottom: 1rem;
       transition: transform 0.3s ease;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.15);
     }
     
     .feature-img:hover {
@@ -108,6 +110,7 @@
       font-size: 1.2rem;
       position: relative;
       overflow: hidden;
+      cursor: pointer;
     }
     
     .map-container::before {
@@ -146,12 +149,15 @@
     
     .amenity-item:hover {
       background: #e9ecef;
+      transform: translateX(5px);
     }
     
     .amenity-icon {
       font-size: 1.5rem;
       margin-right: 1rem;
       color: var(--primary-color);
+      width: 40px;
+      text-align: center;
     }
     
     .floating-btn {
@@ -166,10 +172,11 @@
       box-shadow: 0 10px 25px rgba(198, 40, 40, 0.4);
       z-index: 1000;
       transition: transform 0.3s ease;
+      font-weight: 600;
     }
     
     .floating-btn:hover {
-      transform: translateY(-3px);
+      transform: translateY(-3px) scale(1.05);
     }
     
     .section-title {
@@ -177,6 +184,7 @@
       padding-bottom: 1rem;
       margin-bottom: 2rem;
       text-align: center;
+      color: #333;
     }
     
     .section-title::after {
@@ -190,6 +198,47 @@
       background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
       border-radius: 2px;
     }
+    
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+    
+    .gallery-item {
+      position: relative;
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+    
+    .gallery-item img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+    
+    .gallery-item:hover img {
+      transform: scale(1.1);
+    }
+    
+    .gallery-caption {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: linear-gradient(transparent, rgba(0,0,0,0.8));
+      color: white;
+      padding: 1rem;
+      transform: translateY(100%);
+      transition: transform 0.3s ease;
+    }
+    
+    .gallery-item:hover .gallery-caption {
+      transform: translateY(0);
+    }
   </style>
 </head>
 <body>
@@ -199,14 +248,14 @@
   <nav class="navbar navbar-expand-lg navbar-dark">
     <div class="container">
       <a class="navbar-brand fw-bold" href="dashboard.html">
-        <i class="fas fa-utensils me-2"></i>🍣 和食レストラン 桜
+        <i class="fas fa-utensils me-2"></i>🍣 Sakura Japanese Cuisine
       </a>
       <div class="navbar-nav ms-auto">
         <a href="dashboard.html" class="btn btn-outline-light btn-sm me-2">
-          <i class="fas fa-home me-1"></i>ダッシュボード
+          <i class="fas fa-home me-1"></i>Dashboard
         </a>
         <button class="btn btn-outline-light btn-sm" id="logoutBtn">
-          <i class="fas fa-sign-out-alt me-1"></i>ログアウト
+          <i class="fas fa-sign-out-alt me-1"></i>Logout
         </button>
       </div>
     </div>
@@ -215,13 +264,13 @@
   <!-- Hero Section -->
   <div class="hero-section">
     <div class="container">
-      <h1 class="display-4 fw-bold mb-3">和食レストラン 桜</h1>
-      <p class="lead mb-4">伝統と革新が調和する、本格日本料理の世界へ</p>
+      <h1 class="display-4 fw-bold mb-3">Sakura Japanese Cuisine</h1>
+      <p class="lead mb-4">Where Tradition Meets Innovation in Authentic Japanese Dining</p>
       <div class="row justify-content-center">
         <div class="col-auto">
           <span class="badge bg-light text-dark me-2 p-2"><i class="fas fa-star me-1"></i>4.8/5.0</span>
-          <span class="badge bg-light text-dark me-2 p-2"><i class="fas fa-award me-1"></i>ミシュラン推薦</span>
-          <span class="badge bg-light text-dark p-2"><i class="fas fa-leaf me-1"></i>厳選食材</span>
+          <span class="badge bg-light text-dark me-2 p-2"><i class="fas fa-award me-1"></i>Michelin Recommended</span>
+          <span class="badge bg-light text-dark p-2"><i class="fas fa-leaf me-1"></i>Premium Ingredients</span>
         </div>
       </div>
     </div>
@@ -232,24 +281,24 @@
     <div class="row mb-5">
       <div class="col-12">
         <div class="info-card text-center">
-          <h2 class="section-title">当店について</h2>
-          <p class="lead mb-4">創業50年、伝統の味を現代に受け継ぐ和食レストラン</p>
+          <h2 class="section-title">About Our Restaurant</h2>
+          <p class="lead mb-4">50 Years of Culinary Excellence in Japanese Cuisine</p>
           <div class="row">
             <div class="col-md-3 col-6 mb-3">
               <span class="stats-number">50</span>
-              <span class="stats-label">年の歴史</span>
+              <span class="stats-label">Years History</span>
             </div>
             <div class="col-md-3 col-6 mb-3">
               <span class="stats-number">38</span>
-              <span class="stats-label">席数</span>
+              <span class="stats-label">Total Seats</span>
             </div>
             <div class="col-md-3 col-6 mb-3">
               <span class="stats-number">2</span>
-              <span class="stats-label">個室</span>
+              <span class="stats-label">Private Rooms</span>
             </div>
             <div class="col-md-3 col-6 mb-3">
               <span class="stats-number">98%</span>
-              <span class="stats-label">満足度</span>
+              <span class="stats-label">Satisfaction</span>
             </div>
           </div>
         </div>
@@ -262,42 +311,42 @@
         <div class="info-card h-100">
           <div class="text-center">
             <div class="info-icon">🏮</div>
-            <h3>基本情報</h3>
+            <h3>Basic Information</h3>
           </div>
           <div class="mt-4">
             <div class="amenity-item">
               <i class="fas fa-store amenity-icon"></i>
               <div>
-                <strong>店名</strong><br>
-                <span class="text-muted">和食レストラン 桜</span>
+                <strong>Restaurant Name</strong><br>
+                <span class="text-muted">Sakura Japanese Cuisine</span>
               </div>
             </div>
             <div class="amenity-item">
               <i class="fas fa-utensils amenity-icon"></i>
               <div>
-                <strong>ジャンル</strong><br>
-                <span class="text-muted">会席料理・創作和食・懐石</span>
+                <strong>Cuisine Type</strong><br>
+                <span class="text-muted">Kaiseki, Creative Washoku, Traditional</span>
               </div>
             </div>
             <div class="amenity-item">
               <i class="fas fa-chair amenity-icon"></i>
               <div>
-                <strong>席数</strong><br>
-                <span class="text-muted">カウンター8席、テーブル30席</span>
+                <strong>Seating Capacity</strong><br>
+                <span class="text-muted">Counter: 8 seats, Tables: 30 seats</span>
               </div>
             </div>
             <div class="amenity-item">
               <i class="fas fa-door-closed amenity-icon"></i>
               <div>
-                <strong>個室</strong><br>
-                <span class="text-muted">2室（4名〜8名様）</span>
+                <strong>Private Rooms</strong><br>
+                <span class="text-muted">2 rooms (4-8 people each)</span>
               </div>
             </div>
             <div class="amenity-item">
               <i class="fas fa-yen-sign amenity-icon"></i>
               <div>
-                <strong>予算</strong><br>
-                <span class="text-muted">昼 ¥3,000〜¥5,000 / 夜 ¥8,000〜¥15,000</span>
+                <strong>Price Range</strong><br>
+                <span class="text-muted">Lunch: ¥3,000-¥5,000 / Dinner: ¥8,000-¥15,000</span>
               </div>
             </div>
           </div>
@@ -309,35 +358,35 @@
         <div class="info-card h-100">
           <div class="text-center">
             <div class="info-icon">📍</div>
-            <h3>アクセス情報</h3>
+            <h3>Access Information</h3>
           </div>
           <div class="mt-4">
             <div class="amenity-item">
               <i class="fas fa-map-marker-alt amenity-icon"></i>
               <div>
-                <strong>住所</strong><br>
-                <span class="text-muted">〒100-0001 東京都千代田区千代田1-1-1 東京ビル 3F</span>
+                <strong>Address</strong><br>
+                <span class="text-muted">1-1-1 Chiyoda, Chiyoda-ku, Tokyo 100-0001, Tokyo Building 3F</span>
               </div>
             </div>
             <div class="amenity-item">
               <i class="fas fa-train amenity-icon"></i>
               <div>
-                <strong>最寄駅</strong><br>
-                <span class="text-muted">東京駅 丸の内南口より徒歩3分</span>
+                <strong>Nearest Station</strong><br>
+                <span class="text-muted">Tokyo Station (Marunouchi South Exit) - 3 min walk</span>
               </div>
             </div>
             <div class="amenity-item">
               <i class="fas fa-phone amenity-icon"></i>
               <div>
-                <strong>電話番号</strong><br>
+                <strong>Phone Number</strong><br>
                 <span class="text-muted">03-1234-5678</span>
               </div>
             </div>
             <div class="amenity-item">
               <i class="fas fa-car amenity-icon"></i>
               <div>
-                <strong>駐車場</strong><br>
-                <span class="text-muted">近隣のコインパーキングをご利用ください</span>
+                <strong>Parking</strong><br>
+                <span class="text-muted">Please use nearby coin parking</span>
               </div>
             </div>
           </div>
@@ -345,26 +394,52 @@
       </div>
     </div>
 
-    <!-- Restaurant Images -->
+    <!-- Restaurant Gallery -->
     <div class="row mb-5">
       <div class="col-12">
         <div class="info-card">
-          <h2 class="section-title">店内の様子</h2>
-          <div class="row">
-            <div class="col-md-4 mb-3">
+          <h2 class="section-title">Restaurant Gallery</h2>
+          <div class="gallery-grid">
+            <div class="gallery-item">
               <img src="https://images.unsplash.com/photo-1544148103-0773bf10d330?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" 
-                   alt="店内全景" class="feature-img">
-              <p class="text-center text-muted">落ち着いた店内</p>
+                   alt="Restaurant Interior">
+              <div class="gallery-caption">Elegant Dining Space</div>
             </div>
-            <div class="col-md-4 mb-3">
+            <div class="gallery-item">
               <img src="https://images.unsplash.com/photo-1589939705384-5185137a7f0f?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" 
-                   alt="カウンター席" class="feature-img">
-              <p class="text-center text-muted">職人と語れるカウンター</p>
+                   alt="Counter Seats">
+              <div class="gallery-caption">Interactive Counter</div>
             </div>
-            <div class="col-md-4 mb-3">
+            <div class="gallery-item">
               <img src="https://images.unsplash.com/photo-1559329007-40df8a9345d8?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" 
-                   alt="個室" class="feature-img">
-              <p class="text-center text-muted">プライベートな個室</p>
+                   alt="Private Room">
+              <div class="gallery-caption">Private Room</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Food Gallery -->
+    <div class="row mb-5">
+      <div class="col-12">
+        <div class="info-card">
+          <h2 class="section-title">Our Culinary Art</h2>
+          <div class="gallery-grid">
+            <div class="gallery-item">
+              <img src="https://images.unsplash.com/photo-1577219491135-ce391730fb2c?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" 
+                   alt="Sushi Platter">
+              <div class="gallery-caption">Premium Sushi Selection</div>
+            </div>
+            <div class="gallery-item">
+              <img src="https://images.unsplash.com/photo-1553621042-f6e147245754?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" 
+                   alt="Kaiseki Course">
+              <div class="gallery-caption">Kaiseki Course</div>
+            </div>
+            <div class="gallery-item">
+              <img src="https://images.unsplash.com/photo-1563245372-f21724e3856d?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" 
+                   alt="Tempura">
+              <div class="gallery-caption">Crispy Tempura</div>
             </div>
           </div>
         </div>
@@ -377,28 +452,28 @@
         <div class="info-card">
           <div class="text-center">
             <div class="info-icon">🕒</div>
-            <h3>営業時間</h3>
+            <h3>Business Hours</h3>
           </div>
           <div class="mt-4">
             <div class="amenity-item">
               <i class="fas fa-sun amenity-icon"></i>
               <div>
-                <strong>ランチ</strong><br>
-                <span class="text-muted">11:30〜14:30 (L.O. 14:00)</span>
+                <strong>Lunch</strong><br>
+                <span class="text-muted">11:30 AM - 2:30 PM (Last Order 2:00 PM)</span>
               </div>
             </div>
             <div class="amenity-item">
               <i class="fas fa-moon amenity-icon"></i>
               <div>
-                <strong>ディナー</strong><br>
-                <span class="text-muted">17:30〜22:00 (L.O. 21:00)</span>
+                <strong>Dinner</strong><br>
+                <span class="text-muted">5:30 PM - 10:00 PM (Last Order 9:00 PM)</span>
               </div>
             </div>
             <div class="amenity-item">
               <i class="fas fa-calendar-times amenity-icon"></i>
               <div>
-                <strong>定休日</strong><br>
-                <span class="text-muted">月曜日・年末年始</span>
+                <strong>Closed</strong><br>
+                <span class="text-muted">Mondays & New Year Holidays</span>
               </div>
             </div>
           </div>
@@ -409,19 +484,19 @@
         <div class="info-card">
           <div class="text-center">
             <div class="info-icon">🗺️</div>
-            <h3>アクセスマップ</h3>
+            <h3>Location Map</h3>
           </div>
           <div class="mt-4">
-            <div class="map-container">
+            <div class="map-container" onclick="openGoogleMaps()">
               <div class="text-center position-relative">
                 <i class="fas fa-map-marked-alt fa-3x mb-3"></i>
-                <h5>インタラクティブマップ</h5>
-                <p class="mb-0">クリックして詳細な地図を表示</p>
+                <h5>Interactive Map</h5>
+                <p class="mb-0">Click to view detailed directions</p>
               </div>
             </div>
             <div class="text-center mt-3">
-              <button class="btn btn-outline-primary">
-                <i class="fas fa-directions me-2"></i>経路を検索
+              <button class="btn btn-outline-primary" onclick="openGoogleMaps()">
+                <i class="fas fa-directions me-2"></i>Get Directions
               </button>
             </div>
           </div>
@@ -433,28 +508,28 @@
     <div class="row mb-5">
       <div class="col-12">
         <div class="info-card">
-          <h2 class="section-title">設備・サービス</h2>
+          <h2 class="section-title">Facilities & Services</h2>
           <div class="row">
             <div class="col-md-6">
               <div class="amenity-item">
                 <i class="fas fa-wifi amenity-icon"></i>
                 <div>
-                  <strong>無料Wi-Fi</strong><br>
-                  <span class="text-muted">全席で高速インターネット接続</span>
+                  <strong>Free Wi-Fi</strong><br>
+                  <span class="text-muted">High-speed internet at all seats</span>
                 </div>
               </div>
               <div class="amenity-item">
                 <i class="fas fa-credit-card amenity-icon"></i>
                 <div>
-                  <strong>各種決済対応</strong><br>
-                  <span class="text-muted">現金・クレジットカード・電子マネー</span>
+                  <strong>Multiple Payment Methods</strong><br>
+                  <span class="text-muted">Cash, Credit Cards, E-money</span>
                 </div>
               </div>
               <div class="amenity-item">
                 <i class="fas fa-wheelchair amenity-icon"></i>
                 <div>
-                  <strong>バリアフリー</strong><br>
-                  <span class="text-muted">車いすでもご来店いただけます</span>
+                  <strong>Wheelchair Accessible</strong><br>
+                  <span class="text-muted">Fully accessible for wheelchair users</span>
                 </div>
               </div>
             </div>
@@ -462,22 +537,22 @@
               <div class="amenity-item">
                 <i class="fas fa-smoking-ban amenity-icon"></i>
                 <div>
-                  <strong>全面禁煙</strong><br>
-                  <span class="text-muted">快適な食事環境をご提供</span>
+                  <strong>Non-Smoking</strong><br>
+                  <span class="text-muted">Completely smoke-free environment</span>
                 </div>
               </div>
               <div class="amenity-item">
                 <i class="fas fa-child amenity-icon"></i>
                 <div>
-                  <strong>キッズメニュー</strong><br>
-                  <span class="text-muted">お子様連れも歓迎</span>
+                  <strong>Kids Menu</strong><br>
+                  <span class="text-muted">Family-friendly dining experience</span>
                 </div>
               </div>
               <div class="amenity-item">
                 <i class="fas fa-gift amenity-icon"></i>
                 <div>
-                  <strong>記念日サービス</strong><br>
-                  <span class="text-muted">誕生日・記念日をサプライズでお祝い</span>
+                  <strong>Special Occasions</strong><br>
+                  <span class="text-muted">Birthday & anniversary surprises</span>
                 </div>
               </div>
             </div>
@@ -489,29 +564,44 @@
 
   <!-- Floating Action Button -->
   <button class="floating-btn" onclick="location.href='reservation.html'">
-    <i class="fas fa-calendar-plus me-2"></i>予約する
+    <i class="fas fa-calendar-plus me-2"></i>Make Reservation
   </button>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
-    // ログアウト機能
+    // Logout functionality
     document.getElementById('logoutBtn').addEventListener('click', () => {
-      if (confirm('ログアウトしますか？')) {
+      if (confirm('Are you sure you want to logout?')) {
         localStorage.removeItem('user');
         window.location.href = 'index.html';
       }
     });
 
-    // ユーザー認証チェック
+    // User authentication check
     const currentUser = JSON.parse(localStorage.getItem('user'));
     if (!currentUser) {
       window.location.href = 'login.html';
     }
 
-    // 地図クリックイベント
-    document.querySelector('.map-container').addEventListener('click', () => {
-      alert('Google Mapsで場所を表示します');
-      // 実際の実装ではGoogle Maps APIを統合
+    // Google Maps integration
+    function openGoogleMaps() {
+      const address = "1-1-1 Chiyoda, Chiyoda-ku, Tokyo 100-0001";
+      const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`;
+      window.open(mapsUrl, '_blank');
+    }
+
+    // Add smooth scrolling to sections
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          target.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+          });
+        }
+      });
     });
   </script>
 </body>
