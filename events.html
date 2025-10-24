@@ -2,200 +2,825 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <title>イベント & スペシャル - レストラン予約システム</title>
+  <title>イベント & スペシャル - 和食レストラン桜</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link href="style.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
   <style>
+    :root {
+      --primary-color: #c62828;
+      --secondary-color: #f8bbd0;
+      --accent-color: #ff7043;
+    }
+    
+    body {
+      background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+      min-height: 100vh;
+      font-family: 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Yu Gothic', sans-serif;
+    }
+    
+    .sakura-decoration {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path fill="%23f8bbd0" d="M50 20c-5 0-10 3-13 8-3-5-8-8-13-8-8 0-15 7-15 15 0 10 10 18 25 30 15-12 25-20 25-30 0-8-7-15-15-15z"/></svg>');
+      background-size: 80px;
+      opacity: 0.1;
+      pointer-events: none;
+      z-index: -1;
+    }
+    
+    .navbar {
+      background: linear-gradient(135deg, var(--primary-color), #d32f2f) !important;
+      box-shadow: 0 4px 20px rgba(198, 40, 40, 0.3);
+    }
+    
+    .hero-section {
+      background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), 
+                  url('https://images.unsplash.com/photo-1547592180-85f173990554?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80');
+      background-size: cover;
+      background-position: center;
+      color: white;
+      padding: 80px 0;
+      text-align: center;
+      margin-bottom: 3rem;
+      border-radius: 0 0 30px 30px;
+    }
+    
     .event-card {
       background: white;
-      border-radius: 12px;
+      border-radius: 20px;
       padding: 0;
       margin-bottom: 2rem;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
       overflow: hidden;
+      transition: all 0.3s ease;
+      border: none;
+      position: relative;
+    }
+    
+    .event-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+      transform: scaleX(0);
       transition: transform 0.3s ease;
     }
+    
     .event-card:hover {
-      transform: translateY(-5px);
+      transform: translateY(-8px);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.15);
     }
+    
+    .event-card:hover::before {
+      transform: scaleX(1);
+    }
+    
     .event-image {
       width: 100%;
-      height: 200px;
+      height: 250px;
       object-fit: cover;
+      transition: transform 0.3s ease;
     }
+    
+    .event-card:hover .event-image {
+      transform: scale(1.05);
+    }
+    
     .event-content {
-      padding: 1.5rem;
+      padding: 2rem;
     }
+    
     .event-badge {
-      background: linear-gradient(135deg, #c62828, #e53935);
+      background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
       color: white;
-      padding: 0.3rem 1rem;
-      border-radius: 15px;
+      padding: 0.4rem 1rem;
+      border-radius: 20px;
       font-size: 0.8rem;
+      font-weight: 600;
       margin-right: 0.5rem;
+      margin-bottom: 0.5rem;
+      display: inline-block;
     }
+    
+    .badge-seasonal { background: linear-gradient(135deg, #4facfe, #00f2fe); }
+    .badge-culture { background: linear-gradient(135deg, #43e97b, #38f9d7); }
+    .badge-cooking { background: linear-gradient(135deg, #ff9a9e, #fecfef); }
+    .badge-limited { background: linear-gradient(135deg, #a8edea, #fed6e3); color: #333; }
+    
     .calendar-highlight {
       background: linear-gradient(135deg, #667eea, #764ba2);
       color: white;
-      border-radius: 12px;
-      padding: 2rem;
+      border-radius: 20px;
+      padding: 2.5rem;
       text-align: center;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      margin-bottom: 2rem;
+    }
+    
+    .price-tag {
+      background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+      color: white;
+      padding: 0.8rem 1.5rem;
+      border-radius: 25px;
+      font-weight: bold;
+      font-size: 1.2rem;
+      display: inline-block;
+      margin: 1rem 0;
+      box-shadow: 0 4px 15px rgba(198, 40, 40, 0.3);
+    }
+    
+    .btn-japanese {
+      background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+      color: white;
+      border: none;
+      border-radius: 25px;
+      padding: 0.8rem 1.5rem;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      box-shadow: 0 8px 25px rgba(198, 40, 40, 0.3);
+    }
+    
+    .btn-japanese:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 35px rgba(198, 40, 40, 0.4);
+      color: white;
+    }
+    
+    .btn-outline-japanese {
+      border: 2px solid var(--primary-color);
+      color: var(--primary-color);
+      background: transparent;
+      border-radius: 25px;
+      padding: 0.8rem 1.5rem;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+    
+    .btn-outline-japanese:hover {
+      background: var(--primary-color);
+      color: white;
+      transform: translateY(-2px);
+    }
+    
+    .section-title {
+      position: relative;
+      padding-bottom: 1rem;
+      margin-bottom: 2rem;
+      color: #333;
+    }
+    
+    .section-title::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 80px;
+      height: 3px;
+      background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+      border-radius: 2px;
+    }
+    
+    .availability-badge {
+      display: inline-flex;
+      align-items: center;
+      background: #e8f5e8;
+      color: #2e7d32;
+      padding: 0.3rem 0.8rem;
+      border-radius: 15px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      margin-left: 1rem;
+    }
+    
+    .availability-badge.low {
+      background: #fff3e0;
+      color: #ef6c00;
+    }
+    
+    .availability-badge.sold-out {
+      background: #ffebee;
+      color: #c62828;
+    }
+    
+    .filter-buttons {
+      margin-bottom: 2rem;
+    }
+    
+    .filter-btn {
+      margin: 0.2rem;
+      border-radius: 20px;
+    }
+    
+    .event-details {
+      background: #f8f9fa;
+      border-radius: 15px;
+      padding: 1.5rem;
+      margin: 1rem 0;
+    }
+    
+    .feature-list {
+      list-style: none;
+      padding: 0;
+    }
+    
+    .feature-list li {
+      padding: 0.5rem 0;
+      border-bottom: 1px solid #eee;
+    }
+    
+    .feature-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .feature-list li::before {
+      content: '✅';
+      margin-right: 0.5rem;
+    }
+    
+    .loading-spinner {
+      display: none;
+      text-align: center;
+      padding: 2rem;
     }
   </style>
 </head>
 <body>
   <div class="sakura-decoration"></div>
   
-  <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #c62828;">
+  <nav class="navbar navbar-expand-lg navbar-dark">
     <div class="container">
       <a class="navbar-brand fw-bold" href="dashboard.html">
-        🍣 レストラン予約システム
+        <i class="fas fa-utensils me-2"></i>🍣 和食レストラン 桜
       </a>
       <div class="navbar-nav ms-auto">
-        <a href="dashboard.html" class="btn btn-outline-light btn-sm me-2">ダッシュボード</a>
-        <button class="btn btn-outline-light btn-sm" id="logoutBtn">ログアウト</button>
+        <a href="dashboard.html" class="btn btn-outline-light btn-sm me-2">
+          <i class="fas fa-home me-1"></i>ダッシュボード
+        </a>
+        <button class="btn btn-outline-light btn-sm" id="logoutBtn">
+          <i class="fas fa-sign-out-alt me-1"></i>ログアウト
+        </button>
       </div>
     </div>
   </nav>
 
-  <div class="container mt-4">
-    <div class="text-center mb-5">
-      <h1>イベント & スペシャル</h1>
-      <p class="lead">特別な日をより思い出深く</p>
+  <!-- Hero Section -->
+  <div class="hero-section">
+    <div class="container">
+      <h1 class="display-4 fw-bold mb-3">季節のイベント</h1>
+      <p class="lead mb-4">日本の伝統文化と旬の食材を楽しむ特別な体験</p>
+      <div class="row justify-content-center">
+        <div class="col-auto">
+          <span class="badge bg-light text-dark me-2 p-2"><i class="fas fa-calendar-alt me-1"></i>季節限定</span>
+          <span class="badge bg-light text-dark me-2 p-2"><i class="fas fa-utensils me-1"></i>特別メニュー</span>
+          <span class="badge bg-light text-dark p-2"><i class="fas fa-music me-1"></i>文化体験</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+    <!-- Loading Spinner -->
+    <div class="loading-spinner" id="loadingSpinner">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">読み込み中...</span>
+      </div>
+      <p class="mt-2">処理中...</p>
+    </div>
+
+    <!-- Event Filter -->
+    <div class="filter-buttons text-center">
+      <button class="btn btn-japanese filter-btn active" data-filter="all">すべて</button>
+      <button class="btn btn-outline-japanese filter-btn" data-filter="seasonal">季節イベント</button>
+      <button class="btn btn-outline-japanese filter-btn" data-filter="cultural">文化体験</button>
+      <button class="btn btn-outline-japanese filter-btn" data-filter="cooking">料理教室</button>
+      <button class="btn btn-outline-japanese filter-btn" data-filter="special">スペシャル</button>
     </div>
 
     <!-- Upcoming Events -->
-    <h3 class="mb-4">🎉 開催予定のイベント</h3>
-    <div class="row">
-      <div class="col-md-6">
+    <h3 class="section-title">🌸 開催予定のイベント</h3>
+    <div class="row event-container">
+      <!-- Valentine's Day Event -->
+      <div class="col-lg-6 mb-4" data-category="seasonal special">
         <div class="event-card">
-          <img src="https://images.unsplash.com/photo-1511795409834-ef04bbd61622?w=400&h=200&fit=crop" alt="バレンタイン特別ディナー" class="event-image">
+          <img src="https://images.unsplash.com/photo-1511795409834-ef04bbd61622?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=300&q=80" alt="バレンタイン特別ディナー" class="event-image">
           <div class="event-content">
-            <span class="event-badge">季節イベント</span>
-            <span class="event-badge" style="background: linear-gradient(135deg, #4facfe, #00f2fe);">限定メニュー</span>
-            <h5 class="mt-2">バレンタイン特別ディナー</h5>
-            <p class="text-muted">2024年2月10日〜14日</p>
-            <p>特別に用意した恋人たちのためのコース料理。チョコレート職人による特製デザート付き。</p>
-            <button class="btn btn-japanese btn-sm">詳細を見る</button>
+            <span class="event-badge badge-seasonal">季節限定</span>
+            <span class="event-badge badge-limited">数量限定</span>
+            <span class="availability-badge">残席わずか</span>
+            
+            <h4 class="mt-2">バレンタイン特別会席</h4>
+            <p class="text-muted mb-2">
+              <i class="fas fa-calendar me-1"></i>2024年2月10日〜14日
+              <i class="fas fa-clock ms-3 me-1"></i>17:30〜21:00
+            </p>
+            
+            <div class="event-details">
+              <p class="mb-3">恋人たちのための特別会席料理。チョコレート職人監修の和風デザートとソムリエ厳選スパークリングワイン付き。</p>
+              
+              <ul class="feature-list">
+                <li>前菜5種盛り合わせ</li>
+                <li>特製メインディッシュ</li>
+                <li>和風チョコレートデザート</li>
+                <li>スパークリングワイン1杯</li>
+                <li>記念写真サービス</li>
+              </ul>
+            </div>
+            
+            <div class="price-tag">¥12,800</div>
+            
+            <div class="d-grid gap-2 d-md-flex justify-content-md-start">
+              <button class="btn btn-japanese me-md-2" onclick="openBookingModal('valentine')">
+                <i class="fas fa-calendar-plus me-1"></i>予約する
+              </button>
+              <button class="btn btn-outline-japanese" onclick="showEventDetails('valentine')">
+                <i class="fas fa-info-circle me-1"></i>詳細
+              </button>
+            </div>
           </div>
         </div>
       </div>
 
-      <div class="col-md-6">
+      <!-- Traditional Tea Ceremony -->
+      <div class="col-lg-6 mb-4" data-category="cultural">
         <div class="event-card">
-          <img src="https://images.unsplash.com/photo-1514320291840-2e0a9bf2a9ae?w=400&h=200&fit=crop" alt="ライブジャズナイト" class="event-image">
+          <img src="https://images.unsplash.com/photo-1547592180-85f173990554?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=300&q=80" alt="茶道体験" class="event-image">
           <div class="event-content">
-            <span class="event-badge">エンターテイメント</span>
-            <span class="event-badge" style="background: linear-gradient(135deg, #43e97b, #38f9d7);">毎週金曜</span>
-            <h5 class="mt-2">ライブジャズナイト</h5>
-            <p class="text-muted">毎週金曜日 19:00〜22:00</p>
-            <p>プロのジャズミュージシャンによる生演奏。特別カクテルと共にお楽しみください。</p>
-            <button class="btn btn-japanese btn-sm">詳細を見る</button>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Seasonal Specials -->
-    <h3 class="mb-4 mt-5">🍁 季節のスペシャルメニュー</h3>
-    <div class="row">
-      <div class="col-md-4">
-        <div class="event-card">
-          <img src="https://images.unsplash.com/photo-1570196912127-0d4a2ee81d2c?w=400&h=200&fit=crop" alt="冬の味覚コース" class="event-image">
-          <div class="event-content">
-            <h5>冬の味覚コース</h5>
-            <p class="text-muted">1月〜2月限定</p>
-            <p>カニ、ふぐ、鴨など冬の食材をふんだんに使用した特別コース。</p>
-            <div class="price-tag">¥8,800</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-md-4">
-        <div class="event-card">
-          <img src="https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?w=400&h=200&fit=crop" alt="春の訪れランチ" class="event-image">
-          <div class="event-content">
-            <h5>春の訪れランチ</h5>
-            <p class="text-muted">3月〜4月限定</p>
-            <p>山菜や春野菜を使用した、春の息吹を感じるランチコース。</p>
-            <div class="price-tag">¥3,200</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-md-4">
-        <div class="event-card">
-          <img src="https://images.unsplash.com/photo-1563379926898-05f4575a45d8?w=400&h=200&fit=crop" alt="夏の海鮮祭り" class="event-image">
-          <div class="event-content">
-            <h5>夏の海鮮祭り</h5>
-            <p class="text-muted">7月〜8月限定</p>
-            <p>全国各地から厳選した新鮮な魚介類を使用した海鮮コース。</p>
+            <span class="event-badge badge-culture">文化体験</span>
+            <span class="event-badge">初心者歓迎</span>
+            <span class="availability-badge">空席あり</span>
+            
+            <h4 class="mt-2">茶道体験と和菓子</h4>
+            <p class="text-muted mb-2">
+              <i class="fas fa-calendar me-1"></i>毎週土曜日
+              <i class="fas fa-clock ms-3 me-1"></i>14:00〜16:00
+            </p>
+            
+            <div class="event-details">
+              <p class="mb-3">裏千家師範による本格的な茶道体験。季節の和菓子と抹茶で日本の伝統文化を体感できます。</p>
+              
+              <ul class="feature-list">
+                <li>茶道の歴史と作法の説明</li>
+                <li>実際のお点前体験</li>
+                <li>季節の和菓子付き</li>
+                <li>抹茶の点て方レッスン</li>
+                <li>記念写真撮影</li>
+              </ul>
+            </div>
+            
             <div class="price-tag">¥6,500</div>
+            
+            <div class="d-grid gap-2 d-md-flex justify-content-md-start">
+              <button class="btn btn-japanese me-md-2" onclick="openBookingModal('tea')">
+                <i class="fas fa-calendar-plus me-1"></i>予約する
+              </button>
+              <button class="btn btn-outline-japanese" onclick="showEventDetails('tea')">
+                <i class="fas fa-info-circle me-1"></i>詳細
+              </button>
+            </div>
           </div>
         </div>
       </div>
     </div>
 
     <!-- Cooking Classes -->
-    <h3 class="mb-4 mt-5">👨‍🍳 料理教室</h3>
-    <div class="row">
-      <div class="col-md-6">
+    <h3 class="section-title">👨‍🍳 料理教室</h3>
+    <div class="row event-container">
+      <!-- Sushi Making -->
+      <div class="col-md-6 mb-4" data-category="cooking">
         <div class="event-card">
-          <img src="https://images.unsplash.com/photo-1556909114-f6e7b5ef4de0?w=400&h=200&fit=crop" alt="和食基本講座" class="event-image">
+          <img src="https://images.unsplash.com/photo-1579584425555-c3ce17fd4351?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=300&q=80" alt="寿司職人体験" class="event-image">
           <div class="event-content">
-            <h5>和食基本講座</h5>
-            <p class="text-muted">毎月第1土曜日 10:00〜13:00</p>
-            <p>だしの取り方から基本の和食料理まで学べる初心者向け講座。</p>
-            <div class="price-tag">¥5,000</div>
-            <button class="btn btn-japanese btn-sm mt-2">申し込む</button>
+            <span class="event-badge badge-cooking">料理教室</span>
+            <span class="availability-badge low">残り3席</span>
+            
+            <h4>寿司職人体験教室</h4>
+            <p class="text-muted mb-2">
+              <i class="fas fa-calendar me-1"></i>毎週日曜日
+              <i class="fas fa-clock ms-3 me-1"></i>10:00〜13:00
+            </p>
+            
+            <div class="event-details">
+              <p>現役寿司職人による本格的な寿司作り体験。シャリの握り方から盛り付けまで学べます。</p>
+              
+              <ul class="feature-list">
+                <li>魚の捌き方デモンストレーション</li>
+                <li>シャリの握り方実習</li>
+                <li>5種類の握り寿司作成</li>
+                <li>巻物と軍艦巻きの作成</li>
+                <li>修了証発行</li>
+              </ul>
+            </div>
+            
+            <div class="price-tag">¥8,800</div>
+            
+            <div class="d-grid gap-2 d-md-flex justify-content-md-start">
+              <button class="btn btn-japanese me-md-2" onclick="openBookingModal('sushi')">
+                <i class="fas fa-calendar-plus me-1"></i>申し込む
+              </button>
+              <button class="btn btn-outline-japanese" onclick="showEventDetails('sushi')">
+                <i class="fas fa-info-circle me-1"></i>詳細
+              </button>
+            </div>
           </div>
         </div>
       </div>
 
-      <div class="col-md-6">
+      <!-- Wagyu Cooking -->
+      <div class="col-md-6 mb-4" data-category="cooking">
         <div class="event-card">
-          <img src="https://images.unsplash.com/photo-1565557623262-b51c2513a641?w=400&h=200&fit=crop" alt="パスタマスタークラス" class="event-image">
+          <img src="https://images.unsplash.com/photo-1594048504350-9d5744ef5454?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=300&q=80" alt="和牛料理教室" class="event-image">
           <div class="event-content">
-            <h5>パスタマスタークラス</h5>
-            <p class="text-muted">毎月第3日曜日 14:00〜17:00</p>
-            <p>本場イタリアンシェフ直伝のパスタ作りを学ぶ特別クラス。</p>
-            <div class="price-tag">¥6,500</div>
-            <button class="btn btn-japanese btn-sm mt-2">申し込む</button>
+            <span class="event-badge badge-cooking">料理教室</span>
+            <span class="event-badge">プレミアム</span>
+            <span class="availability-badge">空席あり</span>
+            
+            <h4>A5和牛料理教室</h4>
+            <p class="text-muted mb-2">
+              <i class="fas fa-calendar me-1"></i>毎月第2土曜日
+              <i class="fas fa-clock ms-3 me-1"></i>15:00〜18:00
+            </p>
+            
+            <div class="event-details">
+              <p>最高級A5ランク和牛を使用した料理教室。ステーキ、しゃぶしゃぶ、すき焼きの作り方を学べます。</p>
+              
+              <ul class="feature-list">
+                <li>和牛の部位解説</li>
+                <li>ステーキの焼き方実習</li>
+                <li>しゃぶしゃぶの作り方</li>
+                <li>特製たれの調合</li>
+                <li>ソムリエによるワインペアリング</li>
+              </ul>
+            </div>
+            
+            <div class="price-tag">¥15,000</div>
+            
+            <div class="d-grid gap-2 d-md-flex justify-content-md-start">
+              <button class="btn btn-japanese me-md-2" onclick="openBookingModal('wagyu')">
+                <i class="fas fa-calendar-plus me-1"></i>申し込む
+              </button>
+              <button class="btn btn-outline-japanese" onclick="showEventDetails('wagyu')">
+                <i class="fas fa-info-circle me-1"></i>詳細
+              </button>
+            </div>
           </div>
         </div>
       </div>
     </div>
 
     <!-- Event Calendar -->
-    <div class="calendar-highlight mt-5">
-      <h4 class="mb-3">📅 イベントカレンダー</h4>
-      <p>今月のイベントスケジュール</p>
+    <div class="calendar-highlight">
+      <h4 class="mb-3"><i class="fas fa-calendar-alt me-2"></i>今月のイベントカレンダー</h4>
       <div class="row text-center mt-4">
-        <div class="col-md-3 mb-3">
-          <div class="h5">2/10-14</div>
-          <small>バレンタイン特別ディナー</small>
+        <div class="col-md-2 col-4 mb-3">
+          <div class="h5 text-warning">2/3</div>
+          <small>節分恵方巻</small>
         </div>
-        <div class="col-md-3 mb-3">
-          <div class="h5">毎週金曜</div>
-          <small>ライブジャズナイト</small>
+        <div class="col-md-2 col-4 mb-3">
+          <div class="h5 text-info">2/10-14</div>
+          <small>バレンタイン会席</small>
         </div>
-        <div class="col-md-3 mb-3">
-          <div class="h5">2/20</div>
-          <small>ワイン試飲会</small>
+        <div class="col-md-2 col-4 mb-3">
+          <div class="h5 text-success">毎週土曜</div>
+          <small>茶道体験</small>
         </div>
-        <div class="col-md-3 mb-3">
-          <div class="h5">3/3</div>
-          <small>ひな祭り特別メニュー</small>
+        <div class="col-md-2 col-4 mb-3">
+          <div class="h5 text-primary">毎週日曜</div>
+          <small>寿司教室</small>
+        </div>
+        <div class="col-md-2 col-4 mb-3">
+          <div class="h5 text-danger">2/25</div>
+          <small>和牛教室</small>
+        </div>
+        <div class="col-md-2 col-4 mb-3">
+          <div class="h5" style="color: #9c27b0;">3/3</div>
+          <small>ひな祭り</small>
         </div>
       </div>
     </div>
   </div>
 
+  <!-- Booking Modal -->
+  <div class="modal fade" id="bookingModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="bookingModalTitle">イベント予約</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <div id="bookingFormContent">
+            <!-- Dynamic content will be loaded here -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  
   <script>
     // Check authentication
     const currentUser = JSON.parse(localStorage.getItem('user'));
     if (!currentUser) {
       window.location.href = 'login.html';
+    }
+
+    // Initialize Supabase
+    const SUPABASE_URL = 'https://nfcjbjohxzaikelxgmjg.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5mY2piam9oeHphaWtlbHhnbWpnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjEwNTgzMjAsImV4cCI6MjA3NjYzNDMyMH0.u0ta1NxSDbJ_9lf1TcMp3M0-_vNNBs6HByOj8wtKsX4';
+    
+    const { createClient } = supabase;
+    const supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    // Event data
+    const events = {
+      valentine: {
+        title: "バレンタイン特別会席",
+        price: 12800,
+        date: "2024-02-14",
+        time: "18:00",
+        duration: "2.5時間",
+        maxGuests: 20,
+        description: "恋人たちのための特別会席料理"
+      },
+      tea: {
+        title: "茶道体験と和菓子",
+        price: 6500,
+        date: "2024-02-17",
+        time: "14:00",
+        duration: "2時間",
+        maxGuests: 8,
+        description: "本格的な茶道体験"
+      },
+      sushi: {
+        title: "寿司職人体験教室",
+        price: 8800,
+        date: "2024-02-18",
+        time: "10:00",
+        duration: "3時間",
+        maxGuests: 6,
+        description: "寿司職人による料理教室"
+      },
+      wagyu: {
+        title: "A5和牛料理教室",
+        price: 15000,
+        date: "2024-02-25",
+        time: "15:00",
+        duration: "3時間",
+        maxGuests: 8,
+        description: "最高級和牛を使用した料理教室"
+      }
+    };
+
+    // Filter functionality
+    document.querySelectorAll('.filter-btn').forEach(button => {
+      button.addEventListener('click', function() {
+        document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+        this.classList.add('active');
+        
+        const filter = this.getAttribute('data-filter');
+        filterEvents(filter);
+      });
+    });
+
+    function filterEvents(filter) {
+      const events = document.querySelectorAll('.event-container > div');
+      events.forEach(event => {
+        if (filter === 'all' || event.getAttribute('data-category').includes(filter)) {
+          event.style.display = 'block';
+        } else {
+          event.style.display = 'none';
+        }
+      });
+    }
+
+    // Booking modal functionality
+    function openBookingModal(eventId) {
+      const event = events[eventId];
+      if (!event) return;
+      
+      const modal = new bootstrap.Modal(document.getElementById('bookingModal'));
+      const modalTitle = document.getElementById('bookingModalTitle');
+      const formContent = document.getElementById('bookingFormContent');
+      
+      modalTitle.textContent = `${event.title} - 予約`;
+      
+      formContent.innerHTML = `
+        <div class="row">
+          <div class="col-md-6">
+            <div class="mb-3">
+              <label class="form-label">イベント名</label>
+              <input type="text" class="form-control" value="${event.title}" readonly>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">日付 <span class="text-danger">*</span></label>
+              <input type="date" class="form-control" id="eventDate" value="${event.date}" min="${new Date().toISOString().split('T')[0]}" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">時間 <span class="text-danger">*</span></label>
+              <select class="form-select" id="eventTime" required>
+                <option value="${event.time}">${event.time}</option>
+                <option value="18:00">18:00</option>
+                <option value="18:30">18:30</option>
+                <option value="19:00">19:00</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="mb-3">
+              <label class="form-label">参加人数 <span class="text-danger">*</span></label>
+              <select class="form-select" id="eventGuests" required>
+                ${Array.from({length: event.maxGuests}, (_, i) => 
+                  `<option value="${i + 1}">${i + 1}名</option>`
+                ).join('')}
+              </select>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">お名前 <span class="text-danger">*</span></label>
+              <input type="text" class="form-control" id="customerName" value="${currentUser.name}" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">電話番号 <span class="text-danger">*</span></label>
+              <input type="tel" class="form-control" id="customerPhone" placeholder="03-1234-5678" required>
+            </div>
+          </div>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">特別リクエスト</label>
+          <textarea class="form-control" id="specialRequests" rows="3" placeholder="アレルギーやご要望があればご記入ください"></textarea>
+        </div>
+        <div class="alert alert-info">
+          <strong>料金: ¥${event.price.toLocaleString()}</strong><br>
+          <small>※お飲み物は別途料金となります</small>
+        </div>
+        <div class="text-center">
+          <button type="button" class="btn btn-japanese btn-lg" onclick="submitEventBooking('${eventId}')" id="submitBookingBtn">
+            <i class="fas fa-check me-2"></i>予約を確定する
+          </button>
+        </div>
+      `;
+      
+      modal.show();
+    }
+
+    async function submitEventBooking(eventId) {
+      const event = events[eventId];
+      const submitBtn = document.getElementById('submitBookingBtn');
+      const loadingSpinner = document.getElementById('loadingSpinner');
+      
+      // Show loading
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>処理中...';
+      loadingSpinner.style.display = 'block';
+
+      const formData = {
+        eventId: eventId,
+        eventName: event.title,
+        date: document.getElementById('eventDate').value,
+        time: document.getElementById('eventTime').value,
+        guests: parseInt(document.getElementById('eventGuests').value),
+        customerName: document.getElementById('customerName').value,
+        customerPhone: document.getElementById('customerPhone').value,
+        customerEmail: currentUser.email,
+        specialRequests: document.getElementById('specialRequests').value,
+        totalAmount: event.price * parseInt(document.getElementById('eventGuests').value)
+      };
+
+      // Validate form
+      if (!formData.date || !formData.customerName || !formData.customerPhone) {
+        alert('必須項目を入力してください');
+        resetButtonState();
+        return;
+      }
+
+      try {
+        console.log('Submitting event booking:', formData);
+
+        // Insert event booking
+        const { data, error } = await supabaseClient
+          .from('event_bookings')
+          .insert([{
+            user_id: currentUser.id,
+            event_name: formData.eventName,
+            event_date: formData.date,
+            event_time: formData.time,
+            guests: formData.guests,
+            customer_name: formData.customerName,
+            customer_phone: formData.customerPhone,
+            customer_email: formData.customerEmail,
+            special_requests: formData.specialRequests,
+            total_amount: formData.totalAmount,
+            status: 'confirmed'
+          }])
+          .select();
+
+        if (error) {
+          console.error('Supabase error:', error);
+          throw error;
+        }
+
+        console.log('Booking successful:', data);
+
+        // Close modal and show success message
+        bootstrap.Modal.getInstance(document.getElementById('bookingModal')).hide();
+        
+        // Show success notification
+        showNotification(
+          `✅ ${event.title}の予約が完了しました！`, 
+          'success',
+          `予約日: ${formData.date} ${formData.time}<br>参加人数: ${formData.guests}名<br>合計金額: ¥${formData.totalAmount.toLocaleString()}`
+        );
+
+      } catch (error) {
+        console.error('Booking error:', error);
+        showNotification(
+          '❌ 予約中にエラーが発生しました',
+          'error',
+          'もう一度お試しください。問題が解決しない場合はお電話でご連絡ください。'
+        );
+      } finally {
+        resetButtonState();
+      }
+    }
+
+    function resetButtonState() {
+      const submitBtn = document.getElementById('submitBookingBtn');
+      const loadingSpinner = document.getElementById('loadingSpinner');
+      
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = '<i class="fas fa-check me-2"></i>予約を確定する';
+      }
+      loadingSpinner.style.display = 'none';
+    }
+
+    function showNotification(title, type, message = '') {
+      // Create notification element
+      const notification = document.createElement('div');
+      notification.className = `alert alert-${type === 'success' ? 'success' : 'danger'} alert-dismissible fade show`;
+      notification.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        z-index: 9999;
+        min-width: 300px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      `;
+      
+      notification.innerHTML = `
+        <h6 class="alert-heading">${title}</h6>
+        ${message ? `<div class="small">${message}</div>` : ''}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+      `;
+      
+      document.body.appendChild(notification);
+      
+      // Auto remove after 5 seconds
+      setTimeout(() => {
+        if (notification.parentNode) {
+          notification.remove();
+        }
+      }, 5000);
+    }
+
+    function showEventDetails(eventId) {
+      const event = events[eventId];
+      if (!event) return;
+      
+      const modal = new bootstrap.Modal(document.getElementById('bookingModal'));
+      const modalTitle = document.getElementById('bookingModalTitle');
+      const formContent = document.getElementById('bookingFormContent');
+      
+      modalTitle.textContent = `${event.title} - 詳細`;
+      
+      formContent.innerHTML = `
+        <div class="text-center mb-4">
+          <h4>${event.title}</h4>
+          <div class="price-tag">¥${event.price.toLocaleString()}</div>
+        </div>
+        
+        <div class="event-details">
+          <p><strong>開催日時:</strong> ${event.date} ${event.time}</p>
+          <p><strong>所要時間:</strong> ${event.duration}</p>
+          <p><strong>最大人数:</strong> ${event.maxGuests}名</p>
+          <p><strong>内容:</strong> ${event.description}</p>
+        </div>
+        
+        <div class="text-center mt-4">
+          <button class="btn btn-japanese" onclick="openBookingModal('${eventId}')">
+            <i class="fas fa-calendar-plus me-2"></i>このイベントを予約する
+          </button>
+        </div>
+      `;
+      
+      modal.show();
     }
 
     // Logout
@@ -205,63 +830,9 @@
         window.location.href = 'index.html';
       }
     });
+
+    // Initialize filter
+    filterEvents('all');
   </script>
-  <script>
-// Initialize PWA
-document.addEventListener('DOMContentLoaded', async function() {
-    // Register Service Worker
-    const registration = await RestaurantUtils.PWA.registerServiceWorker();
-    
-    // Handle app install prompt
-    window.addEventListener('beforeinstallprompt', (e) => {
-        e.preventDefault();
-        RestaurantUtils.PWA.deferredPrompt = e;
-        RestaurantUtils.PWA.createInstallButton();
-    });
-    
-    // Track app installed event
-    window.addEventListener('appinstalled', () => {
-        RestaurantUtils.PWA.trackEvent('pwa_installed');
-        console.log('🎉 PWA installed successfully!');
-    });
-    
-    // Network status monitoring
-    RestaurantUtils.PWA.addNetworkListener((status) => {
-        const indicator = document.getElementById('networkStatus');
-        if (indicator) {
-            indicator.textContent = status === 'online' ? '🟢 オンライン' : '🔴 オフライン';
-            indicator.className = status === 'online' ? 'badge bg-success' : 'badge bg-danger';
-        }
-        
-        if (status === 'online') {
-            RestaurantUtils.PWA.showLocalNotification('接続回復', {
-                body: 'インターネット接続が回復しました'
-            });
-        }
-    });
-    
-    // Request notification permission on user interaction
-    document.addEventListener('click', async () => {
-        if (Notification.permission === 'default') {
-            await RestaurantUtils.PWA.requestNotificationPermission();
-        }
-    }, { once: true });
-    
-    // Add install button to navigation
-    setTimeout(() => {
-        RestaurantUtils.PWA.createInstallButton();
-    }, 2000);
-});
-
-// Show PWA install prompt (can be called from any button)
-function showPWAInstallPrompt() {
-    RestaurantUtils.PWA.showInstallPrompt();
-}
-
-// Check if app is running in standalone mode
-function isRunningAsPWA() {
-    return RestaurantUtils.PWA.isAppInstalled();
-}
-</script>
 </body>
 </html>
