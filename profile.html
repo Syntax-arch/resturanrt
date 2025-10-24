@@ -4,101 +4,448 @@
   <meta charset="UTF-8">
   <title>プロフィール - レストラン予約システム</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link href="style.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
   <style>
-    .profile-card {
-      border-radius: 15px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    :root {
+      --primary-color: #c62828;
+      --secondary-color: #f8bbd0;
+      --accent-color: #ff7043;
     }
+    
+    body {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      font-family: 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Yu Gothic', sans-serif;
+    }
+    
+    .sakura-decoration {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path fill="%23ffffff" d="M50 20c-5 0-10 3-13 8-3-5-8-8-13-8-8 0-15 7-15 15 0 10 10 18 25 30 15-12 25-20 25-30 0-8-7-15-15-15z"/></svg>');
+      background-size: 100px;
+      opacity: 0.1;
+      pointer-events: none;
+      z-index: -1;
+    }
+    
+    .navbar {
+      background: linear-gradient(135deg, var(--primary-color), #d32f2f) !important;
+      box-shadow: 0 4px 20px rgba(198, 40, 40, 0.3);
+    }
+    
+    .profile-card {
+      border-radius: 25px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+      border: none;
+      overflow: hidden;
+      margin: 2rem 0;
+    }
+    
     .profile-header {
       background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
       color: white;
-      border-radius: 15px 15px 0 0;
-      padding: 2rem;
+      padding: 3rem 2rem;
       text-align: center;
+      position: relative;
+      overflow: hidden;
     }
+    
+    .profile-header::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+      animation: float 6s ease-in-out infinite;
+    }
+    
+    @keyframes float {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-20px) rotate(180deg); }
+    }
+    
     .profile-avatar {
-      width: 100px;
-      height: 100px;
+      width: 120px;
+      height: 120px;
       background: rgba(255,255,255,0.2);
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
+      font-size: 3rem;
+      margin: 0 auto 1.5rem;
+      border: 4px solid rgba(255,255,255,0.3);
+      backdrop-filter: blur(10px);
+      position: relative;
+      z-index: 2;
+    }
+    
+    .profile-stats {
+      background: white;
+      border-radius: 20px;
+      padding: 2rem;
+      margin-top: -50px;
+      position: relative;
+      z-index: 3;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    }
+    
+    .stat-item {
+      text-align: center;
+      padding: 1rem;
+    }
+    
+    .stat-number {
       font-size: 2.5rem;
-      margin: 0 auto 1rem;
+      font-weight: bold;
+      color: var(--primary-color);
+      display: block;
+      line-height: 1;
+    }
+    
+    .stat-label {
+      font-size: 0.9rem;
+      color: #666;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    
+    .info-section {
+      background: white;
+      border-radius: 20px;
+      padding: 2.5rem;
+      margin: 1.5rem 0;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+    }
+    
+    .info-item {
+      display: flex;
+      align-items: center;
+      padding: 1.2rem 0;
+      border-bottom: 1px solid #f0f0f0;
+    }
+    
+    .info-item:last-child {
+      border-bottom: none;
+    }
+    
+    .info-icon {
+      width: 50px;
+      height: 50px;
+      background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 1.2rem;
+      margin-right: 1.5rem;
+      flex-shrink: 0;
+    }
+    
+    .info-content {
+      flex: 1;
+    }
+    
+    .info-label {
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 0.3rem;
+    }
+    
+    .info-value {
+      color: #666;
+    }
+    
+    .badge-premium {
+      background: linear-gradient(135deg, #FFD700, #FFA500);
+      color: #000;
+      font-weight: 600;
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+    }
+    
+    .progress-ring {
+      width: 120px;
+      height: 120px;
+      margin: 0 auto;
+    }
+    
+    .progress-bg {
+      fill: none;
+      stroke: #f0f0f0;
+      stroke-width: 8;
+    }
+    
+    .progress-fill {
+      fill: none;
+      stroke: var(--primary-color);
+      stroke-width: 8;
+      stroke-linecap: round;
+      transform: rotate(-90deg);
+      transform-origin: 50% 50%;
+      transition: stroke-dasharray 0.3s ease;
+    }
+    
+    .btn-japanese {
+      background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+      color: white;
+      border: none;
+      border-radius: 50px;
+      padding: 12px 30px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+    
+    .btn-japanese:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(198, 40, 40, 0.3);
+      color: white;
+    }
+    
+    .membership-card {
+      background: linear-gradient(135deg, #2c3e50, #34495e);
+      color: white;
+      border-radius: 20px;
+      padding: 2rem;
+      margin: 1.5rem 0;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .membership-card::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+    }
+    
+    .level-indicator {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 1rem;
+    }
+    
+    .level-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #34495e;
+    }
+    
+    .level-dot.active {
+      background: #e74c3c;
+      box-shadow: 0 0 10px rgba(231, 76, 60, 0.5);
     }
   </style>
 </head>
 <body>
   <div class="sakura-decoration"></div>
   
-  <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #c62828;">
+  <nav class="navbar navbar-expand-lg navbar-dark">
     <div class="container">
       <a class="navbar-brand fw-bold" href="dashboard.html">
-        🍣 レストラン予約システム
+        <i class="fas fa-utensils me-2"></i>🍣 レストラン予約システム
       </a>
       <div class="navbar-nav ms-auto">
-        <a href="dashboard.html" class="btn btn-outline-light btn-sm me-2">ダッシュボード</a>
-        <button class="btn btn-outline-light btn-sm" id="logoutBtn">ログアウト</button>
+        <a href="dashboard.html" class="btn btn-outline-light btn-sm me-2">
+          <i class="fas fa-home me-1"></i>ダッシュボード
+        </a>
+        <button class="btn btn-outline-light btn-sm" id="logoutBtn">
+          <i class="fas fa-sign-out-alt me-1"></i>ログアウト
+        </button>
       </div>
     </div>
   </nav>
 
-  <div class="container mt-4">
+  <div class="container">
     <div class="row justify-content-center">
-      <div class="col-md-8">
-        <div class="card profile-card">
+      <div class="col-lg-10">
+        <!-- Profile Header -->
+        <div class="profile-card">
           <div class="profile-header">
-            <div class="profile-avatar">👤</div>
-            <h3 id="userName">ユーザー名</h3>
-            <p class="mb-0">プロフィール情報</p>
+            <div class="profile-avatar">
+              <i class="fas fa-user"></i>
+            </div>
+            <h2 id="userName" class="mb-2">山田 太郎</h2>
+            <p class="mb-3">ゴールド会員</p>
+            <span class="badge-premium">
+              <i class="fas fa-crown me-1"></i>プレミアムメンバー
+            </span>
           </div>
           
-          <div class="card-body p-4">
-            <div class="row">
-              <div class="col-md-6">
-                <div class="mb-4">
-                  <h5>基本情報</h5>
-                  <div class="border-bottom pb-3 mb-3">
-                    <strong>名前:</strong><br>
-                    <span id="profileName" class="text-muted">-</span>
-                  </div>
-                  <div class="border-bottom pb-3 mb-3">
-                    <strong>メールアドレス:</strong><br>
-                    <span id="profileEmail" class="text-muted">-</span>
-                  </div>
-                  <div class="border-bottom pb-3">
-                    <strong>登録日:</strong><br>
-                    <span id="profileJoinDate" class="text-muted">-</span>
-                  </div>
+          <!-- Profile Stats -->
+          <div class="profile-stats">
+            <div class="row text-center">
+              <div class="col-md-3 col-6">
+                <div class="stat-item">
+                  <span class="stat-number" id="totalReservations">12</span>
+                  <span class="stat-label">総予約数</span>
                 </div>
               </div>
-              
-              <div class="col-md-6">
-                <div class="mb-4">
-                  <h5>予約統計</h5>
-                  <div class="border-bottom pb-3 mb-3">
-                    <strong>総予約数:</strong><br>
-                    <span id="totalReservations" class="text-muted">0</span>
-                  </div>
-                  <div class="border-bottom pb-3 mb-3">
-                    <strong>今後の予約:</strong><br>
-                    <span id="upcomingReservations" class="text-muted">0</span>
-                  </div>
-                  <div class="border-bottom pb-3">
-                    <strong>過去の予約:</strong><br>
-                    <span id="pastReservations" class="text-muted">0</span>
-                  </div>
+              <div class="col-md-3 col-6">
+                <div class="stat-item">
+                  <span class="stat-number" id="upcomingReservations">3</span>
+                  <span class="stat-label">今後の予約</span>
                 </div>
               </div>
-            </div>
-            
-            <div class="text-center mt-4">
-              <button class="btn btn-japanese me-2" onclick="editProfile()">プロフィール編集</button>
-              <button class="btn btn-outline-secondary" onclick="window.history.back()">戻る</button>
+              <div class="col-md-3 col-6">
+                <div class="stat-item">
+                  <span class="stat-number" id="pastReservations">9</span>
+                  <span class="stat-label">過去の予約</span>
+                </div>
+              </div>
+              <div class="col-md-3 col-6">
+                <div class="stat-item">
+                  <span class="stat-number">85%</span>
+                  <span class="stat-label">来店率</span>
+                </div>
+              </div>
             </div>
           </div>
+        </div>
+
+        <!-- Membership Progress -->
+        <div class="membership-card">
+          <div class="row align-items-center">
+            <div class="col-md-8">
+              <h5 class="mb-3"><i class="fas fa-trophy me-2"></i>会員ステータス</h5>
+              <p class="mb-3">あと5回のご来店でプラチナ会員に昇格！</p>
+              <div class="level-indicator">
+                <span class="level-dot active"></span>
+                <span class="level-dot active"></span>
+                <span class="level-dot active"></span>
+                <span class="level-dot"></span>
+                <span class="level-dot"></span>
+              </div>
+            </div>
+            <div class="col-md-4 text-center">
+              <div class="progress-ring">
+                <svg width="120" height="120" viewBox="0 0 120 120">
+                  <circle class="progress-bg" cx="60" cy="60" r="54"></circle>
+                  <circle class="progress-fill" cx="60" cy="60" r="54" 
+                          stroke-dasharray="339.292" stroke-dashoffset="67.858"></circle>
+                  <text x="60" y="65" text-anchor="middle" font-size="16" font-weight="bold" fill="white">60%</text>
+                </svg>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Personal Information -->
+        <div class="info-section">
+          <h4 class="mb-4"><i class="fas fa-user-circle me-2"></i>基本情報</h4>
+          <div class="info-item">
+            <div class="info-icon">
+              <i class="fas fa-user"></i>
+            </div>
+            <div class="info-content">
+              <div class="info-label">お名前</div>
+              <div class="info-value" id="profileName">山田 太郎</div>
+            </div>
+          </div>
+          <div class="info-item">
+            <div class="info-icon">
+              <i class="fas fa-envelope"></i>
+            </div>
+            <div class="info-content">
+              <div class="info-label">メールアドレス</div>
+              <div class="info-value" id="profileEmail">yamada@example.com</div>
+            </div>
+          </div>
+          <div class="info-item">
+            <div class="info-icon">
+              <i class="fas fa-calendar-alt"></i>
+            </div>
+            <div class="info-content">
+              <div class="info-label">登録日</div>
+              <div class="info-value" id="profileJoinDate">2024年1月15日</div>
+            </div>
+          </div>
+          <div class="info-item">
+            <div class="info-icon">
+              <i class="fas fa-phone"></i>
+            </div>
+            <div class="info-content">
+              <div class="info-label">電話番号</div>
+              <div class="info-value">03-1234-5678 <span class="badge bg-secondary ms-2">未確認</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Preferences -->
+        <div class="info-section">
+          <h4 class="mb-4"><i class="fas fa-heart me-2"></i>お好み設定</h4>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="info-item">
+                <div class="info-icon">
+                  <i class="fas fa-utensils"></i>
+                </div>
+                <div class="info-content">
+                  <div class="info-label">好きな料理</div>
+                  <div class="info-value">和食・寿司・焼肉</div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="info-item">
+                <div class="info-icon">
+                  <i class="fas fa-wine-glass-alt"></i>
+                </div>
+                <div class="info-content">
+                  <div class="info-label">飲み物</div>
+                  <div class="info-value">日本酒・ビール</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="info-item">
+                <div class="info-icon">
+                  <i class="fas fa-birthday-cake"></i>
+                </div>
+                <div class="info-content">
+                  <div class="info-label">アレルギー</div>
+                  <div class="info-value">エビ・カニ</div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="info-item">
+                <div class="info-icon">
+                  <i class="fas fa-chair"></i>
+                </div>
+                <div class="info-content">
+                  <div class="info-label">席の希望</div>
+                  <div class="info-value">個室希望</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="text-center mt-5">
+          <button class="btn btn-japanese me-3" onclick="editProfile()">
+            <i class="fas fa-edit me-2"></i>プロフィール編集
+          </button>
+          <button class="btn btn-outline-primary me-3" onclick="showReservationHistory()">
+            <i class="fas fa-history me-2"></i>予約履歴
+          </button>
+          <button class="btn btn-outline-secondary" onclick="window.history.back()">
+            <i class="fas fa-arrow-left me-2"></i>戻る
+          </button>
         </div>
       </div>
     </div>
@@ -106,7 +453,7 @@
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
-    // Check authentication
+    // ユーザー認証チェック
     const currentUser = JSON.parse(localStorage.getItem('user'));
     if (!currentUser) {
       window.location.href = 'login.html';
@@ -117,17 +464,17 @@
       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5mY2piam9oeHphaWtlbHhnbWpnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjEwNTgzMjAsImV4cCI6MjA3NjYzNDMyMH0.u0ta1NxSDbJ_9lf1TcMp3M0-_vNNBs6HByOj8wtKsX4'
     );
 
-    // Load profile data
+    // プロフィールデータの読み込み
     async function loadProfileData() {
       try {
-        // Update basic info
+        // 基本情報の更新
         document.getElementById('userName').textContent = currentUser.name;
         document.getElementById('profileName').textContent = currentUser.name;
         document.getElementById('profileEmail').textContent = currentUser.email;
         document.getElementById('profileJoinDate').textContent = 
           currentUser.created_at ? new Date(currentUser.created_at).toLocaleDateString('ja-JP') : '今日';
 
-        // Load reservation stats
+        // 予約統計の読み込み
         const { data: reservations, error } = await supabase
           .from('reservations')
           .select('*')
@@ -144,15 +491,20 @@
           document.getElementById('pastReservations').textContent = past;
         }
       } catch (error) {
-        console.error('Error loading profile data:', error);
+        console.error('プロフィールデータの読み込みエラー:', error);
       }
     }
 
     function editProfile() {
-      alert('プロフィール編集機能は近日実装予定です');
+      // 実際の実装ではモーダルや別ページに移動
+      alert('プロフィール編集画面を表示します');
     }
 
-    // Logout
+    function showReservationHistory() {
+      window.location.href = 'reservations.html';
+    }
+
+    // ログアウト
     document.getElementById('logoutBtn').addEventListener('click', () => {
       if (confirm('ログアウトしますか？')) {
         localStorage.removeItem('user');
@@ -160,65 +512,8 @@
       }
     });
 
-    // Load data
+    // データの読み込み
     loadProfileData();
   </script>
-  <script>
-// Initialize PWA
-document.addEventListener('DOMContentLoaded', async function() {
-    // Register Service Worker
-    const registration = await RestaurantUtils.PWA.registerServiceWorker();
-    
-    // Handle app install prompt
-    window.addEventListener('beforeinstallprompt', (e) => {
-        e.preventDefault();
-        RestaurantUtils.PWA.deferredPrompt = e;
-        RestaurantUtils.PWA.createInstallButton();
-    });
-    
-    // Track app installed event
-    window.addEventListener('appinstalled', () => {
-        RestaurantUtils.PWA.trackEvent('pwa_installed');
-        console.log('🎉 PWA installed successfully!');
-    });
-    
-    // Network status monitoring
-    RestaurantUtils.PWA.addNetworkListener((status) => {
-        const indicator = document.getElementById('networkStatus');
-        if (indicator) {
-            indicator.textContent = status === 'online' ? '🟢 オンライン' : '🔴 オフライン';
-            indicator.className = status === 'online' ? 'badge bg-success' : 'badge bg-danger';
-        }
-        
-        if (status === 'online') {
-            RestaurantUtils.PWA.showLocalNotification('接続回復', {
-                body: 'インターネット接続が回復しました'
-            });
-        }
-    });
-    
-    // Request notification permission on user interaction
-    document.addEventListener('click', async () => {
-        if (Notification.permission === 'default') {
-            await RestaurantUtils.PWA.requestNotificationPermission();
-        }
-    }, { once: true });
-    
-    // Add install button to navigation
-    setTimeout(() => {
-        RestaurantUtils.PWA.createInstallButton();
-    }, 2000);
-});
-
-// Show PWA install prompt (can be called from any button)
-function showPWAInstallPrompt() {
-    RestaurantUtils.PWA.showInstallPrompt();
-}
-
-// Check if app is running in standalone mode
-function isRunningAsPWA() {
-    return RestaurantUtils.PWA.isAppInstalled();
-}
-</script>
 </body>
 </html>

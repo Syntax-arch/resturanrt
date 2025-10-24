@@ -4,125 +4,515 @@
   <meta charset="UTF-8">
   <title>店舗情報 - レストラン予約システム</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link href="style.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
   <style>
+    :root {
+      --primary-color: #c62828;
+      --secondary-color: #f8bbd0;
+      --accent-color: #ff7043;
+    }
+    
+    body {
+      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      min-height: 100vh;
+      font-family: 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Yu Gothic', sans-serif;
+    }
+    
+    .sakura-decoration {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path fill="%23f8bbd0" d="M50 20c-5 0-10 3-13 8-3-5-8-8-13-8-8 0-15 7-15 15 0 10 10 18 25 30 15-12 25-20 25-30 0-8-7-15-15-15z"/></svg>');
+      background-size: 80px;
+      opacity: 0.1;
+      pointer-events: none;
+      z-index: -1;
+    }
+    
+    .navbar {
+      background: linear-gradient(135deg, var(--primary-color), #d32f2f) !important;
+      box-shadow: 0 4px 20px rgba(198, 40, 40, 0.3);
+    }
+    
+    .hero-section {
+      background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), 
+                  url('https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80');
+      background-size: cover;
+      background-position: center;
+      color: white;
+      padding: 100px 0;
+      text-align: center;
+      margin-bottom: 4rem;
+      border-radius: 0 0 30px 30px;
+    }
+    
     .info-card {
       background: white;
-      border-radius: 12px;
-      padding: 2rem;
-      margin-bottom: 1.5rem;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      border-radius: 20px;
+      padding: 2.5rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      border: none;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      position: relative;
+      overflow: hidden;
     }
+    
+    .info-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+    }
+    
+    .info-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+    }
+    
     .info-icon {
-      font-size: 3rem;
-      margin-bottom: 1rem;
+      font-size: 3.5rem;
+      margin-bottom: 1.5rem;
+      background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      display: inline-block;
     }
-    .map-placeholder {
+    
+    .feature-img {
+      width: 100%;
+      height: 250px;
+      object-fit: cover;
+      border-radius: 15px;
+      margin-bottom: 1rem;
+      transition: transform 0.3s ease;
+    }
+    
+    .feature-img:hover {
+      transform: scale(1.05);
+    }
+    
+    .map-container {
       background: linear-gradient(135deg, #667eea, #764ba2);
       height: 300px;
-      border-radius: 12px;
+      border-radius: 15px;
       display: flex;
       align-items: center;
       justify-content: center;
       color: white;
       font-size: 1.2rem;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .map-container::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.3);
+    }
+    
+    .stats-number {
+      font-size: 2.5rem;
+      font-weight: bold;
+      color: var(--primary-color);
+      display: block;
+    }
+    
+    .stats-label {
+      font-size: 0.9rem;
+      color: #666;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    
+    .amenity-item {
+      display: flex;
+      align-items: center;
+      margin-bottom: 1rem;
+      padding: 1rem;
+      background: #f8f9fa;
+      border-radius: 10px;
+      transition: background 0.3s ease;
+    }
+    
+    .amenity-item:hover {
+      background: #e9ecef;
+    }
+    
+    .amenity-icon {
+      font-size: 1.5rem;
+      margin-right: 1rem;
+      color: var(--primary-color);
+    }
+    
+    .floating-btn {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+      color: white;
+      border: none;
+      border-radius: 50px;
+      padding: 15px 25px;
+      box-shadow: 0 10px 25px rgba(198, 40, 40, 0.4);
+      z-index: 1000;
+      transition: transform 0.3s ease;
+    }
+    
+    .floating-btn:hover {
+      transform: translateY(-3px);
+    }
+    
+    .section-title {
+      position: relative;
+      padding-bottom: 1rem;
+      margin-bottom: 2rem;
+      text-align: center;
+    }
+    
+    .section-title::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 3px;
+      background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+      border-radius: 2px;
     }
   </style>
 </head>
 <body>
   <div class="sakura-decoration"></div>
   
-  <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #c62828;">
+  <!-- Navigation -->
+  <nav class="navbar navbar-expand-lg navbar-dark">
     <div class="container">
       <a class="navbar-brand fw-bold" href="dashboard.html">
-        🍣 レストラン予約システム
+        <i class="fas fa-utensils me-2"></i>🍣 和食レストラン 桜
       </a>
       <div class="navbar-nav ms-auto">
-        <a href="dashboard.html" class="btn btn-outline-light btn-sm me-2">ダッシュボード</a>
-        <button class="btn btn-outline-light btn-sm" id="logoutBtn">ログアウト</button>
+        <a href="dashboard.html" class="btn btn-outline-light btn-sm me-2">
+          <i class="fas fa-home me-1"></i>ダッシュボード
+        </a>
+        <button class="btn btn-outline-light btn-sm" id="logoutBtn">
+          <i class="fas fa-sign-out-alt me-1"></i>ログアウト
+        </button>
       </div>
     </div>
   </nav>
 
-  <div class="container mt-4">
-    <div class="text-center mb-5">
-      <h1>店舗情報</h1>
-      <p class="lead">レストラン「Sakura Japanese Cuisine」について</p>
+  <!-- Hero Section -->
+  <div class="hero-section">
+    <div class="container">
+      <h1 class="display-4 fw-bold mb-3">和食レストラン 桜</h1>
+      <p class="lead mb-4">伝統と革新が調和する、本格日本料理の世界へ</p>
+      <div class="row justify-content-center">
+        <div class="col-auto">
+          <span class="badge bg-light text-dark me-2 p-2"><i class="fas fa-star me-1"></i>4.8/5.0</span>
+          <span class="badge bg-light text-dark me-2 p-2"><i class="fas fa-award me-1"></i>ミシュラン推薦</span>
+          <span class="badge bg-light text-dark p-2"><i class="fas fa-leaf me-1"></i>厳選食材</span>
+        </div>
+      </div>
     </div>
-<script>
-// Initialize PWA
-document.addEventListener('DOMContentLoaded', async function() {
-    // Register Service Worker
-    const registration = await RestaurantUtils.PWA.registerServiceWorker();
-    
-    // Handle app install prompt
-    window.addEventListener('beforeinstallprompt', (e) => {
-        e.preventDefault();
-        RestaurantUtils.PWA.deferredPrompt = e;
-        RestaurantUtils.PWA.createInstallButton();
-    });
-    
-    // Track app installed event
-    window.addEventListener('appinstalled', () => {
-        RestaurantUtils.PWA.trackEvent('pwa_installed');
-        console.log('🎉 PWA installed successfully!');
-    });
-    
-    // Network status monitoring
-    RestaurantUtils.PWA.addNetworkListener((status) => {
-        const indicator = document.getElementById('networkStatus');
-        if (indicator) {
-            indicator.textContent = status === 'online' ? '🟢 オンライン' : '🔴 オフライン';
-            indicator.className = status === 'online' ? 'badge bg-success' : 'badge bg-danger';
-        }
-        
-        if (status === 'online') {
-            RestaurantUtils.PWA.showLocalNotification('接続回復', {
-                body: 'インターネット接続が回復しました'
-            });
-        }
-    });
-    
-    // Request notification permission on user interaction
-    document.addEventListener('click', async () => {
-        if (Notification.permission === 'default') {
-            await RestaurantUtils.PWA.requestNotificationPermission();
-        }
-    }, { once: true });
-    
-    // Add install button to navigation
-    setTimeout(() => {
-        RestaurantUtils.PWA.createInstallButton();
-    }, 2000);
-});
+  </div>
 
-// Show PWA install prompt (can be called from any button)
-function showPWAInstallPrompt() {
-    RestaurantUtils.PWA.showInstallPrompt();
-}
+  <div class="container">
+    <!-- Restaurant Overview -->
+    <div class="row mb-5">
+      <div class="col-12">
+        <div class="info-card text-center">
+          <h2 class="section-title">当店について</h2>
+          <p class="lead mb-4">創業50年、伝統の味を現代に受け継ぐ和食レストラン</p>
+          <div class="row">
+            <div class="col-md-3 col-6 mb-3">
+              <span class="stats-number">50</span>
+              <span class="stats-label">年の歴史</span>
+            </div>
+            <div class="col-md-3 col-6 mb-3">
+              <span class="stats-number">38</span>
+              <span class="stats-label">席数</span>
+            </div>
+            <div class="col-md-3 col-6 mb-3">
+              <span class="stats-number">2</span>
+              <span class="stats-label">個室</span>
+            </div>
+            <div class="col-md-3 col-6 mb-3">
+              <span class="stats-number">98%</span>
+              <span class="stats-label">満足度</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
 
-// Check if app is running in standalone mode
-function isRunningAsPWA() {
-    return RestaurantUtils.PWA.isAppInstalled();
-}
-</script>
     <div class="row">
-      <!-- Basic Info -->
-      <div class="col-md-6 mb-4">
+      <!-- Basic Information -->
+      <div class="col-lg-6 mb-4">
         <div class="info-card h-100">
           <div class="text-center">
             <div class="info-icon">🏮</div>
             <h3>基本情報</h3>
           </div>
           <div class="mt-4">
-            <div class="border-bottom pb-2 mb-2">
-              <strong>店名:</strong> Sakura Japanese Cuisine
+            <div class="amenity-item">
+              <i class="fas fa-store amenity-icon"></i>
+              <div>
+                <strong>店名</strong><br>
+                <span class="text-muted">和食レストラン 桜</span>
+              </div>
             </div>
-            <div class="border-bottom pb-2 mb-2">
-              <strong>ジャンル:</strong> 日本料理・創作和食
+            <div class="amenity-item">
+              <i class="fas fa-utensils amenity-icon"></i>
+              <div>
+                <strong>ジャンル</strong><br>
+                <span class="text-muted">会席料理・創作和食・懐石</span>
+              </div>
             </div>
-            <div class="border-bottom pb-2 mb-2">
-              <strong>席数:</strong> カウンター8席、テーブル30席
+            <div class="amenity-item">
+              <i class="fas fa-chair amenity-icon"></i>
+              <div>
+                <strong>席数</strong><br>
+                <span class="text-muted">カウンター8席、テーブル30席</span>
+              </div>
             </div>
-            <div class="border-bottom pb-2 mb-2">
-              <strong>個室:</strong> 2室（4名〜8名様）
+            <div class="amenity-item">
+              <i class="fas fa-door-closed amenity-icon"></i>
+              <div>
+                <strong>個室</strong><br>
+                <span class="text-muted">2室（4名〜8名様）</span>
+              </div>
+            </div>
+            <div class="amenity-item">
+              <i class="fas fa-yen-sign amenity-icon"></i>
+              <div>
+                <strong>予算</strong><br>
+                <span class="text-muted">昼 ¥3,000〜¥5,000 / 夜 ¥8,000〜¥15,000</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Access Information -->
+      <div class="col-lg-6 mb-4">
+        <div class="info-card h-100">
+          <div class="text-center">
+            <div class="info-icon">📍</div>
+            <h3>アクセス情報</h3>
+          </div>
+          <div class="mt-4">
+            <div class="amenity-item">
+              <i class="fas fa-map-marker-alt amenity-icon"></i>
+              <div>
+                <strong>住所</strong><br>
+                <span class="text-muted">〒100-0001 東京都千代田区千代田1-1-1 東京ビル 3F</span>
+              </div>
+            </div>
+            <div class="amenity-item">
+              <i class="fas fa-train amenity-icon"></i>
+              <div>
+                <strong>最寄駅</strong><br>
+                <span class="text-muted">東京駅 丸の内南口より徒歩3分</span>
+              </div>
+            </div>
+            <div class="amenity-item">
+              <i class="fas fa-phone amenity-icon"></i>
+              <div>
+                <strong>電話番号</strong><br>
+                <span class="text-muted">03-1234-5678</span>
+              </div>
+            </div>
+            <div class="amenity-item">
+              <i class="fas fa-car amenity-icon"></i>
+              <div>
+                <strong>駐車場</strong><br>
+                <span class="text-muted">近隣のコインパーキングをご利用ください</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Restaurant Images -->
+    <div class="row mb-5">
+      <div class="col-12">
+        <div class="info-card">
+          <h2 class="section-title">店内の様子</h2>
+          <div class="row">
+            <div class="col-md-4 mb-3">
+              <img src="https://images.unsplash.com/photo-1544148103-0773bf10d330?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" 
+                   alt="店内全景" class="feature-img">
+              <p class="text-center text-muted">落ち着いた店内</p>
+            </div>
+            <div class="col-md-4 mb-3">
+              <img src="https://images.unsplash.com/photo-1589939705384-5185137a7f0f?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" 
+                   alt="カウンター席" class="feature-img">
+              <p class="text-center text-muted">職人と語れるカウンター</p>
+            </div>
+            <div class="col-md-4 mb-3">
+              <img src="https://images.unsplash.com/photo-1559329007-40df8a9345d8?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" 
+                   alt="個室" class="feature-img">
+              <p class="text-center text-muted">プライベートな個室</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Business Hours & Map -->
+    <div class="row">
+      <div class="col-lg-6 mb-4">
+        <div class="info-card">
+          <div class="text-center">
+            <div class="info-icon">🕒</div>
+            <h3>営業時間</h3>
+          </div>
+          <div class="mt-4">
+            <div class="amenity-item">
+              <i class="fas fa-sun amenity-icon"></i>
+              <div>
+                <strong>ランチ</strong><br>
+                <span class="text-muted">11:30〜14:30 (L.O. 14:00)</span>
+              </div>
+            </div>
+            <div class="amenity-item">
+              <i class="fas fa-moon amenity-icon"></i>
+              <div>
+                <strong>ディナー</strong><br>
+                <span class="text-muted">17:30〜22:00 (L.O. 21:00)</span>
+              </div>
+            </div>
+            <div class="amenity-item">
+              <i class="fas fa-calendar-times amenity-icon"></i>
+              <div>
+                <strong>定休日</strong><br>
+                <span class="text-muted">月曜日・年末年始</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="col-lg-6 mb-4">
+        <div class="info-card">
+          <div class="text-center">
+            <div class="info-icon">🗺️</div>
+            <h3>アクセスマップ</h3>
+          </div>
+          <div class="mt-4">
+            <div class="map-container">
+              <div class="text-center position-relative">
+                <i class="fas fa-map-marked-alt fa-3x mb-3"></i>
+                <h5>インタラクティブマップ</h5>
+                <p class="mb-0">クリックして詳細な地図を表示</p>
+              </div>
+            </div>
+            <div class="text-center mt-3">
+              <button class="btn btn-outline-primary">
+                <i class="fas fa-directions me-2"></i>経路を検索
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Features & Amenities -->
+    <div class="row mb-5">
+      <div class="col-12">
+        <div class="info-card">
+          <h2 class="section-title">設備・サービス</h2>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="amenity-item">
+                <i class="fas fa-wifi amenity-icon"></i>
+                <div>
+                  <strong>無料Wi-Fi</strong><br>
+                  <span class="text-muted">全席で高速インターネット接続</span>
+                </div>
+              </div>
+              <div class="amenity-item">
+                <i class="fas fa-credit-card amenity-icon"></i>
+                <div>
+                  <strong>各種決済対応</strong><br>
+                  <span class="text-muted">現金・クレジットカード・電子マネー</span>
+                </div>
+              </div>
+              <div class="amenity-item">
+                <i class="fas fa-wheelchair amenity-icon"></i>
+                <div>
+                  <strong>バリアフリー</strong><br>
+                  <span class="text-muted">車いすでもご来店いただけます</span>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="amenity-item">
+                <i class="fas fa-smoking-ban amenity-icon"></i>
+                <div>
+                  <strong>全面禁煙</strong><br>
+                  <span class="text-muted">快適な食事環境をご提供</span>
+                </div>
+              </div>
+              <div class="amenity-item">
+                <i class="fas fa-child amenity-icon"></i>
+                <div>
+                  <strong>キッズメニュー</strong><br>
+                  <span class="text-muted">お子様連れも歓迎</span>
+                </div>
+              </div>
+              <div class="amenity-item">
+                <i class="fas fa-gift amenity-icon"></i>
+                <div>
+                  <strong>記念日サービス</strong><br>
+                  <span class="text-muted">誕生日・記念日をサプライズでお祝い</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Floating Action Button -->
+  <button class="floating-btn" onclick="location.href='reservation.html'">
+    <i class="fas fa-calendar-plus me-2"></i>予約する
+  </button>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    // ログアウト機能
+    document.getElementById('logoutBtn').addEventListener('click', () => {
+      if (confirm('ログアウトしますか？')) {
+        localStorage.removeItem('user');
+        window.location.href = 'index.html';
+      }
+    });
+
+    // ユーザー認証チェック
+    const currentUser = JSON.parse(localStorage.getItem('user'));
+    if (!currentUser) {
+      window.location.href = 'login.html';
+    }
+
+    // 地図クリックイベント
+    document.querySelector('.map-container').addEventListener('click', () => {
+      alert('Google Mapsで場所を表示します');
+      // 実際の実装ではGoogle Maps APIを統合
+    });
+  </script>
+</body>
+</html>
