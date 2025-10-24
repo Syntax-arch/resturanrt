@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <title>プロフィール - レストラン予約システム</title>
+  <title>User Profile - Reservation System</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
   <style>
@@ -15,7 +15,7 @@
     body {
       background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
       min-height: 100vh;
-      font-family: 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Yu Gothic', sans-serif;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
     
     .sakura-decoration {
@@ -42,6 +42,7 @@
       border: none;
       overflow: hidden;
       margin: 2rem 0;
+      background: white;
     }
     
     .profile-header {
@@ -98,6 +99,11 @@
     .stat-item {
       text-align: center;
       padding: 1rem;
+      transition: transform 0.3s ease;
+    }
+    
+    .stat-item:hover {
+      transform: translateY(-5px);
     }
     
     .stat-number {
@@ -128,6 +134,14 @@
       align-items: center;
       padding: 1.2rem 0;
       border-bottom: 1px solid #f0f0f0;
+      transition: background-color 0.3s ease;
+    }
+    
+    .info-item:hover {
+      background-color: #f8f9fa;
+      border-radius: 10px;
+      padding-left: 1rem;
+      padding-right: 1rem;
     }
     
     .info-item:last-child {
@@ -168,6 +182,7 @@
       font-weight: 600;
       padding: 0.5rem 1rem;
       border-radius: 20px;
+      box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
     }
     
     .progress-ring {
@@ -200,11 +215,12 @@
       padding: 12px 30px;
       font-weight: 600;
       transition: all 0.3s ease;
+      box-shadow: 0 8px 25px rgba(198, 40, 40, 0.3);
     }
     
     .btn-japanese:hover {
       transform: translateY(-2px);
-      box-shadow: 0 10px 25px rgba(198, 40, 40, 0.3);
+      box-shadow: 0 12px 35px rgba(198, 40, 40, 0.4);
       color: white;
     }
     
@@ -216,6 +232,7 @@
       margin: 1.5rem 0;
       position: relative;
       overflow: hidden;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.2);
     }
     
     .membership-card::before {
@@ -233,18 +250,64 @@
       align-items: center;
       justify-content: space-between;
       margin-top: 1rem;
+      position: relative;
     }
     
     .level-dot {
-      width: 12px;
-      height: 12px;
+      width: 16px;
+      height: 16px;
       border-radius: 50%;
       background: #34495e;
+      border: 3px solid #2c3e50;
+      position: relative;
+      z-index: 2;
     }
     
     .level-dot.active {
       background: #e74c3c;
-      box-shadow: 0 0 10px rgba(231, 76, 60, 0.5);
+      box-shadow: 0 0 15px rgba(231, 76, 60, 0.6);
+      animation: pulse 2s infinite;
+    }
+    
+    .level-line {
+      position: absolute;
+      top: 50%;
+      left: 8px;
+      right: 8px;
+      height: 3px;
+      background: #34495e;
+      z-index: 1;
+    }
+    
+    .level-line-fill {
+      position: absolute;
+      top: 50%;
+      left: 8px;
+      width: 60%;
+      height: 3px;
+      background: #e74c3c;
+      z-index: 1;
+      transition: width 0.5s ease;
+    }
+    
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+    }
+    
+    .achievement-badge {
+      display: inline-flex;
+      align-items: center;
+      background: #f8f9fa;
+      border-radius: 20px;
+      padding: 0.5rem 1rem;
+      margin: 0.25rem;
+      font-size: 0.9rem;
+    }
+    
+    .achievement-icon {
+      margin-right: 0.5rem;
+      color: var(--primary-color);
     }
   </style>
 </head>
@@ -254,14 +317,14 @@
   <nav class="navbar navbar-expand-lg navbar-dark">
     <div class="container">
       <a class="navbar-brand fw-bold" href="dashboard.html">
-        <i class="fas fa-utensils me-2"></i>🍣 レストラン予約システム
+        <i class="fas fa-utensils me-2"></i>🍣 Reservation System
       </a>
       <div class="navbar-nav ms-auto">
         <a href="dashboard.html" class="btn btn-outline-light btn-sm me-2">
-          <i class="fas fa-home me-1"></i>ダッシュボード
+          <i class="fas fa-home me-1"></i>Dashboard
         </a>
         <button class="btn btn-outline-light btn-sm" id="logoutBtn">
-          <i class="fas fa-sign-out-alt me-1"></i>ログアウト
+          <i class="fas fa-sign-out-alt me-1"></i>Logout
         </button>
       </div>
     </div>
@@ -276,10 +339,10 @@
             <div class="profile-avatar">
               <i class="fas fa-user"></i>
             </div>
-            <h2 id="userName" class="mb-2">山田 太郎</h2>
-            <p class="mb-3">ゴールド会員</p>
+            <h2 id="userName" class="mb-2">Taro Yamada</h2>
+            <p class="mb-3">Gold Member</p>
             <span class="badge-premium">
-              <i class="fas fa-crown me-1"></i>プレミアムメンバー
+              <i class="fas fa-crown me-1"></i>Premium Member
             </span>
           </div>
           
@@ -289,25 +352,25 @@
               <div class="col-md-3 col-6">
                 <div class="stat-item">
                   <span class="stat-number" id="totalReservations">12</span>
-                  <span class="stat-label">総予約数</span>
+                  <span class="stat-label">Total Reservations</span>
                 </div>
               </div>
               <div class="col-md-3 col-6">
                 <div class="stat-item">
                   <span class="stat-number" id="upcomingReservations">3</span>
-                  <span class="stat-label">今後の予約</span>
+                  <span class="stat-label">Upcoming</span>
                 </div>
               </div>
               <div class="col-md-3 col-6">
                 <div class="stat-item">
                   <span class="stat-number" id="pastReservations">9</span>
-                  <span class="stat-label">過去の予約</span>
+                  <span class="stat-label">Past Visits</span>
                 </div>
               </div>
               <div class="col-md-3 col-6">
                 <div class="stat-item">
                   <span class="stat-number">85%</span>
-                  <span class="stat-label">来店率</span>
+                  <span class="stat-label">Visit Rate</span>
                 </div>
               </div>
             </div>
@@ -318,14 +381,27 @@
         <div class="membership-card">
           <div class="row align-items-center">
             <div class="col-md-8">
-              <h5 class="mb-3"><i class="fas fa-trophy me-2"></i>会員ステータス</h5>
-              <p class="mb-3">あと5回のご来店でプラチナ会員に昇格！</p>
+              <h5 class="mb-3"><i class="fas fa-trophy me-2"></i>Membership Status</h5>
+              <p class="mb-3">5 more visits to reach Platinum status!</p>
               <div class="level-indicator">
+                <div class="level-line"></div>
+                <div class="level-line-fill"></div>
                 <span class="level-dot active"></span>
                 <span class="level-dot active"></span>
                 <span class="level-dot active"></span>
                 <span class="level-dot"></span>
                 <span class="level-dot"></span>
+              </div>
+              <div class="mt-3">
+                <span class="achievement-badge">
+                  <i class="fas fa-utensils achievement-icon"></i>Food Explorer
+                </span>
+                <span class="achievement-badge">
+                  <i class="fas fa-star achievement-icon"></i>Regular Customer
+                </span>
+                <span class="achievement-badge">
+                  <i class="fas fa-calendar achievement-icon"></i>Early Bird
+                </span>
               </div>
             </div>
             <div class="col-md-4 text-center">
@@ -333,7 +409,7 @@
                 <svg width="120" height="120" viewBox="0 0 120 120">
                   <circle class="progress-bg" cx="60" cy="60" r="54"></circle>
                   <circle class="progress-fill" cx="60" cy="60" r="54" 
-                          stroke-dasharray="339.292" stroke-dashoffset="67.858"></circle>
+                          stroke-dasharray="339.292" stroke-dashoffset="135.717"></circle>
                   <text x="60" y="65" text-anchor="middle" font-size="16" font-weight="bold" fill="white">60%</text>
                 </svg>
               </div>
@@ -343,14 +419,14 @@
 
         <!-- Personal Information -->
         <div class="info-section">
-          <h4 class="mb-4"><i class="fas fa-user-circle me-2"></i>基本情報</h4>
+          <h4 class="mb-4"><i class="fas fa-user-circle me-2"></i>Personal Information</h4>
           <div class="info-item">
             <div class="info-icon">
               <i class="fas fa-user"></i>
             </div>
             <div class="info-content">
-              <div class="info-label">お名前</div>
-              <div class="info-value" id="profileName">山田 太郎</div>
+              <div class="info-label">Full Name</div>
+              <div class="info-value" id="profileName">Taro Yamada</div>
             </div>
           </div>
           <div class="info-item">
@@ -358,7 +434,7 @@
               <i class="fas fa-envelope"></i>
             </div>
             <div class="info-content">
-              <div class="info-label">メールアドレス</div>
+              <div class="info-label">Email Address</div>
               <div class="info-value" id="profileEmail">yamada@example.com</div>
             </div>
           </div>
@@ -367,8 +443,8 @@
               <i class="fas fa-calendar-alt"></i>
             </div>
             <div class="info-content">
-              <div class="info-label">登録日</div>
-              <div class="info-value" id="profileJoinDate">2024年1月15日</div>
+              <div class="info-label">Member Since</div>
+              <div class="info-value" id="profileJoinDate">January 15, 2024</div>
             </div>
           </div>
           <div class="info-item">
@@ -376,15 +452,15 @@
               <i class="fas fa-phone"></i>
             </div>
             <div class="info-content">
-              <div class="info-label">電話番号</div>
-              <div class="info-value">03-1234-5678 <span class="badge bg-secondary ms-2">未確認</span></div>
+              <div class="info-label">Phone Number</div>
+              <div class="info-value">03-1234-5678 <span class="badge bg-secondary ms-2">Unverified</span></div>
             </div>
           </div>
         </div>
 
         <!-- Preferences -->
         <div class="info-section">
-          <h4 class="mb-4"><i class="fas fa-heart me-2"></i>お好み設定</h4>
+          <h4 class="mb-4"><i class="fas fa-heart me-2"></i>Preferences</h4>
           <div class="row">
             <div class="col-md-6">
               <div class="info-item">
@@ -392,8 +468,8 @@
                   <i class="fas fa-utensils"></i>
                 </div>
                 <div class="info-content">
-                  <div class="info-label">好きな料理</div>
-                  <div class="info-value">和食・寿司・焼肉</div>
+                  <div class="info-label">Favorite Cuisine</div>
+                  <div class="info-value">Japanese, Sushi, Yakiniku</div>
                 </div>
               </div>
             </div>
@@ -403,8 +479,8 @@
                   <i class="fas fa-wine-glass-alt"></i>
                 </div>
                 <div class="info-content">
-                  <div class="info-label">飲み物</div>
-                  <div class="info-value">日本酒・ビール</div>
+                  <div class="info-label">Preferred Drinks</div>
+                  <div class="info-value">Sake, Beer</div>
                 </div>
               </div>
             </div>
@@ -416,8 +492,8 @@
                   <i class="fas fa-birthday-cake"></i>
                 </div>
                 <div class="info-content">
-                  <div class="info-label">アレルギー</div>
-                  <div class="info-value">エビ・カニ</div>
+                  <div class="info-label">Allergies</div>
+                  <div class="info-value">Shrimp, Crab</div>
                 </div>
               </div>
             </div>
@@ -427,8 +503,37 @@
                   <i class="fas fa-chair"></i>
                 </div>
                 <div class="info-content">
-                  <div class="info-label">席の希望</div>
-                  <div class="info-value">個室希望</div>
+                  <div class="info-label">Seating Preference</div>
+                  <div class="info-value">Private Room Preferred</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recent Activity -->
+        <div class="info-section">
+          <h4 class="mb-4"><i class="fas fa-history me-2"></i>Recent Activity</h4>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="info-item">
+                <div class="info-icon" style="background: #28a745;">
+                  <i class="fas fa-calendar-check"></i>
+                </div>
+                <div class="info-content">
+                  <div class="info-label">Last Reservation</div>
+                  <div class="info-value">March 15, 2024 - Dinner</div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="info-item">
+                <div class="info-icon" style="background: #ffc107;">
+                  <i class="fas fa-star"></i>
+                </div>
+                <div class="info-content">
+                  <div class="info-label">Loyalty Points</div>
+                  <div class="info-value">1,250 points <span class="badge bg-warning text-dark">Gold Tier</span></div>
                 </div>
               </div>
             </div>
@@ -438,13 +543,13 @@
         <!-- Action Buttons -->
         <div class="text-center mt-5">
           <button class="btn btn-japanese me-3" onclick="editProfile()">
-            <i class="fas fa-edit me-2"></i>プロフィール編集
+            <i class="fas fa-edit me-2"></i>Edit Profile
           </button>
           <button class="btn btn-outline-primary me-3" onclick="showReservationHistory()">
-            <i class="fas fa-history me-2"></i>予約履歴
+            <i class="fas fa-history me-2"></i>Reservation History
           </button>
           <button class="btn btn-outline-secondary" onclick="window.history.back()">
-            <i class="fas fa-arrow-left me-2"></i>戻る
+            <i class="fas fa-arrow-left me-2"></i>Go Back
           </button>
         </div>
       </div>
@@ -453,7 +558,7 @@
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
-    // ユーザー認証チェック
+    // User authentication check
     const currentUser = JSON.parse(localStorage.getItem('user'));
     if (!currentUser) {
       window.location.href = 'login.html';
@@ -464,17 +569,17 @@
       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5mY2piam9oeHphaWtlbHhnbWpnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjEwNTgzMjAsImV4cCI6MjA3NjYzNDMyMH0.u0ta1NxSDbJ_9lf1TcMp3M0-_vNNBs6HByOj8wtKsX4'
     );
 
-    // プロフィールデータの読み込み
+    // Load profile data
     async function loadProfileData() {
       try {
-        // 基本情報の更新
+        // Update basic info
         document.getElementById('userName').textContent = currentUser.name;
         document.getElementById('profileName').textContent = currentUser.name;
         document.getElementById('profileEmail').textContent = currentUser.email;
         document.getElementById('profileJoinDate').textContent = 
-          currentUser.created_at ? new Date(currentUser.created_at).toLocaleDateString('ja-JP') : '今日';
+          currentUser.created_at ? new Date(currentUser.created_at).toLocaleDateString('en-US') : 'Today';
 
-        // 予約統計の読み込み
+        // Load reservation stats
         const { data: reservations, error } = await supabase
           .from('reservations')
           .select('*')
@@ -491,28 +596,28 @@
           document.getElementById('pastReservations').textContent = past;
         }
       } catch (error) {
-        console.error('プロフィールデータの読み込みエラー:', error);
+        console.error('Error loading profile data:', error);
       }
     }
 
     function editProfile() {
-      // 実際の実装ではモーダルや別ページに移動
-      alert('プロフィール編集画面を表示します');
+      // In actual implementation, show modal or redirect to edit page
+      alert('Profile edit feature will be available soon!');
     }
 
     function showReservationHistory() {
       window.location.href = 'reservations.html';
     }
 
-    // ログアウト
+    // Logout
     document.getElementById('logoutBtn').addEventListener('click', () => {
-      if (confirm('ログアウトしますか？')) {
+      if (confirm('Are you sure you want to logout?')) {
         localStorage.removeItem('user');
         window.location.href = 'index.html';
       }
     });
 
-    // データの読み込み
+    // Load data
     loadProfileData();
   </script>
 </body>
