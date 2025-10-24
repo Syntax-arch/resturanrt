@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>ケータリングサービス - レストラン予約システム</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="style.css" rel="stylesheet">
+    <link href="main.css" rel="stylesheet">
+    <style>
+        .catering-hero {
+            background: linear-gradient(135deg, #43e97b, #38f9d7);
+            color: white;
+            padding: 4rem 0;
+            text-align: center;
+        }
+        .package-card {
+            border-radius: 15px;
+            overflow: hidden;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+        .package-card:hover {
+            transform: translateY(-5px);
+        }
+        .package-header {
+            padding: 2rem;
+            color: white;
+            text-align: center;
+        }
+        .package-1 .package-header { background: linear-gradient(135deg, #667eea, #764ba2); }
+        .package-2 .package-header { background: linear-gradient(135deg, #f093fb, #f5576c); }
+        .package-3 .package-header { background: linear-gradient(135deg, #4facfe, #00f2fe); }
+        
+        .package-price {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+        .event-type {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="sakura-decoration"></div>
+    
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="dashboard.html">
+                🍣 レストラン予約システム
+            </a>
+            <div class="navbar-nav ms-auto">
+                <a href="dashboard.html" class="btn btn-outline-light btn-sm me-2">ダッシュボード</a>
+                <button class="btn btn-outline-light btn-sm" onclick="RestaurantUtils.logout()">ログアウト</button>
+            </div>
+        </div>
+    </nav>
+
+    <section class="catering-hero">
+        <div class="container">
+            <h1 class="display-4 fw-bold mb-4">🏢 ケータリングサービス</h1>
+            <p class="lead mb-4">職人の技を、あなたのオフィスやイベント会場へ</p>
+            <p>会議、パーティー、イベントなど、様々なシーンで本格日本料理をご提供</p>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="container">
+            <div class="japanese-header">
+                <h2>📦 ケータリングプラン</h2>
+                <p class="lead">目的に合わせてお選びいただけます</p>
+            </div>
+
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <div class="package-card package-1">
+                        <div class="package-header">
+                            <h4>ビジネスランチ</h4>
+                            <div class="package-price">¥2,500/人</div>
+                            <small>10名様より</small>
+                        </div>
+                        <div class="card-body">
+                            <ul>
+                                <li>会議・研修向け</li>
+                                <li>3品の弁当セット</li>
+                                <li>飲み物付き</li>
+                                <li>設営・片付けサービス</li>
+                                <li>2時間までのご利用</li>
+                            </ul>
+                            <button class="btn btn-primary w-100" onclick="inquireCatering('ビジネスランチ')">お問い合わせ</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="package-card package-2">
+                        <div class="package-header">
+                            <h4>パーティーコース</h4>
+                            <div class="package-price">¥5,000/人</div>
+                            <small>20名様より</small>
+                        </div>
+                        <div class="card-body">
+                            <ul>
+                                <li>懇親会・忘年会向け</li>
+                                <li>5品のコース料理</li>
+                                <li>飲み放題付き</li>
+                                <li>サーバー派遣</li>
+                                <li>4時間までのご利用</li>
+                            </ul>
+                            <button class="btn btn-primary w-100" onclick="inquireCatering('パーティーコース')">お問い合わせ</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="package-card package-3">
+                        <div class="package-header">
+                            <h4>プレミアムコース</h4>
+                            <div class="package-price">¥8,000/人</div>
+                            <small>30名様より</small>
+                        </div>
+                        <div class="card-body">
+                            <ul>
+                                <li>冠婚葬祭向け</li>
+                                <li>7品のフルコース</li>
+                                <li>ソムリエサービス</li>
+                                <li>完全個室設営</li>
+                                <li>6時間までのご利用</li>
+                            </ul>
+                            <button class="btn btn-primary w-100" onclick="inquireCatering('プレミアムコース')">お問い合わせ</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section section-light">
+        <div class="container">
+            <h3 class="text-center mb-4">🎉 対応イベント例</h3>
+            <div class="row">
+                <div class="col-md-3 mb-3">
+                    <div class="event-type">
+                        <div style="font-size: 2rem; margin-bottom: 1rem;">💼</div>
+                        <h6>企業イベント</h6>
+                        <p class="small mb-0">会議、研修、懇親会</p>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <div class="event-type">
+                        <div style="font-size: 2rem; margin-bottom: 1rem;">🎓</div>
+                        <h6>学園祭</h6>
+                        <p class="small mb-0">大学祭、文化祭</p>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <div class="event-type">
+                        <div style="font-size: 2rem; margin-bottom: 1rem;">💍</div>
+                        <h6>結婚式</h6>
+                        <p class="small mb-0">披露宴、二次会</p>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <div class="event-type">
+                        <div style="font-size: 2rem; margin-bottom: 1rem;">🎂</div>
+                        <h6>誕生日パーティー</h6>
+                        <p class="small mb-0">家庭でのお祝い</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="utils.js"></script>
+    <script>
+        RestaurantUtils.checkAuth();
+
+        function inquireCatering(packageName) {
+            alert(`${packageName}についてのお問い合わせフォームを表示します`);
+            // 実際の実装ではお問い合わせフォームへ遷移
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>ギフトカード - レストラン予約システム</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="style.css" rel="stylesheet">
+    <link href="main.css" rel="stylesheet">
+    <style>
+        .gift-card {
+            border-radius: 20px;
+            padding: 2rem;
+            color: white;
+            text-align: center;
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+            min-height: 200px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .gift-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.2);
+            z-index: 1;
+        }
+        .gift-card-content {
+            position: relative;
+            z-index: 2;
+        }
+        .gift-card-1 { background: linear-gradient(135deg, #667eea, #764ba2); }
+        .gift-card-2 { background: linear-gradient(135deg, #f093fb, #f5576c); }
+        .gift-card-3 { background: linear-gradient(135deg, #4facfe, #00f2fe); }
+        .gift-card-4 { background: linear-gradient(135deg, #43e97b, #38f9d7); }
+        
+        .gift-amount {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+        .custom-amount {
+            background: linear-gradient(135deg, #ff9a9e, #fecfef);
+        }
+    </style>
+</head>
+<body>
+    <div class="sakura-decoration"></div>
+    
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="dashboard.html">
+                🍣 レストラン予約システム
+            </a>
+            <div class="navbar-nav ms-auto">
+                <a href="dashboard.html" class="btn btn-outline-light btn-sm me-2">ダッシュボード</a>
+                <button class="btn btn-outline-light btn-sm" onclick="RestaurantUtils.logout()">ログアウト</button>
+            </div>
+        </div>
+    </nav>
+
+    <section class="section">
+        <div class="container">
+            <div class="japanese-header">
+                <h2>🎁 ギフトカード</h2>
+                <p class="lead">大切な人へ、美味しい時間を贈ろう</p>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 mb-4">
+                    <div class="gift-card gift-card-1">
+                        <div class="gift-card-content">
+                            <div class="gift-amount">¥3,000</div>
+                            <p>お試しコースに最適</p>
+                            <button class="btn btn-light mt-3" onclick="selectGiftCard(3000)">選択する</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-4">
+                    <div class="gift-card gift-card-2">
+                        <div class="gift-card-content">
+                            <div class="gift-amount">¥5,000</div>
+                            <p>ランチコースにぴったり</p>
+                            <button class="btn btn-light mt-3" onclick="selectGiftCard(5000)">選択する</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-4">
+                    <div class="gift-card gift-card-3">
+                        <div class="gift-card-content">
+                            <div class="gift-amount">¥10,000</div>
+                            <p>特別な日のディナーに</p>
+                            <button class="btn btn-light mt-3" onclick="selectGiftCard(10000)">選択する</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-4">
+                    <div class="gift-card gift-card-4">
+                        <div class="gift-card-content">
+                            <div class="gift-amount">¥20,000</div>
+                            <p>贅沢なコース料理に</p>
+                            <button class="btn btn-light mt-3" onclick="selectGiftCard(20000)">選択する</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card custom-amount">
+                <div class="card-body text-center">
+                    <h4>💫 カスタム金額</h4>
+                    <p class="mb-3">希望の金額でギフトカードを作成</p>
+                    <div class="row justify-content-center">
+                        <div class="col-md-6">
+                            <div class="input-group">
+                                <span class="input-group-text">¥</span>
+                                <input type="number" class="form-control" id="customAmount" placeholder="金額を入力" min="1000" max="100000">
+                                <button class="btn btn-primary" onclick="selectCustomAmount()">作成</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section section-light">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 mb-4">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h4>🎯 ギフトカードの特徴</h4>
+                            <ul>
+                                <li>有効期限：発行から1年間</li>
+                                <li>全国の店舗でご利用可能</li>
+                                <li>オンライン・店頭で購入可能</li>
+                                <li>残高確認はいつでも可能</li>
+                                <li>返金・換金不可</li>
+                                <li>紛失再発行対応</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-4">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h4>📦 配送オプション</h4>
+                            <ul>
+                                <li>Eメール配送（即時発行）</li>
+                                <li>スマートフォン配送</li>
+                                <li>宅配便（有料）</li>
+                                <li>店頭受け取り</li>
+                                <li>包装サービス（有料）</li>
+                                <li>メッセージカード付き</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="utils.js"></script>
+    <script>
+        RestaurantUtils.checkAuth();
+
+        function selectGiftCard(amount) {
+            alert(`¥${amount.toLocaleString()}のギフトカードを選択しました`);
+            // 実際の実装では購入ページへ遷移
+        }
+
+        function selectCustomAmount() {
+            const amount = document.getElementById('customAmount').value;
+            if (amount && amount >= 1000) {
+                alert(`¥${parseInt(amount).toLocaleString()}のギフトカードを作成します`);
+            } else {
+                alert('1000円以上の金額を入力してください');
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>モバイルアプリ - レストラン予約システム</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="style.css" rel="stylesheet">
+    <link href="main.css" rel="stylesheet">
+    <style>
+        .app-hero {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 4rem 0;
+            text-align: center;
+        }
+        .app-screenshot {
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            margin: 2rem 0;
+        }
+        .feature-list {
+            list-style: none;
+            padding: 0;
+        }
+        .feature-list li {
+            padding: 0.5rem 0;
+            display: flex;
+            align-items: center;
+        }
+        .feature-list li::before {
+            content: "✅";
+            margin-right: 0.5rem;
+        }
+        .download-badges {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 2rem 0;
+        }
+        .download-badge {
+            background: #333;
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 10px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+        }
+        .download-badge:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+    </style>
+</head>
+<body>
+    <div class="sakura-decoration"></div>
+    
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="dashboard.html">
+                🍣 レストラン予約システム
+            </a>
+            <div class="navbar-nav ms-auto">
+                <a href="dashboard.html" class="btn btn-outline-light btn-sm me-2">ダッシュボード</a>
+                <button class="btn btn-outline-light btn-sm" onclick="RestaurantUtils.logout()">ログアウト</button>
+            </div>
+        </div>
+    </nav>
+
+    <section class="app-hero">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <h1 class="display-4 fw-bold mb-4">📱 モバイルアプリ</h1>
+                    <p class="lead mb-4">いつでもどこでも、スマートフォンから簡単にご予約</p>
+                    <p>レストラン予約システムの公式モバイルアプリで、より快適な予約体験を。</p>
+                    
+                    <div class="download-badges">
+                        <a href="#" class="download-badge">
+                            <span style="font-size: 1.5rem;">📱</span>
+                            <div>
+                                <small>Download on the</small>
+                                <div>App Store</div>
+                            </div>
+                        </a>
+                        <a href="#" class="download-badge">
+                            <span style="font-size: 1.5rem;">🤖</span>
+                            <div>
+                                <small>Get it on</small>
+                                <div>Google Play</div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <img src="https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" 
+                         alt="モバイルアプリ" class="img-fluid app-screenshot">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section section-light">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 mb-4">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h3 class="card-title">✨ アプリの特徴</h3>
+                            <ul class="feature-list">
+                                <li>プッシュ通知で予約リマインダー</li>
+                                <li>オフラインでもメニュー閲覧可能</li>
+                                <li>顔認証で簡単ログイン</li>
+                                <li>Apple Pay/Google Pay対応</li>
+                                <li>位置情報から最寄店舗を自動表示</li>
+                                <li>カメラでQRコード決済</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-4">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h3 class="card-title">🚀 近日公開機能</h3>
+                            <ul class="feature-list">
+                                <li>ARメニュー閲覧</li>
+                                <li>音声予約アシスタント</li>
+                                <li>食事写真自動記録</li>
+                                <li>ソーシャルシェア機能</li>
+                                <li>パーソナルレコメンド</li>
+                                <li>ライブキッチンカメラ</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="container text-center">
+            <h2 class="mb-4">📲 今すぐダウンロード</h2>
+            <p class="lead mb-4">アプリをダウンロードして、特別な特典をゲット！</p>
+            <div class="download-badges">
+                <a href="#" class="download-badge" style="background: #007AFF;">
+                    <span style="font-size: 2rem;">🍎</span>
+                    <div>
+                        <div>App Store</div>
+                    </div>
+                </a>
+                <a href="#" class="download-badge" style="background: #34A853;">
+                    <span style="font-size: 2rem;">🤖</span>
+                    <div>
+                        <div>Google Play</div>
+                    </div>
+                </a>
+            </div>
+            <p class="text-muted mt-3">※ アプリは近日公開予定です</p>
+        </div>
+    </section>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="utils.js"></script>
+    <script>
+        // Check authentication
+        RestaurantUtils.checkAuth();
+    </script>
+</body>
+</html>
