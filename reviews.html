@@ -13,6 +13,11 @@
       margin-bottom: 2rem;
       box-shadow: 0 4px 15px rgba(0,0,0,0.1);
       border: 1px solid rgba(141, 110, 99, 0.2);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .review-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.15);
     }
     .review-header {
       display: flex;
@@ -25,6 +30,7 @@
       border-radius: 50%;
       margin-right: 1rem;
       object-fit: cover;
+      border: 3px solid #8d6e63;
     }
     .rating-stars {
       color: #ffc107;
@@ -36,6 +42,7 @@
       object-fit: cover;
       border-radius: 8px;
       margin: 1rem 0;
+      border: 2px solid #f5f5f5;
     }
     .stats-card {
       background: linear-gradient(135deg, #667eea, #764ba2);
@@ -44,6 +51,48 @@
       padding: 2rem;
       text-align: center;
       box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      transition: transform 0.3s ease;
+    }
+    .stats-card:hover {
+      transform: scale(1.05);
+    }
+    .review-tags {
+      margin: 0.5rem 0;
+    }
+    .review-tag {
+      background: #e3f2fd;
+      color: #1976d2;
+      padding: 0.25rem 0.75rem;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      margin-right: 0.5rem;
+      display: inline-block;
+    }
+    .review-date {
+      color: #78909c;
+      font-size: 0.9rem;
+    }
+    .review-response {
+      background: #f8f9fa;
+      border-left: 4px solid #8d6e63;
+      padding: 1rem;
+      margin-top: 1rem;
+      border-radius: 0 8px 8px 0;
+    }
+    .review-filter {
+      background: white;
+      border-radius: 10px;
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    .filter-badge {
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .filter-badge.active {
+      background: #8d6e63 !important;
+      transform: scale(1.1);
     }
   </style>
 </head>
@@ -79,7 +128,7 @@
       </div>
       <div class="col-md-3 mb-3">
         <div class="stats-card" style="background: linear-gradient(135deg, #4facfe, #00f2fe);">
-          <div class="display-4 mb-2">256</div>
+          <div class="display-4 mb-2">347</div>
           <div class="h5">レビュー数</div>
         </div>
       </div>
@@ -97,61 +146,168 @@
       </div>
     </div>
 
+    <!-- Review Filters -->
+    <div class="review-filter">
+      <div class="row align-items-center">
+        <div class="col-md-6">
+          <h6 class="mb-3">絞り込み</h6>
+          <div class="d-flex flex-wrap gap-2">
+            <span class="badge bg-primary filter-badge active" data-rating="all">すべて</span>
+            <span class="badge bg-warning filter-badge" data-rating="5">★★★★★</span>
+            <span class="badge bg-success filter-badge" data-rating="4">★★★★☆以上</span>
+            <span class="badge bg-info filter-badge" data-rating="3">★★★☆☆以上</span>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="input-group">
+            <input type="text" class="form-control" placeholder="レビューを検索..." id="reviewSearch">
+            <button class="btn btn-japanese" onclick="searchReviews()">検索</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- Reviews -->
-    <div class="row">
+    <div class="row" id="reviewsContainer">
       <div class="col-md-6">
-        <div class="review-card">
+        <!-- Japanese Customer 1 -->
+        <div class="review-card" data-rating="5">
           <div class="review-header">
-            <img src="https://images.unsplash.com/photo-1494790108755-2616b612b786?w=100&h=100&fit=crop&crop=face" alt="山田さん" class="review-avatar">
+            <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=100&h=100&fit=crop&crop=face" alt="山田さん" class="review-avatar">
             <div>
               <h6 class="mb-1">山田 花子</h6>
               <div class="rating-stars">★★★★★</div>
-              <small class="text-muted">2024年1月15日</small>
+              <small class="review-date">2024年1月15日</small>
             </div>
           </div>
-          <p>記念日のディナーで利用しました。スタッフの対応がとても丁寧で、料理もすべて美味しかったです。特にメインのステーキが絶品でした。またぜひ訪れたいと思います。</p>
+          <div class="review-tags">
+            <span class="review-tag">記念日</span>
+            <span class="review-tag">家族</span>
+          </div>
+          <p>結婚記念日のディナーで利用しました。スタッフの対応がとても丁寧で、料理もすべて美味しかったです。特にメインの和牛ステーキが絶品でした。席も窓側の眺めの良い場所を用意していただき、素敵な夜になりました。</p>
           <img src="https://images.unsplash.com/photo-1546833999-b9f581a1996d?w=400&h=200&fit=crop" alt="料理写真" class="review-image">
+          <div class="review-response">
+            <strong>📝 店長からの返信:</strong>
+            <p>山田様、ご来店誠にありがとうございます。お二人の大切な記念日のお手伝いができて光栄です。またのご来店を心よりお待ちしております。</p>
+          </div>
         </div>
 
-        <div class="review-card">
+        <!-- Japanese Customer 2 -->
+        <div class="review-card" data-rating="4">
           <div class="review-header">
-            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop&crop=face" alt="佐藤さん" class="review-avatar">
+            <img src="https://images.unsplash.com/photo-1567532939604-b6b5b0db2604?w=100&h=100&fit=crop&crop=face" alt="佐藤さん" class="review-avatar">
             <div>
               <h6 class="mb-1">佐藤 一郎</h6>
               <div class="rating-stars">★★★★☆</div>
-              <small class="text-muted">2024年1月12日</small>
+              <small class="review-date">2024年1月12日</small>
             </div>
           </div>
-          <p>家族での食事に利用しました。子ども用の椅子やメニューも用意していただき、家族連れにも優しいお店です。料理のクオリティも高く、また来たいと思います。</p>
+          <div class="review-tags">
+            <span class="review-tag">家族</span>
+            <span class="review-tag">子連れ</span>
+          </div>
+          <p>家族での食事に利用しました。子ども用の椅子やメニューも用意していただき、家族連れにも優しいお店です。料理のクオリティも高く、子ども用に味を調整していただけるのも助かりました。駐車場も広くて便利でした。</p>
+        </div>
+
+        <!-- Japanese Customer 3 -->
+        <div class="review-card" data-rating="5">
+          <div class="review-header">
+            <img src="https://images.unsplash.com/photo-1580489944761-15a19d654956?w=100&h=100&fit=crop&crop=face" alt="高橋さん" class="review-avatar">
+            <div>
+              <h6 class="mb-1">高橋 さくら</h6>
+              <div class="rating-stars">★★★★★</div>
+              <small class="review-date">2024年1月8日</small>
+            </div>
+          </div>
+          <div class="review-tags">
+            <span class="review-tag">女子会</span>
+            <span class="review-tag">写真映え</span>
+          </div>
+          <p>友人との女子会で利用しました。店内の雰囲気がとてもおしゃれで、料理の盛り付けも美しく、写真をたくさん撮りました。デザートのプレートが特に可愛くて、みんなで感動しました。また絶対に行きます！</p>
+          <img src="https://images.unsplash.com/photo-1565958011703-44f9829ba187?w=400&h=200&fit=crop" alt="デザート" class="review-image">
         </div>
       </div>
 
       <div class="col-md-6">
-        <div class="review-card">
+        <!-- Japanese Customer 4 -->
+        <div class="review-card" data-rating="5">
           <div class="review-header">
-            <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop&crop=face" alt="鈴木さん" class="review-avatar">
+            <img src="https://images.unsplash.com/photo-1554151228-14d9def656e4?w=100&h=100&fit=crop&crop=face" alt="鈴木さん" class="review-avatar">
             <div>
               <h6 class="mb-1">鈴木 美咲</h6>
               <div class="rating-stars">★★★★★</div>
-              <small class="text-muted">2024年1月10日</small>
+              <small class="review-date">2024年1月10日</small>
             </div>
           </div>
-          <p>誕生日のサプライズで利用しました。スタッフの方がケーキと花を用意してくださり、とても感動しました。料理もサービスも最高で、忘れられない一日になりました。</p>
-          <img src="https://images.unsplash.com/photo-1565958011703-44f9829ba187?w=400&h=200&fit=crop" alt="デザート" class="review-image">
+          <div class="review-tags">
+            <span class="review-tag">誕生日</span>
+            <span class="review-tag">サプライズ</span>
+          </div>
+          <p>誕生日のサプライズで利用しました。スタッフの方がケーキと花を用意してくださり、とても感動しました。料理もサービスも最高で、忘れられない一日になりました。友達にも絶対におすすめします！</p>
         </div>
 
-        <div class="review-card">
+        <!-- Japanese Customer 5 -->
+        <div class="review-card" data-rating="5">
           <div class="review-header">
-            <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop&crop=face" alt="田中さん" class="review-avatar">
+            <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?w=100&h=100&fit=crop&crop=face" alt="田中さん" class="review-avatar">
             <div>
               <h6 class="mb-1">田中 健太</h6>
               <div class="rating-stars">★★★★★</div>
-              <small class="text-muted">2024年1月8日</small>
+              <small class="review-date">2024年1月8日</small>
             </div>
           </div>
-          <p>ビジネス接待で利用しました。個室が静かで落ち着き、料理の出るタイミングも完璧でした。取引先の方にも大変喜んでいただきました。</p>
+          <div class="review-tags">
+            <span class="review-tag">接待</span>
+            <span class="review-tag">ビジネス</span>
+          </div>
+          <p>ビジネス接待で利用しました。個室が静かで落ち着き、料理の出るタイミングも完璧でした。取引先の方にも大変喜んでいただき、商談もスムーズに進みました。また接待で利用させていただきます。</p>
+        </div>
+
+        <!-- Foreign Customer 1 -->
+        <div class="review-card" data-rating="5">
+          <div class="review-header">
+            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop&crop=face" alt="John Smith" class="review-avatar">
+            <div>
+              <h6 class="mb-1">John Smith</h6>
+              <div class="rating-stars">★★★★★</div>
+              <small class="review-date">2024年1月5日</small>
+            </div>
+          </div>
+          <div class="review-tags">
+            <span class="review-tag">Tourist</span>
+            <span class="review-tag">Sushi</span>
+          </div>
+          <p>Visited during my trip to Japan. The sushi was incredible - the best I've ever had! Staff spoke good English and were very helpful. The atmosphere was authentic and beautiful. Highly recommend for tourists!</p>
+          <div class="review-response">
+            <strong>📝 Manager's Response:</strong>
+            <p>Thank you for visiting us from overseas! We're delighted you enjoyed our sushi. We hope to welcome you again on your next visit to Japan.</p>
+          </div>
+        </div>
+
+        <!-- Japanese Customer 6 -->
+        <div class="review-card" data-rating="4">
+          <div class="review-header">
+            <img src="https://images.unsplash.com/photo-1494790108755-2616b612b786?w=100&h=100&fit=crop&crop=face" alt="伊藤さん" class="review-avatar">
+            <div>
+              <h6 class="mb-1">伊藤 まりこ</h6>
+              <div class="rating-stars">★★★★☆</div>
+              <small class="review-date">2024年1月3日</small>
+            </div>
+          </div>
+          <div class="review-tags">
+            <span class="review-tag">デート</span>
+            <span class="review-tag">夜景</span>
+          </div>
+          <p>デートで利用しました。夜景がとても綺麗でロマンチックな雰囲気でした。料理も美味しかったですが、少し待ち時間が長かったのが残念です。また機会があれば訪れたいと思います。</p>
         </div>
       </div>
+    </div>
+
+    <!-- Load More Button -->
+    <div class="text-center mt-4">
+      <button class="btn btn-outline-japanese" onclick="loadMoreReviews()">
+        📖 さらにレビューを読み込む
+      </button>
     </div>
 
     <!-- Write Review Button -->
@@ -164,7 +320,7 @@
 
   <!-- Write Review Modal -->
   <div class="modal fade" id="writeReviewModal" tabindex="-1">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title">レビューを書く</h5>
@@ -172,23 +328,54 @@
         </div>
         <div class="modal-body">
           <form id="reviewForm">
+            <div class="row">
+              <div class="col-md-6">
+                <div class="mb-3">
+                  <label class="form-label">お名前</label>
+                  <input type="text" class="form-control" id="reviewerName" required>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="mb-3">
+                  <label class="form-label">訪問日</label>
+                  <input type="date" class="form-control" id="visitDate" required>
+                </div>
+              </div>
+            </div>
+            
             <div class="mb-3">
               <label class="form-label">評価</label>
               <div class="rating-stars" id="ratingSelect">
-                <span style="cursor: pointer;" onclick="setRating(1)">★</span>
-                <span style="cursor: pointer;" onclick="setRating(2)">★</span>
-                <span style="cursor: pointer;" onclick="setRating(3)">★</span>
-                <span style="cursor: pointer;" onclick="setRating(4)">★</span>
-                <span style="cursor: pointer;" onclick="setRating(5)">★</span>
+                <span style="cursor: pointer; font-size: 2rem;" onmouseover="hoverRating(1)" onmouseout="resetRating()" onclick="setRating(1)">★</span>
+                <span style="cursor: pointer; font-size: 2rem;" onmouseover="hoverRating(2)" onmouseout="resetRating()" onclick="setRating(2)">★</span>
+                <span style="cursor: pointer; font-size: 2rem;" onmouseover="hoverRating(3)" onmouseout="resetRating()" onclick="setRating(3)">★</span>
+                <span style="cursor: pointer; font-size: 2rem;" onmouseover="hoverRating(4)" onmouseout="resetRating()" onclick="setRating(4)">★</span>
+                <span style="cursor: pointer; font-size: 2rem;" onmouseover="hoverRating(5)" onmouseout="resetRating()" onclick="setRating(5)">★</span>
+              </div>
+              <small class="text-muted" id="ratingText">普通</small>
+            </div>
+            
+            <div class="mb-3">
+              <label class="form-label">タグ（複数選択可）</label>
+              <div class="d-flex flex-wrap gap-2">
+                <span class="badge bg-light text-dark tag-select" data-tag="記念日">記念日</span>
+                <span class="badge bg-light text-dark tag-select" data-tag="家族">家族</span>
+                <span class="badge bg-light text-dark tag-select" data-tag="デート">デート</span>
+                <span class="badge bg-light text-dark tag-select" data-tag">接待</span>
+                <span class="badge bg-light text-dark tag-select" data-tag="女子会">女子会</span>
+                <span class="badge bg-light text-dark tag-select" data-tag="子連れ">子連れ</span>
               </div>
             </div>
+            
             <div class="mb-3">
               <label class="form-label">レビュー本文</label>
-              <textarea class="form-control" rows="4" placeholder="ご感想をお聞かせください"></textarea>
+              <textarea class="form-control" rows="4" placeholder="ご感想をお聞かせください" id="reviewText" required></textarea>
             </div>
+            
             <div class="mb-3">
-              <label class="form-label">写真を追加</label>
-              <input type="file" class="form-control" accept="image/*">
+              <label class="form-label">写真を追加（最大3枚）</label>
+              <input type="file" class="form-control" accept="image/*" multiple id="reviewImages">
+              <small class="text-muted">JPEG, PNG形式、5MBまで</small>
             </div>
           </form>
         </div>
@@ -202,6 +389,9 @@
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <script>
+    let currentRating = 3;
+    let selectedTags = [];
+
     // Check authentication
     const currentUser = JSON.parse(localStorage.getItem('user'));
     if (!currentUser) {
@@ -210,15 +400,124 @@
 
     // Rating system
     function setRating(rating) {
+      currentRating = rating;
+      updateRatingDisplay();
+      updateRatingText();
+    }
+
+    function hoverRating(rating) {
       const stars = document.querySelectorAll('#ratingSelect span');
       stars.forEach((star, index) => {
         star.style.color = index < rating ? '#ffc107' : '#ddd';
       });
     }
 
+    function resetRating() {
+      updateRatingDisplay();
+    }
+
+    function updateRatingDisplay() {
+      const stars = document.querySelectorAll('#ratingSelect span');
+      stars.forEach((star, index) => {
+        star.style.color = index < currentRating ? '#ffc107' : '#ddd';
+      });
+    }
+
+    function updateRatingText() {
+      const texts = {
+        1: '悪い',
+        2: 'やや悪い',
+        3: '普通',
+        4: '良い',
+        5: '最高'
+      };
+      document.getElementById('ratingText').textContent = texts[currentRating];
+    }
+
+    // Tag selection
+    document.querySelectorAll('.tag-select').forEach(tag => {
+      tag.addEventListener('click', function() {
+        const tagValue = this.getAttribute('data-tag');
+        if (selectedTags.includes(tagValue)) {
+          selectedTags = selectedTags.filter(t => t !== tagValue);
+          this.classList.remove('bg-primary', 'text-white');
+          this.classList.add('bg-light', 'text-dark');
+        } else {
+          selectedTags.push(tagValue);
+          this.classList.remove('bg-light', 'text-dark');
+          this.classList.add('bg-primary', 'text-white');
+        }
+      });
+    });
+
+    // Review filtering
+    document.querySelectorAll('.filter-badge').forEach(badge => {
+      badge.addEventListener('click', function() {
+        document.querySelectorAll('.filter-badge').forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+        
+        const rating = this.getAttribute('data-rating');
+        filterReviews(rating);
+      });
+    });
+
+    function filterReviews(rating) {
+      const reviews = document.querySelectorAll('.review-card');
+      reviews.forEach(review => {
+        if (rating === 'all') {
+          review.style.display = 'block';
+        } else {
+          const reviewRating = parseInt(review.getAttribute('data-rating'));
+          if (reviewRating >= parseInt(rating)) {
+            review.style.display = 'block';
+          } else {
+            review.style.display = 'none';
+          }
+        }
+      });
+    }
+
+    function searchReviews() {
+      const searchTerm = document.getElementById('reviewSearch').value.toLowerCase();
+      const reviews = document.querySelectorAll('.review-card');
+      
+      reviews.forEach(review => {
+        const text = review.textContent.toLowerCase();
+        if (text.includes(searchTerm)) {
+          review.style.display = 'block';
+        } else {
+          review.style.display = 'none';
+        }
+      });
+    }
+
+    function loadMoreReviews() {
+      alert('さらにレビューを読み込みます...');
+      // In a real app, this would load more reviews from the server
+    }
+
     function submitReview() {
+      const name = document.getElementById('reviewerName').value;
+      const text = document.getElementById('reviewText').value;
+      
+      if (!name || !text) {
+        alert('お名前とレビュー本文を入力してください');
+        return;
+      }
+      
       alert('レビューを投稿しました！承認後に表示されます。');
       bootstrap.Modal.getInstance(document.getElementById('writeReviewModal')).hide();
+      
+      // Reset form
+      document.getElementById('reviewForm').reset();
+      currentRating = 3;
+      selectedTags = [];
+      updateRatingDisplay();
+      updateRatingText();
+      document.querySelectorAll('.tag-select').forEach(tag => {
+        tag.classList.remove('bg-primary', 'text-white');
+        tag.classList.add('bg-light', 'text-dark');
+      });
     }
 
     // Logout
@@ -229,65 +528,12 @@
       }
     });
 
-    // Initialize 3-star rating
-    setRating(3);
+    // Initialize
+    updateRatingDisplay();
+    updateRatingText();
+
+    // Set today's date as default visit date
+    document.getElementById('visitDate').valueAsDate = new Date();
   </script>
-  <script>
-// Initialize PWA
-document.addEventListener('DOMContentLoaded', async function() {
-    // Register Service Worker
-    const registration = await RestaurantUtils.PWA.registerServiceWorker();
-    
-    // Handle app install prompt
-    window.addEventListener('beforeinstallprompt', (e) => {
-        e.preventDefault();
-        RestaurantUtils.PWA.deferredPrompt = e;
-        RestaurantUtils.PWA.createInstallButton();
-    });
-    
-    // Track app installed event
-    window.addEventListener('appinstalled', () => {
-        RestaurantUtils.PWA.trackEvent('pwa_installed');
-        console.log('🎉 PWA installed successfully!');
-    });
-    
-    // Network status monitoring
-    RestaurantUtils.PWA.addNetworkListener((status) => {
-        const indicator = document.getElementById('networkStatus');
-        if (indicator) {
-            indicator.textContent = status === 'online' ? '🟢 オンライン' : '🔴 オフライン';
-            indicator.className = status === 'online' ? 'badge bg-success' : 'badge bg-danger';
-        }
-        
-        if (status === 'online') {
-            RestaurantUtils.PWA.showLocalNotification('接続回復', {
-                body: 'インターネット接続が回復しました'
-            });
-        }
-    });
-    
-    // Request notification permission on user interaction
-    document.addEventListener('click', async () => {
-        if (Notification.permission === 'default') {
-            await RestaurantUtils.PWA.requestNotificationPermission();
-        }
-    }, { once: true });
-    
-    // Add install button to navigation
-    setTimeout(() => {
-        RestaurantUtils.PWA.createInstallButton();
-    }, 2000);
-});
-
-// Show PWA install prompt (can be called from any button)
-function showPWAInstallPrompt() {
-    RestaurantUtils.PWA.showInstallPrompt();
-}
-
-// Check if app is running in standalone mode
-function isRunningAsPWA() {
-    return RestaurantUtils.PWA.isAppInstalled();
-}
-</script>
 </body>
 </html>
