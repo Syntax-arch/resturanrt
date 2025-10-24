@@ -324,6 +324,77 @@
     </div>
   </div>
 </div>
+<!-- Add to sidebar -->
+<li class="nav-item">
+  <a href="#admin-management" class="nav-link" onclick="showSection('admin-management')">
+    👑 管理者管理
+  </a>
+</li>
+
+<!-- Add new section -->
+<div id="admin-management-section" class="section-content d-none">
+  <h3 class="mb-4">👑 管理者管理</h3>
+  
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addAdminModal">
+      ➕ 管理者を追加
+    </button>
+  </div>
+
+  <div class="card admin-card">
+    <div class="card-header">
+      <h6 class="mb-0">👑 管理者一覧</h6>
+    </div>
+    <div class="card-body">
+      <div id="adminList">
+        <!-- Admin list will be loaded here -->
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Add Admin Modal -->
+<div class="modal fade" id="addAdminModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">➕ 管理者追加</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <form id="addAdminForm">
+          <div class="mb-3">
+            <label class="form-label">👤 ユーザー名</label>
+            <input type="text" class="form-control" id="adminUsername" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">📧 メールアドレス</label>
+            <input type="email" class="form-control" id="adminEmail">
+          </div>
+          <div class="mb-3">
+            <label class="form-label">🔑 パスワード</label>
+            <input type="password" class="form-control" id="adminPassword" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">🏷️ 権限</label>
+            <select class="form-select" id="adminRole">
+              <option value="admin">管理者</option>
+              <option value="super_admin">スーパー管理者</option>
+            </select>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="adminActive" checked>
+            <label class="form-check-label">アクティブ</label>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">キャンセル</button>
+        <button type="button" class="btn btn-primary" onclick="registerAdmin()">💾 管理者を追加</button>
+      </div>
+    </div>
+  </div>
+</div>
           <!-- Staff management content will go here -->
           <div class="alert alert-info">
             🔧 スタッフ管理機能は近日実装予定

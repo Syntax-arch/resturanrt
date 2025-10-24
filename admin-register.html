@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>管理者登録 - レストラン予約システム</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    .admin-register-container {
+      min-height: 100vh;
+      background: linear-gradient(135deg, 
+        rgba(198, 40, 40, 0.9) 0%, 
+        rgba(44, 62, 80, 0.9) 100%),
+        url('https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80');
+      background-size: cover;
+      background-position: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .admin-register-card {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 3rem;
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      max-width: 500px;
+      width: 90%;
+    }
+    .admin-header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    .admin-logo {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <div class="admin-register-container">
+    <div class="admin-register-card">
+      <div class="admin-header">
+        <span class="admin-logo">👑</span>
+        <h2>管理者登録</h2>
+        <p class="text-muted">最初の管理者アカウントを作成</p>
+      </div>
+
+      <form id="adminRegisterForm">
+        <div class="mb-3">
+          <label class="form-label">👤 ユーザー名</label>
+          <input type="text" class="form-control" id="adminUsername" placeholder="admin" required>
+        </div>
+        
+        <div class="mb-3">
+          <label class="form-label">📧 メールアドレス</label>
+          <input type="email" class="form-control" id="adminEmail" placeholder="admin@restaurant.com" required>
+        </div>
+        
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label class="form-label">🔑 パスワード</label>
+            <input type="password" class="form-control" id="adminPassword" placeholder="パスワード" required>
+          </div>
+          <div class="col-md-6 mb-3">
+            <label class="form-label">🔑 パスワード確認</label>
+            <input type="password" class="form-control" id="adminConfirmPassword" placeholder="パスワード再入力" required>
+          </div>
+        </div>
+
+        <div class="mb-4">
+          <label class="form-label">🔐 管理者登録キー</label>
+          <input type="password" class="form-control" id="adminSecretKey" placeholder="秘密キーを入力" required>
+          <small class="text-muted">システム管理者から提供されたキーを入力してください</small>
+        </div>
+
+        <button type="submit" class="btn btn-dark w-100 py-3">
+          👑 管理者アカウントを作成
+        </button>
+      </form>
+
+      <div id="adminRegisterMessage" class="mt-3"></div>
+
+      <div class="text-center mt-4">
+        <a href="admin-login.html" class="text-decoration-none">← 管理者ログインへ戻る</a>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    const supabase = window.supabase.createClient(
+      'https://nfcjbjohxzaikelxgmjg.supabase.co',
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5mY2piam9oeHphaWtlbHhnbWpnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjEwNTgzMjAsImV4cCI6MjA3NjYzNDMyMH0.u0ta1NxSDbJ_9lf1TcMp3M0-_vNNBs6HByOj8wtKsX4'
+    );
+
+    // Secret key for admin registration (change this in production)
+    const ADMIN_SECRET_KEY = "RESTAURANT2024";
+
+    document.getElementById('adminRegisterForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const username = document.getElementById('adminUsername').value;
+      const email = document.getElementById('adminEmail').value;
+      const password = document.getElementById('adminPassword').value;
+      const confirmPassword = document.getElementById('adminConfirmPassword').value;
+      const secretKey = document.getElementById('adminSecretKey').value;
+      const messageDiv = document.getElementById('adminRegisterMessage');
+      
+      // Validation
+      if (password !== confirmPassword) {
+        messageDiv.innerHTML = '<div class="alert alert-danger">❌ パスワードが一致しません</div>';
+        return;
+      }
+
+      if (secretKey !== ADMIN_SECRET_KEY) {
+        messageDiv.innerHTML = '<div class="alert alert-danger">❌ 管理者キーが正しくありません</div>';
+        return;
+      }
+
+      // Show loading
+      const submitBtn = e.target.querySelector('button[type="submit"]');
+      submitBtn.innerHTML = '⏳ アカウント作成中...';
+      submitBtn.disabled = true;
+
+      try {
+        // Check if admin users already exist
+        const { data: existingAdmins, error: checkError } = await supabase
+          .from('admin_users')
+          .select('id');
+
+        if (checkError) throw checkError;
+
+        // Create admin user
+        const { data, error } = await supabase
+          .from('admin_users')
+          .insert([{
+            username: username,
+            email: email,
+            password: password,
+            is_active: true,
+            role: existingAdmins.length === 0 ? 'super_admin' : 'admin'
+          }])
+          .select();
+
+        if (error) throw error;
+
+        messageDiv.innerHTML = `
+          <div class="alert alert-success">
+            ✅ 管理者アカウントを作成しました！<br>
+            <strong>ユーザー名:</strong> ${username}<br>
+            <strong>権限:</strong> ${existingAdmins.length === 0 ? 'スーパー管理者' : '管理者'}
+          </div>
+        `;
+
+        // Clear form
+        document.getElementById('adminRegisterForm').reset();
+
+        // Redirect to login after 3 seconds
+        setTimeout(() => {
+          window.location.href = 'admin-login.html';
+        }, 3000);
+
+      } catch (error) {
+        messageDiv.innerHTML = `
+          <div class="alert alert-danger">
+            ❌ アカウント作成に失敗しました: ${error.message}
+          </div>
+        `;
+      } finally {
+        submitBtn.innerHTML = '👑 管理者アカウントを作成';
+        submitBtn.disabled = false;
+      }
+    });
+  </script>
+</body>
+</html>

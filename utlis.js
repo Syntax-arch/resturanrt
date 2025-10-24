@@ -926,3 +926,120 @@ function showSection(sectionName) {
   
   // ... rest of existing code ...
 }
+
+// Load admin list
+async function loadAdminList() {
+  try {
+    const { data: admins, error } = await supabase
+      .from('admin_users')
+      .select('*')
+      .order('created_at', { ascending: false });
+
+    if (error) throw error;
+
+    const container = document.getElementById('adminList');
+    container.innerHTML = '';
+
+    admins.forEach(admin => {
+      const adminCard = document.createElement('div');
+      adminCard.className = 'card mb-3';
+      adminCard.innerHTML = `
+        <div class="card-body">
+          <div class="row align-items-center">
+            <div class="col-md-3">
+              <h6 class="mb-1">${admin.username}</h6>
+              <small class="text-muted">${admin.role === 'super_admin' ? '👑 スーパー管理者' : '💼 管理者'}</small>
+            </div>
+            <div class="col-md-3">
+              <small class="text-muted">メール</small>
+              <div>${admin.email || '-'}</div>
+            </div>
+            <div class="col-md-2">
+              <small class="text-muted">最終ログイン</small>
+              <div>${admin.last_login ? new Date(admin.last_login).toLocaleDateString('ja-JP') : '未ログイン'}</div>
+            </div>
+            <div class="col-md-2">
+              <small class="text-muted">ステータス</small>
+              <div>
+                <span class="badge ${admin.is_active ? 'bg-success' : 'bg-secondary'}">
+                  ${admin.is_active ? 'アクティブ' : '非アクティブ'}
+                </span>
+              </div>
+            </div>
+            <div class="col-md-2 text-end">
+              ${admin.id !== adminUser.id ? `
+                <button class="btn btn-sm btn-outline-danger" onclick="deleteAdmin(${admin.id})">
+                  🗑️ 削除
+                </button>
+              ` : '<small class="text-muted">現在のユーザー</small>'}
+            </div>
+          </div>
+        </div>
+      `;
+      container.appendChild(adminCard);
+    });
+
+  } catch (error) {
+    console.error('Error loading admins:', error);
+  }
+}
+
+// Register new admin
+async function registerAdmin() {
+  const adminData = {
+    username: document.getElementById('adminUsername').value,
+    email: document.getElementById('adminEmail').value,
+    password: document.getElementById('adminPassword').value,
+    role: document.getElementById('adminRole').value,
+    is_active: document.getElementById('adminActive').checked
+  };
+
+  try {
+    const { data, error } = await supabase
+      .from('admin_users')
+      .insert([adminData]);
+
+    if (error) throw error;
+
+    // Close modal and reset form
+    bootstrap.Modal.getInstance(document.getElementById('addAdminModal')).hide();
+    document.getElementById('addAdminForm').reset();
+    
+    // Reload admin list
+    loadAdminList();
+    
+    alert('✅ 管理者を追加しました！');
+    
+  } catch (error) {
+    alert('❌ 管理者追加に失敗しました: ' + error.message);
+  }
+}
+
+// Delete admin
+async function deleteAdmin(adminId) {
+  if (confirm('この管理者を削除しますか？')) {
+    try {
+      const { error } = await supabase
+        .from('admin_users')
+        .delete()
+        .eq('id', adminId);
+
+      if (error) throw error;
+
+      loadAdminList();
+      alert('✅ 管理者を削除しました');
+      
+    } catch (error) {
+      alert('❌ 削除に失敗しました: ' + error.message);
+    }
+  }
+}
+
+// Update showSection function
+function showSection(sectionName) {
+  // ... existing code ...
+  
+  if (sectionName === 'admin-management') {
+    loadAdminList();
+  }
+}
