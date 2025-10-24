@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <title>管理者ダッシュボード - レストラン予約システム</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
   <link href="style.css" rel="stylesheet">
   <style>
     .admin-sidebar {
@@ -11,12 +12,21 @@
       color: white;
       min-height: 100vh;
       padding: 0;
+      position: fixed;
+      width: 250px;
+      z-index: 1000;
     }
     .admin-sidebar .nav-link {
       color: #ecf0f1;
       padding: 1rem 1.5rem;
       border-bottom: 1px solid #34495e;
       transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+    }
+    .admin-sidebar .nav-link i {
+      width: 20px;
+      margin-right: 10px;
     }
     .admin-sidebar .nav-link:hover,
     .admin-sidebar .nav-link.active {
@@ -26,12 +36,14 @@
     .admin-main {
       background: #f8f9fa;
       min-height: 100vh;
+      margin-left: 250px;
     }
     .admin-card {
       border: none;
       border-radius: 15px;
       box-shadow: 0 4px 15px rgba(0,0,0,0.1);
       transition: transform 0.3s ease;
+      margin-bottom: 1.5rem;
     }
     .admin-card:hover {
       transform: translateY(-5px);
@@ -39,6 +51,7 @@
     .stat-card {
       text-align: center;
       padding: 1.5rem;
+      color: white;
     }
     .stat-number {
       font-size: 2.5rem;
@@ -52,25 +65,70 @@
     .activity-item {
       padding: 0.75rem;
       border-bottom: 1px solid #eee;
+      display: flex;
+      align-items: center;
+    }
+    .activity-item:last-child {
+      border-bottom: none;
+    }
+    .activity-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 1rem;
+      font-size: 1.2rem;
+    }
+    .table-actions {
+      display: flex;
+      gap: 0.5rem;
+    }
+    .btn-sm {
+      padding: 0.25rem 0.5rem;
+      font-size: 0.875rem;
+    }
+    .chart-container {
+      position: relative;
+      height: 300px;
+      margin: 1rem 0;
+    }
+    .badge-status {
+      font-size: 0.75rem;
+    }
+    .search-box {
+      max-width: 300px;
+    }
+    .pagination {
+      margin-bottom: 0;
     }
   </style>
 </head>
 <body>
   <!-- Admin Navigation -->
-  <nav class="navbar navbar-dark" style="background-color: #c62828;">
+  <nav class="navbar navbar-dark sticky-top" style="background-color: #c62828; height: 70px;">
     <div class="container-fluid">
       <a class="navbar-brand fw-bold" href="admin-dashboard.html">
-        👑 管理者ダッシュボード
+        <i class="fas fa-crown me-2"></i>管理者ダッシュボード
       </a>
-      <div class="navbar-nav ms-auto flex-row">
+      <div class="navbar-nav ms-auto flex-row align-items-center">
         <span class="navbar-text me-3" id="adminWelcome">
-          管理者
+          <i class="fas fa-user me-1"></i>管理者
         </span>
-        <button class="btn btn-outline-light btn-sm me-2" onclick="refreshDashboard()">
-          🔄 更新
-        </button>
+        <div class="dropdown me-2">
+          <button class="btn btn-outline-light btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown">
+            <i class="fas fa-cog me-1"></i>設定
+          </button>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="#"><i class="fas fa-user me-2"></i>プロフィール</a></li>
+            <li><a class="dropdown-item" href="#"><i class="fas fa-bell me-2"></i>通知設定</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="#" onclick="refreshDashboard()"><i class="fas fa-sync-alt me-2"></i>更新</a></li>
+          </ul>
+        </div>
         <button class="btn btn-outline-light btn-sm" id="adminLogoutBtn">
-          ログアウト
+          <i class="fas fa-sign-out-alt me-1"></i>ログアウト
         </button>
       </div>
     </div>
@@ -81,38 +139,68 @@
       <!-- Sidebar -->
       <div class="col-md-2 admin-sidebar">
         <div class="d-flex flex-column flex-shrink-0 p-3">
+          <div class="text-center mb-4 mt-2">
+            <h5 class="text-white">レストラン管理</h5>
+            <small class="text-muted">v2.1.0</small>
+          </div>
           <ul class="nav nav-pills flex-column mb-auto">
             <li class="nav-item">
               <a href="#dashboard" class="nav-link active" onclick="showSection('dashboard')">
-                📊 ダッシュボード
+                <i class="fas fa-chart-line"></i>ダッシュボード
               </a>
             </li>
             <li class="nav-item">
               <a href="#reservations" class="nav-link" onclick="showSection('reservations')">
-                📅 予約管理
+                <i class="fas fa-calendar-alt"></i>予約管理
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="#customers" class="nav-link" onclick="showSection('customers')">
+                <i class="fas fa-users"></i>顧客管理
               </a>
             </li>
             <li class="nav-item">
               <a href="#staff" class="nav-link" onclick="showSection('staff')">
-                👥 スタッフ管理
+                <i class="fas fa-user-tie"></i>スタッフ管理
               </a>
             </li>
             <li class="nav-item">
               <a href="#menu" class="nav-link" onclick="showSection('menu')">
-                🍽️ メニュー管理
+                <i class="fas fa-utensils"></i>メニュー管理
               </a>
             </li>
             <li class="nav-item">
-              <a href="#analytics" class="nav-link" onclick="showSection('analytics')">
-                📈 分析レポート
+              <a href="#tables" class="nav-link" onclick="showSection('tables')">
+                <i class="fas fa-chair"></i>席管理
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="#reports" class="nav-link" onclick="showSection('reports')">
+                <i class="fas fa-chart-bar"></i>分析レポート
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="#reviews" class="nav-link" onclick="showSection('reviews')">
+                <i class="fas fa-star"></i>レビュー管理
               </a>
             </li>
             <li class="nav-item">
               <a href="#settings" class="nav-link" onclick="showSection('settings')">
-                ⚙️ システム設定
+                <i class="fas fa-cogs"></i>システム設定
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="#admin-management" class="nav-link" onclick="showSection('admin-management')">
+                <i class="fas fa-user-shield"></i>管理者管理
               </a>
             </li>
           </ul>
+          <div class="mt-auto pt-3">
+            <div class="text-center text-muted small">
+              <div id="currentDateTime"></div>
+              <div id="networkStatus" class="badge bg-success mt-1">🟢 オンライン</div>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -122,38 +210,75 @@
         <!-- Dashboard Section -->
         <div id="dashboard-section" class="section-content">
           <div class="d-flex justify-content-between align-items-center mb-4">
-            <h3>📊 経営ダッシュボード</h3>
+            <h3><i class="fas fa-chart-line me-2"></i>経営ダッシュボード</h3>
             <div class="btn-group">
               <button class="btn btn-outline-primary btn-sm" onclick="loadStats('today')">今日</button>
               <button class="btn btn-outline-primary btn-sm" onclick="loadStats('week')">今週</button>
-              <button class="btn btn-outline-primary btn-sm" onclick="loadStats('month')">今月</button>
+              <button class="btn btn-outline-primary btn-sm active" onclick="loadStats('month')">今月</button>
             </div>
           </div>
 
           <!-- Stats Cards -->
           <div class="row mb-4">
             <div class="col-md-3 mb-3">
-              <div class="card admin-card stat-card text-white" style="background: linear-gradient(135deg, #667eea, #764ba2);">
+              <div class="card admin-card stat-card" style="background: linear-gradient(135deg, #667eea, #764ba2);">
                 <div class="stat-number" id="totalReservations">0</div>
                 <div>総予約数</div>
+                <small><i class="fas fa-arrow-up me-1"></i><span id="reservationTrend">0%</span> 前月比</small>
               </div>
             </div>
             <div class="col-md-3 mb-3">
-              <div class="card admin-card stat-card text-white" style="background: linear-gradient(135deg, #f093fb, #f5576c);">
+              <div class="card admin-card stat-card" style="background: linear-gradient(135deg, #f093fb, #f5576c);">
                 <div class="stat-number" id="todayRevenue">¥0</div>
-                <div>本日売上</div>
+                <div>売上</div>
+                <small><i class="fas fa-arrow-up me-1"></i><span id="revenueTrend">0%</span> 前月比</small>
               </div>
             </div>
             <div class="col-md-3 mb-3">
-              <div class="card admin-card stat-card text-white" style="background: linear-gradient(135deg, #4facfe, #00f2fe);">
+              <div class="card admin-card stat-card" style="background: linear-gradient(135deg, #4facfe, #00f2fe);">
                 <div class="stat-number" id="activeStaff">0</div>
                 <div>出勤スタッフ</div>
+                <small><i class="fas fa-user-clock me-1"></i>本日</small>
               </div>
             </div>
             <div class="col-md-3 mb-3">
-              <div class="card admin-card stat-card text-white" style="background: linear-gradient(135deg, #43e97b, #38f9d7);">
+              <div class="card admin-card stat-card" style="background: linear-gradient(135deg, #43e97b, #38f9d7);">
                 <div class="stat-number" id="tableOccupancy">0%</div>
                 <div>席稼働率</div>
+                <small><i class="fas fa-chart-line me-1"></i>ピーク時</small>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <!-- Revenue Chart -->
+            <div class="col-md-8 mb-4">
+              <div class="card admin-card h-100">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                  <h6 class="mb-0"><i class="fas fa-yen-sign me-2"></i>売上推移</h6>
+                  <select class="form-select form-select-sm w-auto" onchange="updateRevenueChart(this.value)">
+                    <option value="week">週次</option>
+                    <option value="month" selected>月次</option>
+                    <option value="year">年次</option>
+                  </select>
+                </div>
+                <div class="card-body">
+                  <div class="chart-container">
+                    <canvas id="revenueChart"></canvas>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Recent Activity -->
+            <div class="col-md-4 mb-4">
+              <div class="card admin-card h-100">
+                <div class="card-header">
+                  <h6 class="mb-0"><i class="fas fa-bell me-2"></i>最近のアクティビティ</h6>
+                </div>
+                <div class="card-body recent-activity" id="recentActivity">
+                  <!-- Activities will be loaded here -->
+                </div>
               </div>
             </div>
           </div>
@@ -162,8 +287,9 @@
             <!-- Recent Reservations -->
             <div class="col-md-6 mb-4">
               <div class="card admin-card h-100">
-                <div class="card-header">
-                  <h6 class="mb-0">🆕 最近の予約</h6>
+                <div class="card-header d-flex justify-content-between align-items-center">
+                  <h6 class="mb-0"><i class="fas fa-calendar-plus me-2"></i>最近の予約</h6>
+                  <a href="#reservations" class="btn btn-sm btn-outline-primary" onclick="showSection('reservations')">すべて表示</a>
                 </div>
                 <div class="card-body recent-activity" id="recentReservations">
                   <!-- Recent reservations will be loaded here -->
@@ -174,8 +300,9 @@
             <!-- Staff Schedule -->
             <div class="col-md-6 mb-4">
               <div class="card admin-card h-100">
-                <div class="card-header">
-                  <h6 class="mb-0">👥 本日のスタッフ</h6>
+                <div class="card-header d-flex justify-content-between align-items-center">
+                  <h6 class="mb-0"><i class="fas fa-user-tie me-2"></i>本日のスタッフ</h6>
+                  <a href="#staff" class="btn btn-sm btn-outline-primary" onclick="showSection('staff')">管理</a>
                 </div>
                 <div class="card-body" id="todayStaff">
                   <!-- Today's staff will be loaded here -->
@@ -189,28 +316,44 @@
             <div class="col-12">
               <div class="card admin-card">
                 <div class="card-header">
-                  <h6 class="mb-0">⚡ クイックアクション</h6>
+                  <h6 class="mb-0"><i class="fas fa-bolt me-2"></i>クイックアクション</h6>
                 </div>
                 <div class="card-body">
-                  <div class="row">
-                    <div class="col-md-3 text-center mb-3">
-                      <button class="btn btn-primary w-100" onclick="showSection('reservations')">
-                        📅 予約作成
+                  <div class="row text-center">
+                    <div class="col-md-2 mb-3">
+                      <button class="btn btn-primary w-100 h-100 py-3" onclick="showSection('reservations')">
+                        <i class="fas fa-calendar-plus fa-2x mb-2"></i><br>
+                        予約作成
                       </button>
                     </div>
-                    <div class="col-md-3 text-center mb-3">
-                      <button class="btn btn-success w-100" onclick="showSection('staff')">
-                        👥 シフト作成
+                    <div class="col-md-2 mb-3">
+                      <button class="btn btn-success w-100 h-100 py-3" onclick="showSection('staff')">
+                        <i class="fas fa-user-plus fa-2x mb-2"></i><br>
+                        スタッフ追加
                       </button>
                     </div>
-                    <div class="col-md-3 text-center mb-3">
-                      <button class="btn btn-info w-100" onclick="showSection('menu')">
-                        🍽️ メニュー編集
+                    <div class="col-md-2 mb-3">
+                      <button class="btn btn-info w-100 h-100 py-3" onclick="showSection('menu')">
+                        <i class="fas fa-utensils fa-2x mb-2"></i><br>
+                        メニュー編集
                       </button>
                     </div>
-                    <div class="col-md-3 text-center mb-3">
-                      <button class="btn btn-warning w-100" onclick="generateDailyReport()">
-                        📈 日次レポート
+                    <div class="col-md-2 mb-3">
+                      <button class="btn btn-warning w-100 h-100 py-3" onclick="generateDailyReport()">
+                        <i class="fas fa-file-pdf fa-2x mb-2"></i><br>
+                        日次レポート
+                      </button>
+                    </div>
+                    <div class="col-md-2 mb-3">
+                      <button class="btn btn-danger w-100 h-100 py-3" onclick="showSection('reports')">
+                        <i class="fas fa-chart-bar fa-2x mb-2"></i><br>
+                        売上分析
+                      </button>
+                    </div>
+                    <div class="col-md-2 mb-3">
+                      <button class="btn btn-dark w-100 h-100 py-3" onclick="showSection('settings')">
+                        <i class="fas fa-cogs fa-2x mb-2"></i><br>
+                        システム設定
                       </button>
                     </div>
                   </div>
@@ -222,224 +365,324 @@
 
         <!-- Reservations Management Section -->
         <div id="reservations-section" class="section-content d-none">
-          <h3 class="mb-4">📅 予約管理</h3>
-          <!-- Reservation management content will go here -->
-          <div class="alert alert-info">
-            🔧 予約管理機能は近日実装予定
+          <div class="d-flex justify-content-between align-items-center mb-4">
+            <h3><i class="fas fa-calendar-alt me-2"></i>予約管理</h3>
+            <div>
+              <button class="btn btn-primary me-2" data-bs-toggle="modal" data-bs-target="#addReservationModal">
+                <i class="fas fa-plus me-1"></i>新規予約
+              </button>
+              <button class="btn btn-outline-secondary" onclick="loadReservations()">
+                <i class="fas fa-sync-alt me-1"></i>更新
+              </button>
+            </div>
+          </div>
+
+          <!-- Filters -->
+          <div class="card admin-card mb-4">
+            <div class="card-body">
+              <div class="row g-3">
+                <div class="col-md-3">
+                  <label class="form-label">日付</label>
+                  <input type="date" class="form-control" id="reservationDateFilter" onchange="filterReservations()">
+                </div>
+                <div class="col-md-3">
+                  <label class="form-label">ステータス</label>
+                  <select class="form-select" id="statusFilter" onchange="filterReservations()">
+                    <option value="">すべて</option>
+                    <option value="confirmed">確認済み</option>
+                    <option value="pending">保留中</option>
+                    <option value="cancelled">キャンセル</option>
+                    <option value="completed">完了</option>
+                  </select>
+                </div>
+                <div class="col-md-3">
+                  <label class="form-label">顧客名</label>
+                  <input type="text" class="form-control" id="customerFilter" onkeyup="filterReservations()" placeholder="検索...">
+                </div>
+                <div class="col-md-3">
+                  <label class="form-label">表示件数</label>
+                  <select class="form-select" id="pageSizeFilter" onchange="filterReservations()">
+                    <option value="10">10件</option>
+                    <option value="25">25件</option>
+                    <option value="50">50件</option>
+                    <option value="100">100件</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Reservations Table -->
+          <div class="card admin-card">
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table table-hover">
+                  <thead>
+                    <tr>
+                      <th>予約ID</th>
+                      <th>顧客名</th>
+                      <th>日付</th>
+                      <th>時間</th>
+                      <th>人数</th>
+                      <th>テーブル</th>
+                      <th>ステータス</th>
+                      <th>作成日時</th>
+                      <th>操作</th>
+                    </tr>
+                  </thead>
+                  <tbody id="reservationsTable">
+                    <!-- Reservations will be loaded here -->
+                  </tbody>
+                </table>
+              </div>
+              <!-- Pagination -->
+              <nav>
+                <ul class="pagination justify-content-center" id="reservationsPagination">
+                  <!-- Pagination will be loaded here -->
+                </ul>
+              </nav>
+            </div>
+          </div>
+        </div>
+
+        <!-- Customers Management Section -->
+        <div id="customers-section" class="section-content d-none">
+          <div class="d-flex justify-content-between align-items-center mb-4">
+            <h3><i class="fas fa-users me-2"></i>顧客管理</h3>
+            <div class="search-box">
+              <div class="input-group">
+                <input type="text" class="form-control" placeholder="顧客を検索..." id="customerSearch">
+                <button class="btn btn-outline-secondary" onclick="searchCustomers()">
+                  <i class="fas fa-search"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="row mb-4">
+            <div class="col-md-3">
+              <div class="card admin-card stat-card" style="background: linear-gradient(135deg, #667eea, #764ba2);">
+                <div class="stat-number" id="totalCustomers">0</div>
+                <div>登録顧客数</div>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="card admin-card stat-card" style="background: linear-gradient(135deg, #4facfe, #00f2fe);">
+                <div class="stat-number" id="activeCustomers">0</div>
+                <div>今月の来店</div>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="card admin-card stat-card" style="background: linear-gradient(135deg, #43e97b, #38f9d7);">
+                <div class="stat-number" id="repeatCustomers">0%</div>
+                <div>リピート率</div>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="card admin-card stat-card" style="background: linear-gradient(135deg, #ff9a9e, #fecfef);">
+                <div class="stat-number" id="avgSpending">¥0</div>
+                <div>平均単価</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card admin-card">
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table table-hover">
+                  <thead>
+                    <tr>
+                      <th>顧客ID</th>
+                      <th>氏名</th>
+                      <th>メール</th>
+                      <th>電話番号</th>
+                      <th>来店回数</th>
+                      <th>最終来店</th>
+                      <th>総利用金額</th>
+                      <th>操作</th>
+                    </tr>
+                  </thead>
+                  <tbody id="customersTable">
+                    <!-- Customers will be loaded here -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
           </div>
         </div>
 
         <!-- Staff Management Section -->
         <div id="staff-section" class="section-content d-none">
-          <h3 class="mb-4">👥 スタッフ管理</h3>
-          <!-- Staff Management Section -->
-<div id="staff-section" class="section-content d-none">
-  <h3 class="mb-4">👥 スタッフ管理</h3>
-  
-  <!-- Add New Staff Button -->
-  <div class="d-flex justify-content-between align-items-center mb-4">
-    <div>
-      <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addStaffModal">
-        ➕ スタッフを追加
-      </button>
-    </div>
-    <div class="btn-group">
-      <button class="btn btn-outline-secondary btn-sm" onclick="loadStaffList()">
-        🔄 更新
-      </button>
-    </div>
-  </div>
-
-  <!-- Staff List -->
-  <div class="card admin-card">
-    <div class="card-header">
-      <h6 class="mb-0">👥 スタッフ一覧</h6>
-    </div>
-    <div class="card-body">
-      <div id="staffList">
-        <!-- Staff list will be loaded here -->
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- Add Staff Modal -->
-<div class="modal fade" id="addStaffModal" tabindex="-1">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">➕ スタッフ登録</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-      </div>
-      <div class="modal-body">
-        <form id="addStaffForm">
-          <div class="row">
-            <div class="col-md-6 mb-3">
-              <label class="form-label">👤 氏名</label>
-              <input type="text" class="form-control" id="staffName" required>
-            </div>
-            <div class="col-md-6 mb-3">
-              <label class="form-label">🏷️ 役職</label>
-              <select class="form-select" id="staffRole">
-                <option value="スタッフ">スタッフ</option>
-                <option value="マネージャー">マネージャー</option>
-                <option value="シェフ">シェフ</option>
-                <option value="ホール">ホールスタッフ</option>
-                <option value="キッチン">キッチンスタッフ</option>
-              </select>
+          <div class="d-flex justify-content-between align-items-center mb-4">
+            <h3><i class="fas fa-user-tie me-2"></i>スタッフ管理</h3>
+            <div>
+              <button class="btn btn-primary me-2" data-bs-toggle="modal" data-bs-target="#addStaffModal">
+                <i class="fas fa-plus me-1"></i>スタッフ追加
+              </button>
+              <button class="btn btn-success me-2" data-bs-toggle="modal" data-bs-target="#addScheduleModal">
+                <i class="fas fa-calendar-plus me-1"></i>シフト作成
+              </button>
+              <button class="btn btn-outline-secondary" onclick="loadStaffList()">
+                <i class="fas fa-sync-alt me-1"></i>更新
+              </button>
             </div>
           </div>
-          
-          <div class="mb-3">
-            <label class="form-label">📧 メールアドレス</label>
-            <input type="email" class="form-control" id="staffEmail">
-          </div>
-          
-          <div class="mb-3">
-            <label class="form-label">📞 電話番号</label>
-            <input type="tel" class="form-control" id="staffPhone">
-          </div>
-          
-          <div class="row">
-            <div class="col-md-6 mb-3">
-              <label class="form-label">🔑 パスワード</label>
-              <input type="password" class="form-control" id="staffPassword" required>
+
+          <div class="card admin-card">
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table table-hover">
+                  <thead>
+                    <tr>
+                      <th>スタッフID</th>
+                      <th>氏名</th>
+                      <th>役職</th>
+                      <th>メール</th>
+                      <th>電話番号</th>
+                      <th>ステータス</th>
+                      <th>最終ログイン</th>
+                      <th>操作</th>
+                    </tr>
+                  </thead>
+                  <tbody id="staffTable">
+                    <!-- Staff will be loaded here -->
+                  </tbody>
+                </table>
+              </div>
             </div>
-            <div class="col-md-6 mb-3">
-              <label class="form-label">🆔 スタッフコード (自動生成)</label>
-              <input type="text" class="form-control" id="staffCode" readonly>
-            </div>
-          </div>
-          
-          <div class="form-check mb-3">
-            <input class="form-check-input" type="checkbox" id="staffActive" checked>
-            <label class="form-check-label">アクティブ</label>
-          </div>
-        </form>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">キャンセル</button>
-        <button type="button" class="btn btn-primary" onclick="registerStaff()">💾 スタッフを登録</button>
-      </div>
-    </div>
-  </div>
-</div>
-<!-- Add to sidebar -->
-<li class="nav-item">
-  <a href="#admin-management" class="nav-link" onclick="showSection('admin-management')">
-    👑 管理者管理
-  </a>
-</li>
-
-<!-- Add new section -->
-<div id="admin-management-section" class="section-content d-none">
-  <h3 class="mb-4">👑 管理者管理</h3>
-  
-  <div class="d-flex justify-content-between align-items-center mb-4">
-    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addAdminModal">
-      ➕ 管理者を追加
-    </button>
-  </div>
-
-  <div class="card admin-card">
-    <div class="card-header">
-      <h6 class="mb-0">👑 管理者一覧</h6>
-    </div>
-    <div class="card-body">
-      <div id="adminList">
-        <!-- Admin list will be loaded here -->
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- Add Admin Modal -->
-<div class="modal fade" id="addAdminModal" tabindex="-1">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">➕ 管理者追加</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-      </div>
-      <div class="modal-body">
-        <form id="addAdminForm">
-          <div class="mb-3">
-            <label class="form-label">👤 ユーザー名</label>
-            <input type="text" class="form-control" id="adminUsername" required>
-          </div>
-          <div class="mb-3">
-            <label class="form-label">📧 メールアドレス</label>
-            <input type="email" class="form-control" id="adminEmail">
-          </div>
-          <div class="mb-3">
-            <label class="form-label">🔑 パスワード</label>
-            <input type="password" class="form-control" id="adminPassword" required>
-          </div>
-          <div class="mb-3">
-            <label class="form-label">🏷️ 権限</label>
-            <select class="form-select" id="adminRole">
-              <option value="admin">管理者</option>
-              <option value="super_admin">スーパー管理者</option>
-            </select>
-          </div>
-          <div class="form-check">
-            <input class="form-check-input" type="checkbox" id="adminActive" checked>
-            <label class="form-check-label">アクティブ</label>
-          </div>
-        </form>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">キャンセル</button>
-        <button type="button" class="btn btn-primary" onclick="registerAdmin()">💾 管理者を追加</button>
-      </div>
-    </div>
-  </div>
-</div>
-          <!-- Staff management content will go here -->
-          <div class="alert alert-info">
-            🔧 スタッフ管理機能は近日実装予定
           </div>
         </div>
 
         <!-- Menu Management Section -->
         <div id="menu-section" class="section-content d-none">
-          <h3 class="mb-4">🍽️ メニュー管理</h3>
-          <!-- Menu management content will go here -->
-          <div class="alert alert-info">
-            🔧 メニュー管理機能は近日実装予定
+          <div class="d-flex justify-content-between align-items-center mb-4">
+            <h3><i class="fas fa-utensils me-2"></i>メニュー管理</h3>
+            <div>
+              <button class="btn btn-primary me-2" data-bs-toggle="modal" data-bs-target="#addMenuItemModal">
+                <i class="fas fa-plus me-1"></i>メニュー追加
+              </button>
+              <button class="btn btn-outline-secondary" onclick="loadMenuItems()">
+                <i class="fas fa-sync-alt me-1"></i>更新
+              </button>
+            </div>
+          </div>
+
+          <div class="row mb-4">
+            <div class="col-md-3">
+              <div class="card admin-card stat-card" style="background: linear-gradient(135deg, #667eea, #764ba2);">
+                <div class="stat-number" id="totalMenuItems">0</div>
+                <div>メニュー数</div>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="card admin-card stat-card" style="background: linear-gradient(135deg, #4facfe, #00f2fe);">
+                <div class="stat-number" id="availableItems">0</div>
+                <div>提供中</div>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="card admin-card stat-card" style="background: linear-gradient(135deg, #43e97b, #38f9d7);">
+                <div class="stat-number" id="popularItem">-</div>
+                <div>人気メニュー</div>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="card admin-card stat-card" style="background: linear-gradient(135deg, #ff9a9e, #fecfef);">
+                <div class="stat-number" id="avgPrice">¥0</div>
+                <div>平均価格</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card admin-card">
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table table-hover">
+                  <thead>
+                    <tr>
+                      <th>メニューID</th>
+                      <th>画像</th>
+                      <th>名前</th>
+                      <th>カテゴリー</th>
+                      <th>価格</th>
+                      <th>在庫</th>
+                      <th>ステータス</th>
+                      <th>人気度</th>
+                      <th>操作</th>
+                    </tr>
+                  </thead>
+                  <tbody id="menuTable">
+                    <!-- Menu items will be loaded here -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
           </div>
         </div>
 
-        <!-- Analytics Section -->
-        <div id="analytics-section" class="section-content d-none">
-          <h3 class="mb-4">📈 分析レポート</h3>
-          <!-- Analytics content will go here -->
-          <div class="alert alert-info">
-            🔧 分析機能は近日実装予定
+        <!-- Tables Management Section -->
+        <div id="tables-section" class="section-content d-none">
+          <div class="d-flex justify-content-between align-items-center mb-4">
+            <h3><i class="fas fa-chair me-2"></i>席管理</h3>
+            <div>
+              <button class="btn btn-primary me-2" data-bs-toggle="modal" data-bs-target="#addTableModal">
+                <i class="fas fa-plus me-1"></i>席追加
+              </button>
+              <button class="btn btn-outline-secondary" onclick="loadTables()">
+                <i class="fas fa-sync-alt me-1"></i>更新
+              </button>
+            </div>
           </div>
+
+          <div class="row" id="tablesGrid">
+            <!-- Tables will be loaded here as cards -->
+          </div>
+        </div>
+
+        <!-- Reports Section -->
+        <div id="reports-section" class="section-content d-none">
+          <h3 class="mb-4"><i class="fas fa-chart-bar me-2"></i>分析レポート</h3>
+          <!-- Reports content will be implemented -->
+        </div>
+
+        <!-- Reviews Management Section -->
+        <div id="reviews-section" class="section-content d-none">
+          <h3 class="mb-4"><i class="fas fa-star me-2"></i>レビュー管理</h3>
+          <!-- Reviews content will be implemented -->
         </div>
 
         <!-- Settings Section -->
         <div id="settings-section" class="section-content d-none">
-          <h3 class="mb-4">⚙️ システム設定</h3>
-          <!-- Settings content will go here -->
-          <div class="alert alert-info">
-            🔧 システム設定機能は近日実装予定
-          </div>
+          <h3 class="mb-4"><i class="fas fa-cogs me-2"></i>システム設定</h3>
+          <!-- Settings content will be implemented -->
+        </div>
+
+        <!-- Admin Management Section -->
+        <div id="admin-management-section" class="section-content d-none">
+          <h3 class="mb-4"><i class="fas fa-user-shield me-2"></i>管理者管理</h3>
+          <!-- Admin management content will be implemented -->
         </div>
 
       </div>
     </div>
   </div>
 
+  <!-- Modals will be added here for each section -->
+
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   
   <script>
+    // Supabase client
     const supabase = window.supabase.createClient(
       'https://nfcjbjohxzaikelxgmjg.supabase.co',
       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5mY2piam9oeHphaWtlbHhnbWpnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjEwNTgzMjAsImV4cCI6MjA3NjYzNDMyMH0.u0ta1NxSDbJ_9lf1TcMp3M0-_vNNBs6HByOj8wtKsX4'
     );
+
+    // Global variables
+    let currentPage = 1;
+    let reservations = [];
+    let revenueChart = null;
 
     // Check admin authentication
     const adminUser = JSON.parse(localStorage.getItem('adminUser'));
@@ -448,8 +691,15 @@
       window.location.href = 'admin-login.html';
     }
 
-    // Update welcome message
+    // Update welcome message and datetime
     document.getElementById('adminWelcome').textContent = `ようこそ、${adminUser.username}さん`;
+    function updateDateTime() {
+      const now = new Date();
+      document.getElementById('currentDateTime').textContent = 
+        now.toLocaleDateString('ja-JP') + ' ' + now.toLocaleTimeString('ja-JP');
+    }
+    setInterval(updateDateTime, 1000);
+    updateDateTime();
 
     // Section navigation
     function showSection(sectionName) {
@@ -466,92 +716,396 @@
         link.classList.remove('active');
       });
       event.target.classList.add('active');
+
+      // Load section-specific data
+      switch(sectionName) {
+        case 'dashboard':
+          loadDashboardData();
+          break;
+        case 'reservations':
+          loadReservations();
+          break;
+        case 'customers':
+          loadCustomers();
+          break;
+        case 'staff':
+          loadStaffList();
+          break;
+        case 'menu':
+          loadMenuItems();
+          break;
+        case 'tables':
+          loadTables();
+          break;
+        case 'reports':
+          loadReports();
+          break;
+        case 'reviews':
+          loadReviews();
+          break;
+        case 'settings':
+          loadSettings();
+          break;
+        case 'admin-management':
+          loadAdminList();
+          break;
+      }
     }
 
-    // Load dashboard statistics
-    async function loadStats(period = 'today') {
+    // Dashboard functions
+    async function loadDashboardData() {
+      await loadStats('month');
+      await loadRecentActivity();
+      initializeRevenueChart();
+    }
+
+    async function loadStats(period = 'month') {
       try {
-        const today = new Date().toISOString().split('T')[0];
-        
-        // Get today's reservations
-        const { data: reservations, error: resError } = await supabase
-          .from('reservations')
-          .select('*')
-          .eq('date', today);
-          
-        if (!resError) {
-          document.getElementById('totalReservations').textContent = reservations.length;
-          
-          // Calculate revenue (simplified - ¥5,000 per reservation)
-          const revenue = reservations.length * 5000;
-          document.getElementById('todayRevenue').textContent = `¥${revenue.toLocaleString()}`;
-          
-          // Load recent reservations
-          const recentContainer = document.getElementById('recentReservations');
-          recentContainer.innerHTML = '';
-          
-          reservations.slice(0, 5).forEach(reservation => {
-            const item = document.createElement('div');
-            item.className = 'activity-item';
-            item.innerHTML = `
-              <div class="d-flex justify-content-between">
-                <strong>${reservation.customer_name}</strong>
-                <small class="text-muted">${reservation.time}</small>
+        // Simulate API calls - replace with actual Supabase queries
+        document.getElementById('totalReservations').textContent = '156';
+        document.getElementById('todayRevenue').textContent = '¥458,000';
+        document.getElementById('activeStaff').textContent = '8';
+        document.getElementById('tableOccupancy').textContent = '78%';
+        document.getElementById('reservationTrend').textContent = '+12%';
+        document.getElementById('revenueTrend').textContent = '+8%';
+
+        // Load recent reservations
+        const recentContainer = document.getElementById('recentReservations');
+        recentContainer.innerHTML = `
+          ${[1,2,3,4,5].map(i => `
+            <div class="activity-item">
+              <div class="activity-icon bg-primary text-white">
+                <i class="fas fa-user"></i>
               </div>
-              <small>${reservation.guests}名 - テーブル${reservation.table_number || '未定'}</small>
-            `;
-            recentContainer.appendChild(item);
-          });
-        }
-        
-        // Get today's staff
-        const { data: staff, error: staffError } = await supabase
-          .from('staff_schedules')
-          .select(`
-            staff (name, role),
-            start_time,
-            end_time
-          `)
-          .eq('date', today);
-          
-        if (!staffError) {
-          document.getElementById('activeStaff').textContent = staff.length;
-          
-          const staffContainer = document.getElementById('todayStaff');
-          staffContainer.innerHTML = '';
-          
-          staff.forEach(schedule => {
-            const item = document.createElement('div');
-            item.className = 'activity-item';
-            item.innerHTML = `
-              <div class="d-flex justify-content-between">
-                <strong>${schedule.staff.name}</strong>
-                <small class="text-muted">${schedule.staff.role}</small>
+              <div class="flex-grow-1">
+                <div class="d-flex justify-content-between">
+                  <strong>顧客 ${i}</strong>
+                  <small class="text-muted">19:0${i}</small>
+                </div>
+                <small>${2+i}名 - テーブル${i+10}</small>
               </div>
-              <small>${schedule.start_time} - ${schedule.end_time}</small>
-            `;
-            staffContainer.appendChild(item);
-          });
-        }
-        
-        // Calculate table occupancy (simplified)
-        const occupancy = Math.min(100, Math.round((reservations.length / 10) * 100));
-        document.getElementById('tableOccupancy').textContent = `${occupancy}%`;
-        
+            </div>
+          `).join('')}
+        `;
+
+        // Load today's staff
+        const staffContainer = document.getElementById('todayStaff');
+        staffContainer.innerHTML = `
+          ${[1,2,3,4].map(i => `
+            <div class="activity-item">
+              <div class="activity-icon bg-success text-white">
+                <i class="fas fa-user-tie"></i>
+              </div>
+              <div class="flex-grow-1">
+                <div class="d-flex justify-content-between">
+                  <strong>スタッフ ${i}</strong>
+                  <small class="text-muted">${['ホール','キッチン','マネージャー','ホール'][i-1]}</small>
+                </div>
+                <small>10:00 - 22:00</small>
+              </div>
+            </div>
+          `).join('')}
+        `;
+
       } catch (error) {
         console.error('Error loading stats:', error);
       }
     }
 
-    // Refresh dashboard
-    function refreshDashboard() {
-      loadStats('today');
+    async function loadRecentActivity() {
+      const activities = [
+        { type: 'reservation', message: '新しい予約が入りました', time: '5分前', icon: 'fa-calendar-plus', color: 'primary' },
+        { type: 'customer', message: '新規顧客が登録されました', time: '12分前', icon: 'fa-user-plus', color: 'success' },
+        { type: 'review', message: '新しいレビューが投稿されました', time: '30分前', icon: 'fa-star', color: 'warning' },
+        { type: 'payment', message: '支払いが完了しました', time: '1時間前', icon: 'fa-yen-sign', color: 'info' },
+        { type: 'staff', message: 'スタッフのシフトが更新されました', time: '2時間前', icon: 'fa-user-tie', color: 'secondary' }
+      ];
+
+      const container = document.getElementById('recentActivity');
+      container.innerHTML = activities.map(activity => `
+        <div class="activity-item">
+          <div class="activity-icon bg-${activity.color} text-white">
+            <i class="fas ${activity.icon}"></i>
+          </div>
+          <div class="flex-grow-1">
+            <div class="d-flex justify-content-between">
+              <strong>${activity.message}</strong>
+              <small class="text-muted">${activity.time}</small>
+            </div>
+          </div>
+        </div>
+      `).join('');
     }
 
-    // Generate daily report
+    function initializeRevenueChart() {
+      const ctx = document.getElementById('revenueChart').getContext('2d');
+      if (revenueChart) {
+        revenueChart.destroy();
+      }
+      
+      revenueChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: ['1月', '2月', '3月', '4月', '5月', '6月'],
+          datasets: [{
+            label: '売上（万円）',
+            data: [120, 150, 180, 160, 200, 240],
+            borderColor: '#3498db',
+            backgroundColor: 'rgba(52, 152, 219, 0.1)',
+            borderWidth: 2,
+            fill: true,
+            tension: 0.4
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              display: false
+            }
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+              grid: {
+                color: 'rgba(0,0,0,0.1)'
+              }
+            },
+            x: {
+              grid: {
+                display: false
+              }
+            }
+          }
+        }
+      });
+    }
+
+    function updateRevenueChart(period) {
+      // Update chart based on period
+      console.log('Updating chart for period:', period);
+    }
+
+    // Reservations management
+    async function loadReservations() {
+      // Simulate loading reservations
+      const reservationsTable = document.getElementById('reservationsTable');
+      reservationsTable.innerHTML = `
+        ${[1,2,3,4,5].map(i => `
+          <tr>
+            <td>#RES${1000 + i}</td>
+            <td>顧客 ${i}</td>
+            <td>2024-01-${15 + i}</td>
+            <td>19:0${i}</td>
+            <td>${2 + i}</td>
+            <td>テーブル ${10 + i}</td>
+            <td><span class="badge bg-success badge-status">確認済み</span></td>
+            <td>2024-01-${10 + i} 10:0${i}</td>
+            <td>
+              <div class="table-actions">
+                <button class="btn btn-sm btn-outline-primary" title="編集">
+                  <i class="fas fa-edit"></i>
+                </button>
+                <button class="btn btn-sm btn-outline-danger" title="削除">
+                  <i class="fas fa-trash"></i>
+                </button>
+              </div>
+            </td>
+          </tr>
+        `).join('')}
+      `;
+    }
+
+    function filterReservations() {
+      // Implement filtering logic
+      console.log('Filtering reservations...');
+    }
+
+    // Staff management
+    async function loadStaffList() {
+      const staffTable = document.getElementById('staffTable');
+      staffTable.innerHTML = `
+        ${[1,2,3,4].map(i => `
+          <tr>
+            <td>#STAFF${100 + i}</td>
+            <td>スタッフ ${i}</td>
+            <td>${['ホール','キッチン','マネージャー','ホール'][i-1]}</td>
+            <td>staff${i}@restaurant.com</td>
+            <td>090-1234-567${i}</td>
+            <td><span class="badge bg-success badge-status">アクティブ</span></td>
+            <td>2024-01-15 08:3${i}</td>
+            <td>
+              <div class="table-actions">
+                <button class="btn btn-sm btn-outline-primary" title="編集">
+                  <i class="fas fa-edit"></i>
+                </button>
+                <button class="btn btn-sm btn-outline-warning" title="シフト">
+                  <i class="fas fa-calendar"></i>
+                </button>
+                <button class="btn btn-sm btn-outline-danger" title="削除">
+                  <i class="fas fa-trash"></i>
+                </button>
+              </div>
+            </td>
+          </tr>
+        `).join('')}
+      `;
+    }
+
+    // Menu management
+    async function loadMenuItems() {
+      document.getElementById('totalMenuItems').textContent = '45';
+      document.getElementById('availableItems').textContent = '38';
+      document.getElementById('popularItem').textContent = '和牛ステーキ';
+      document.getElementById('avgPrice').textContent = '¥2,800';
+
+      const menuTable = document.getElementById('menuTable');
+      menuTable.innerHTML = `
+        ${[1,2,3,4,5].map(i => `
+          <tr>
+            <td>#MENU${100 + i}</td>
+            <td><img src="https://via.placeholder.com/50" class="rounded" alt="Menu item"></td>
+            <td>メニュー ${i}</td>
+            <td>${['前菜','メイン','デザート','ドリンク','メイン'][i-1]}</td>
+            <td>¥${1500 + i * 500}</td>
+            <td>${i % 2 === 0 ? '在庫あり' : '残りわずか'}</td>
+            <td><span class="badge bg-success badge-status">提供中</span></td>
+            <td>${3 + i}⭐</td>
+            <td>
+              <div class="table-actions">
+                <button class="btn btn-sm btn-outline-primary" title="編集">
+                  <i class="fas fa-edit"></i>
+                </button>
+                <button class="btn btn-sm btn-outline-warning" title="在庫">
+                  <i class="fas fa-box"></i>
+                </button>
+                <button class="btn btn-sm btn-outline-danger" title="削除">
+                  <i class="fas fa-trash"></i>
+                </button>
+              </div>
+            </td>
+          </tr>
+        `).join('')}
+      `;
+    }
+
+    // Tables management
+    async function loadTables() {
+      const tablesGrid = document.getElementById('tablesGrid');
+      tablesGrid.innerHTML = `
+        ${[1,2,3,4,5,6,7,8].map(i => `
+          <div class="col-md-3 mb-3">
+            <div class="card admin-card">
+              <div class="card-body text-center">
+                <h5>テーブル ${i}</h5>
+                <div class="h4 mb-3">${['2','4','4','6','2','8','4','2'][i-1]}名</div>
+                <div class="mb-2">
+                  <span class="badge ${i % 3 === 0 ? 'bg-warning' : 'bg-success'}">
+                    ${i % 3 === 0 ? '予約済み' : '空席'}
+                  </span>
+                </div>
+                <small class="text-muted">${['窓側','個室','中央','VIP','カウンター','宴会','個室','窓側'][i-1]}</small>
+              </div>
+            </div>
+          </div>
+        `).join('')}
+      `;
+    }
+
+    // Customers management
+    async function loadCustomers() {
+      document.getElementById('totalCustomers').textContent = '1,247';
+      document.getElementById('activeCustomers').textContent = '156';
+      document.getElementById('repeatCustomers').textContent = '42%';
+      document.getElementById('avgSpending').textContent = '¥3,850';
+
+      const customersTable = document.getElementById('customersTable');
+      customersTable.innerHTML = `
+        ${[1,2,3,4,5].map(i => `
+          <tr>
+            <td>#CUST${1000 + i}</td>
+            <td>顧客 ${i}</td>
+            <td>customer${i}@example.com</td>
+            <td>090-1234-567${i}</td>
+            <td>${5 + i}</td>
+            <td>2024-01-${10 + i}</td>
+            <td>¥${(5 + i) * 3850}</td>
+            <td>
+              <div class="table-actions">
+                <button class="btn btn-sm btn-outline-primary" title="詳細">
+                  <i class="fas fa-eye"></i>
+                </button>
+                <button class="btn btn-sm btn-outline-info" title="予約履歴">
+                  <i class="fas fa-history"></i>
+                </button>
+                <button class="btn btn-sm btn-outline-warning" title="編集">
+                  <i class="fas fa-edit"></i>
+                </button>
+              </div>
+            </td>
+          </tr>
+        `).join('')}
+      `;
+    }
+
+    function searchCustomers() {
+      const searchTerm = document.getElementById('customerSearch').value;
+      console.log('Searching customers:', searchTerm);
+    }
+
+    // Other section placeholders
+    async function loadReports() {
+      console.log('Loading reports...');
+    }
+
+    async function loadReviews() {
+      console.log('Loading reviews...');
+    }
+
+    async function loadSettings() {
+      console.log('Loading settings...');
+    }
+
+    async function loadAdminList() {
+      console.log('Loading admin list...');
+    }
+
+    // Utility functions
+    function refreshDashboard() {
+      loadDashboardData();
+      showNotification('ダッシュボードを更新しました', 'success');
+    }
+
     function generateDailyReport() {
-      alert('📊 日次レポートを生成しました！');
+      showNotification('日次レポートを生成しました', 'info');
       // In full implementation, this would generate a PDF report
+    }
+
+    function showNotification(message, type = 'info') {
+      // Create toast notification
+      const toast = document.createElement('div');
+      toast.className = `toast align-items-center text-white bg-${type === 'success' ? 'success' : type === 'error' ? 'danger' : 'info'} border-0`;
+      toast.innerHTML = `
+        <div class="d-flex">
+          <div class="toast-body">${message}</div>
+          <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+        </div>
+      `;
+      
+      const container = document.createElement('div');
+      container.className = 'toast-container position-fixed top-0 end-0 p-3';
+      container.style.zIndex = '9999';
+      container.appendChild(toast);
+      document.body.appendChild(container);
+      
+      const bsToast = new bootstrap.Toast(toast);
+      bsToast.show();
+      
+      // Remove after hide
+      toast.addEventListener('hidden.bs.toast', () => {
+        container.remove();
+      });
     }
 
     // Logout
@@ -563,37 +1117,7 @@
     });
 
     // Initialize dashboard
-    loadStats('today');
-    // Check admin authentication
-const adminUser = JSON.parse(localStorage.getItem('adminUser'));
-if (!adminUser) {
-  alert('管理者権限が必要です');
-  window.location.href = 'admin-login.html';
-}
-
-// Optional: Verify the admin user still exists in database
-async function verifyAdminUser() {
-  try {
-    const { data, error } = await supabase
-      .from('admin_users')
-      .select('id, is_active')
-      .eq('id', adminUser.id)
-      .eq('is_active', true);
-
-    if (error || !data || data.length === 0) {
-      localStorage.removeItem('adminUser');
-      window.location.href = 'admin-login.html';
-      return;
-    }
-  } catch (error) {
-    console.error('Admin verification failed:', error);
-    // Continue anyway - network issue might be temporary
-  }
-}
-
-// Run verification (optional)
-verifyAdminUser();
+    loadDashboardData();
   </script>
-  
 </body>
 </html>

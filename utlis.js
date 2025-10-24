@@ -1125,3 +1125,68 @@ document.getElementById('adminLoginForm').addEventListener('submit', async (e) =
     submitBtn.disabled = false;
   }
 });
+
+const supabase = window.supabase.createClient(
+  'https://nfcjbjohxzaikelxgmjg.supabase.co',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5mY2piam9oeHphaWtlbHhnbWpnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjEwNTgzMjAsImV4cCI6MjA3NjYzNDMyMH0.u0ta1NxSDbJ_9lf1TcMp3M0-_vNNBs6HByOj8wtKsX4'
+);
+
+document.getElementById('adminLoginForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  
+  const username = document.getElementById('adminUsername').value;
+  const password = document.getElementById('adminPassword').value;
+  const messageDiv = document.getElementById('adminMessage');
+  
+  // Show loading
+  const submitBtn = e.target.querySelector('button[type="submit"]');
+  submitBtn.innerHTML = '⏳ 認証中...';
+  submitBtn.disabled = true;
+
+  try {
+    // Use array response instead of .single()
+    const { data, error } = await supabase
+      .from('admin_users')
+      .select('*')
+      .eq('username', username)
+      .eq('password', password)
+      .eq('is_active', true);
+
+    if (error) throw error;
+
+    // Check if we found exactly one admin user
+    if (data && data.length > 0) {
+      const adminUser = data[0];
+      
+      // Store admin session
+      localStorage.setItem('adminUser', JSON.stringify(adminUser));
+      
+      // Update last login
+      await supabase
+        .from('admin_users')
+        .update({ last_login: new Date().toISOString() })
+        .eq('id', adminUser.id);
+      
+      messageDiv.innerHTML = `
+        <div class="alert alert-success">
+          ✅ 管理者認証成功！ダッシュボードへ移動します...
+        </div>
+      `;
+      
+      setTimeout(() => {
+        window.location.href = 'admin-dashboard.html';
+      }, 1500);
+    } else {
+      throw new Error('ユーザー名またはパスワードが間違っています');
+    }
+  } catch (error) {
+    messageDiv.innerHTML = `
+      <div class="alert alert-danger">
+        ❌ ${error.message}
+      </div>
+    `;
+    
+    submitBtn.innerHTML = '🔐 管理者ログイン';
+    submitBtn.disabled = false;
+  }
+});
